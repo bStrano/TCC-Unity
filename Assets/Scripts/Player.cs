@@ -57,33 +57,33 @@ public class Player : Character {
 
     }
 
-    public void MoveToDirection(String direction)
+    public void MoveToDirection(Command direction)
     {
         if (!isWalking)
         {
             isWalking = true;
             switch (direction)
             {
-                case ("Up"):
+                case (Command.Walk_Top):
                     this.direction.x = 0;
                     this.direction.y = 1;
                     exitIndex = 0;
                     StartCoroutine(Move(new Vector3(transform.position.x, transform.position.y + 1)));
                     break;
-                case ("Right"):
+                case (Command.Walk_Right):
                     exitIndex = 1;
                     this.direction.x = 1; 
                     this.direction.y = 0;
                     StartCoroutine(Move(new Vector3(transform.position.x + 1, transform.position.y)));
                
                     break;
-                case ("Down"):
+                case (Command.Walk_Bot):
                     this.direction.x = 0;
                     this.direction.y = -1;
                     exitIndex = 2;
                     StartCoroutine(Move(new Vector3(transform.position.x, transform.position.y - 1)));
                     break;
-                case ("Left"):
+                case (Command.Walk_Left):
                     this.direction.x = -1;
                     this.direction.y = 0;
                     exitIndex = 3;
@@ -96,7 +96,16 @@ public class Player : Character {
     }
 
 
+    public void setActiveCommand(Command playerCommand)
+    {
 
+        //PlayerCommand playerCommand = (PlayerCommand)Enum.Parse(typeof(PlayerCommand), command);
+        if (playerCommand == Command.Walk_Top || playerCommand == Command.Walk_Right || playerCommand == Command.Walk_Bot || playerCommand == Command.Walk_Left )
+        {
+            Debug.Log("Iniciando a movimentação do personagem, ---- " + playerCommand.ToString());
+            MoveToDirection(playerCommand);  
+        }
+    }
     
 
 
