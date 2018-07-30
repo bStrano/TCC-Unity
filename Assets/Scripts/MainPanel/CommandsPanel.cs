@@ -20,7 +20,6 @@ public enum Command
 
 public class CommandsPanel : MonoBehaviour
 {
-
     private List<Command> commands;
     [SerializeField]
     private Text entries;
@@ -41,7 +40,8 @@ public class CommandsPanel : MonoBehaviour
 
     public void Start()
     {
-        maxComands = LevelManager.instance.GetActiveLevel().ComandsAvaiable;
+        Debug.Log(LevelManager.instance);
+        maxComands = LevelManager.instance.ActiveLevel.ComandsAvaiable;
         commands = new List<Command>();
         UpdateEntries();
     }

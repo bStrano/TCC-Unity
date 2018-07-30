@@ -2,32 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour {
 
     public static LevelManager instance = null;
 
-    public int ActiveLevel
-    {
-        get
-        {
-            return activeLevel;
-        }
 
-        set
-        {
-            activeLevel = value;
-        }
-    }
+    public Level ActiveLevel { get; set; }
 
-    private int activeLevel;
-     
     void Awake()
     {
         if(instance == null)
         {
-            instance = this;
+           instance = this;
+        
         } else if (instance != this)
         {
             Destroy(gameObject);
@@ -37,20 +26,32 @@ public class LevelManager : MonoBehaviour {
         
     }
 
-    [SerializeField]
-    private List<Level> levelList;
+
+
+    public void SwitchScene(string sceneName, Level level)
+    {
+        this.ActiveLevel = level;
+        SceneManager.LoadScene(sceneName);
+       
+    }
+
+
+    
 
 
     public Level GetActiveLevel()
     {
-        int activeIndex = SceneManager.GetActiveScene().buildIndex;
-        return levelList[activeIndex];
+        return ActiveLevel;
+        //int activeIndex = SceneManager.GetActiveScene().buildIndex;
+        
+       // return levelList[activeIndex];
     }
 
 	// Use this for initialization
 	void Start () {
-		
-	}
+
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
