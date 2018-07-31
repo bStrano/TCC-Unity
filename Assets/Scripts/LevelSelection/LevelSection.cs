@@ -37,7 +37,6 @@ public class LevelSection : MonoBehaviour
             LevelButton levelButton = button.GetComponent<LevelButton>();
 
             
-            Debug.Log(levelPersistence.isUnlocked(level.LevelNumber.ToString()));
             if (levelPersistence.isUnlocked(level.LevelNumber.ToString()))
             {
                 levelButton.LevelNumber.text = level.LevelNumber.ToString();

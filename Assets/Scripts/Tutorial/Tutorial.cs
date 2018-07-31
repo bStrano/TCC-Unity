@@ -7,6 +7,9 @@ using System;
 
 public class Tutorial : MonoBehaviour {
     private int maxPage;
+    [SerializeField] private Text pageNumberText;
+    [SerializeField] private Button previousButton;
+    [SerializeField] private Button nextButton;
     [SerializeField] private GameObject layoutPrefab;
     [SerializeField] private Transform contentPanel;
     [SerializeField] private TutorialContent[] pages;
@@ -19,17 +22,21 @@ public class Tutorial : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        ChangeActivePage(0);
-
+        
         maxPage = pages.Length;
+        ChangeActivePage(0);
+        previousButton.gameObject.SetActive(false);
 
         InstantiateContents();
+
+
 
 
     }
 
     private void InstantiateContents()
     {
+      
         foreach( TutorialContent tutorialContent in pages)
         {
             tutorialContent.ContentPrefab =  Instantiate(tutorialContent.ContentPrefab, contentPanel);
@@ -41,9 +48,13 @@ public class Tutorial : MonoBehaviour {
             {
                 tutorialContent.ContentPrefab.SetActive(false);
             }
-
-            tutorialContent.ContentPrefab.GetComponent<Image>().sprite = tutorialContent.ContentImageSprite;
-
+            //tutorialContent.ContentPrefab.GetComponentsInChildren<Image>()[1].preserveAspect = true;
+            tutorialContent.ContentPrefab.GetComponentsInChildren<Image>()[1].sprite = tutorialContent.ContentImageSprite;
+            RectTransform content = tutorialContent.ContentPrefab.GetComponentInChildren<RectTransform>();
+            Debug.Log(content.gameObject);
+         
+             content.GetComponentInChildren<Text>().text = tutorialContent.ContentDescription;
+             
         }
     }
 
@@ -51,30 +62,66 @@ public class Tutorial : MonoBehaviour {
     {
         activePagePosition = pageIndex;
         activePage = pages[pageIndex];
-        Debug.Log(pageIndex);
-        Debug.Log(activePage);
+        UpdatePageNumber(pageIndex);
     }
 
     private void ChangePage(int pageIndex)
     {
-
         activePage.ContentPrefab.SetActive(false);
         ChangeActivePage(pageIndex);
         activePage.ContentPrefab.SetActive(true);
     }
 
-    public void NextButtonHandler()
+
+
+
+
+
+    public void UpdatePageNumber(int pageIndex)
     {
-        Debug.Log("Next");
-        ChangePage(activePagePosition+1);
+        pageNumberText.text = (pageIndex + 1).ToString() + "/" + maxPage.ToString();
     }
-
-
 
    public void PreviousButtonHandler()
     {
+        activePagePosition = activePagePosition - 1;
 
-        ChangePage(activePagePosition-1);
+        if (activePagePosition == pages.Length - 2)
+        {
+            nextButton.GetComponentInChildren<Text>().text = "Próximo";
+        }
+
+        if(activePagePosition == 0)
+        {
+            previousButton.gameObject.SetActive(false);
+        }
+
+        ChangePage(activePagePosition);
+
+
+    }
+
+    public void NextButtonHandler()
+    {
+        activePagePosition = activePagePosition + 1;
+
+        if(activePagePosition == pages.Length - 1)
+        {
+            nextButton.GetComponentInChildren<Text>().text = "Concluir !";
+        } else if(activePagePosition == pages.Length)
+        {
+            Destroy(layoutPrefab.transform.gameObject);
+            return;
+        }
+
+        if (activePagePosition == 1)
+        {
+            previousButton.gameObject.SetActive(true);
+        }
+
+        ChangePage(activePagePosition);
+
+
     }
 
     // Update is called once per frame
