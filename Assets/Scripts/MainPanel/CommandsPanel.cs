@@ -15,7 +15,9 @@ public enum Command
     Attack,
     Spell1,
     Spell2,
-    Spell3
+    Spell3,
+    Collect_Coin,
+    Open_Chest
 }
 
 public class CommandsPanel : MonoBehaviour
@@ -40,7 +42,6 @@ public class CommandsPanel : MonoBehaviour
 
     public void Start()
     {
-        Debug.Log(LevelManager.instance);
         maxComands = LevelManager.instance.ActiveLevel.ComandsAvaiable;
         commands = new List<Command>();
         UpdateEntries();
@@ -77,6 +78,7 @@ public class CommandsPanel : MonoBehaviour
 
         if (AddComand(command))
         {
+            Debug.Log("A");
             UpdateEntries();
             return command;
         } else

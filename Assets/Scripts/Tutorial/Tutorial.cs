@@ -51,7 +51,6 @@ public class Tutorial : MonoBehaviour {
             //tutorialContent.ContentPrefab.GetComponentsInChildren<Image>()[1].preserveAspect = true;
             tutorialContent.ContentPrefab.GetComponentsInChildren<Image>()[1].sprite = tutorialContent.ContentImageSprite;
             RectTransform content = tutorialContent.ContentPrefab.GetComponentInChildren<RectTransform>();
-            Debug.Log(content.gameObject);
          
              content.GetComponentInChildren<Text>().text = tutorialContent.ContentDescription;
              

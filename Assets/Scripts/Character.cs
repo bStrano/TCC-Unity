@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Direction
+{
+    TOP,RIGHT,BOT,LEFT,NONE
+}
 
 public abstract class Character : MonoBehaviour {
     [SerializeField]
@@ -16,7 +20,28 @@ public abstract class Character : MonoBehaviour {
 
     protected bool isAttacking = false;
   
-
+    public Direction GetDirection()
+    {
+        float x = direction.x;
+        float y = direction.y;
+        if (x == 0 && y == 1)
+        {
+            return Direction.TOP;
+        } else if (x == 1 && y == 0)
+        {
+            return Direction.RIGHT;
+        } else if (x == 0 && y == -1)
+        {
+            return Direction.BOT;
+        } else if ( x == -1 && y == 0)
+        {
+            return Direction.LEFT;
+        } else
+        {
+            Debug.Log("Invalid Direction");
+            return Direction.NONE;
+        }
+    }
 
     // Use this for initialization
     protected virtual void Start () {

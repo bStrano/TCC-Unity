@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
+[System.Serializable]
 public class LevelSection : MonoBehaviour
 {
 
@@ -62,7 +63,6 @@ public class LevelSection : MonoBehaviour
 
     public void CallSwitchScene(Level level)
     {
-        Debug.Log("c");
         LevelManager.instance.SwitchScene("Level_" + level.LevelNumber, level);
     }
 

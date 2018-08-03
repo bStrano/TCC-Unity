@@ -6,19 +6,16 @@ using System;
 
 
 public class MainPanel : MonoBehaviour {
-
-  
     [SerializeField]
     private CodeOutputPanel codeOutputPanel;
     [SerializeField]
     private CommandsPanel commandsPanel;
 
 
+
     private GameObject playerGO;
     private Player player;
 
-
- 
 
 
     public void StartPlayRoutine()

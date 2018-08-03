@@ -37,8 +37,8 @@ public class Player : Character {
     {
        // groundSprite = map.GetSprite(Vector3Int.RoundToInt(new Vector3(transform.position.x, transform.position.y)));
         Sprite nextPositionSprite = map.GetSprite(Vector3Int.RoundToInt(new Vector3(nextPosition.x, nextPosition.y)));
-        Debug.Log(" O próximo tile é : " + nextPositionSprite.name);
-        Debug.Log(nextPositionSprite.name == "sand_tile" || nextPositionSprite.name.Contains("grass"));
+        //Debug.Log(" O próximo tile é : " + nextPositionSprite.name);
+        //Debug.Log(nextPositionSprite.name == "sand_tile" || nextPositionSprite.name.Contains("grass"));
         if ( nextPositionSprite.name == "sand_tile" || nextPositionSprite.name.Contains("grass"))
         {
 
@@ -55,6 +55,21 @@ public class Player : Character {
         }
         isWalking = false;
 
+    }
+
+    public void CollectCoin()
+    {
+        Debug.Log("Collect Coin");
+        GameManager.instance.RequestCoinCollect(transform);
+    }
+
+    public void OpenChest()
+    {
+        Direction direction = GameManager.instance.RequestOpenChest(transform);
+        if(direction != Direction.NONE)
+        {
+            
+        }
     }
 
     public void MoveToDirection(Command direction)
@@ -104,6 +119,12 @@ public class Player : Character {
         {
             Debug.Log("Iniciando a movimentação do personagem, ---- " + playerCommand.ToString());
             MoveToDirection(playerCommand);  
+        } else if ( playerCommand == Command.Collect_Coin)
+        {
+            CollectCoin();
+        } else if ( playerCommand == Command.Open_Chest)
+        {
+            OpenChest();
         }
     }
     
