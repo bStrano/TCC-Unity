@@ -5,7 +5,7 @@ using UnityEngine;
 public class LevelPersistence : MonoBehaviour {
 
 
-    public bool isUnlocked(string levelNumber)
+    public static bool IsLevelUnlocked(string levelNumber)
     {
         if (string.Compare(levelNumber,"1") == 0)
         {

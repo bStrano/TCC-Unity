@@ -53,11 +53,11 @@ public class ProgressBar : MonoBehaviour {
         currentAmount = currentAmount * 100;
         if((int) currentAmount == 100)
         {
-            percentageText.fontSize = 30;
+            percentageText.fontSize = 5;
             percentageText.text = "Concluido!";
         } else
         {
-            percentageText.fontSize = 45;
+            percentageText.fontSize = 15;
             percentageText.text = ((int) currentAmount).ToString() + "%";
            
         }
