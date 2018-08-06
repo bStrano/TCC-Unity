@@ -1,15 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 
 
 
 public class MainPanel : MonoBehaviour {
-    [SerializeField]
-    private CodeOutputPanel codeOutputPanel;
+    [SerializeField] private GameObject mainPanel;
+    
+    [SerializeField] private CodeOutputPanel codeOutputPanel;
     [SerializeField]
     private CommandsPanel commandsPanel;
+  
 
 
 
@@ -18,19 +21,14 @@ public class MainPanel : MonoBehaviour {
 
 
 
-    public void StartPlayRoutine()
+
+
+    public void AddFunction(Function function)
     {
-        StartCoroutine(Play());
+
     }
 
-    public IEnumerator Play()
-    {
-        foreach (Command comand in commandsPanel.Comands)
-        {
-            player.setActiveCommand(comand);
-            yield return new WaitForSeconds(2);
-        }
-    }
+
 
     // Use this for initialization
     void Start () {
@@ -43,9 +41,6 @@ public class MainPanel : MonoBehaviour {
 		
 	}
 
-    public void HandleCommands(string commandString)
-    {
-        Command command = commandsPanel.ReciveComand(commandString);
-        codeOutputPanel.TranslateCommandToCode(command, commandsPanel.Comands.Count);
-    }
+
+
 }

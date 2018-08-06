@@ -40,7 +40,10 @@ public class LevelManager : MonoBehaviour {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    
+    public void BackToMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
 
 
     public Level GetActiveLevel()

@@ -11,29 +11,40 @@ public class Player : Character {
     private GameObject[] spellPrefab;
     [SerializeField]
     private Transform[] exitPoints;
-    private int exitIndex =2;
+    private int exitIndex = 2;
     private Transform target;
 
     private Sprite groundSprite;
 
 
-    
+
 
     // Use this for initialization
-    protected override void  Start () {
+    protected override void Start() {
         base.Start();
- 
-        target = GameObject.Find("Skeleton").transform;
-       
     }
-	
-	// Update is called once per frame
-	protected override void Update () {
-        base.Update();    
+
+    // Update is called once per frame
+    protected override void Update() {
+        base.Update();
     }
 
 
-     IEnumerator Move(Vector3 nextPosition)
+    IEnumerator Move(Vector3 nextPosition)
+    {
+        isWalking = true;
+        rb.velocity = direction.normalized * speed;
+        while (transform.position != nextPosition)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, nextPosition, speed * Time.deltaTime);
+            yield return null;
+        }
+        isWalking = false;
+    }
+
+
+
+     bool MoveIfPossible(Vector3 nextPosition)
     {
        // groundSprite = map.GetSprite(Vector3Int.RoundToInt(new Vector3(transform.position.x, transform.position.y)));
         Sprite nextPositionSprite = map.GetSprite(Vector3Int.RoundToInt(new Vector3(nextPosition.x, nextPosition.y)));
@@ -42,40 +53,41 @@ public class Player : Character {
         if ( nextPositionSprite.name == "sand_tile" || nextPositionSprite.name.Contains("grass"))
         {
 
-            rb.velocity = direction.normalized * speed;
-            while(transform.position != nextPosition)
-            {
-                transform.position = Vector3.MoveTowards(transform.position, nextPosition, speed * Time.deltaTime);
-                yield return null;
-            }
-            
+            StartCoroutine(Move(nextPosition));
+            return true;
         } else
         {
-            Debug.Log("ELSE");
+            direction.x = 0;
+            direction.y = 0;
+            isWalking = false;
+            return false;
         }
-        isWalking = false;
 
     }
 
-    public void CollectCoin()
+    public bool CollectCoin()
     {
         Debug.Log("Collect Coin");
-        GameManager.instance.RequestCoinCollect(transform);
+        return ObjectsManager.instance.RequestCoinCollect(transform);
     }
 
-    public void OpenChest()
+    public bool OpenChest()
     {
-        Direction direction = GameManager.instance.RequestOpenChest(transform);
+        Direction direction = ObjectsManager.instance.RequestOpenChest(transform);
         if(direction != Direction.NONE)
         {
-            
+            return true;
+        } else
+        {
+            return false;
         }
     }
 
-    public void MoveToDirection(Command direction)
+    public bool MoveToDirection(Command direction)
     {
         if (!isWalking)
         {
+            Vector3 directionBeforeMovement = new Vector3(this.direction.x, this.direction.y, 0);
             isWalking = true;
             switch (direction)
             {
@@ -83,48 +95,54 @@ public class Player : Character {
                     this.direction.x = 0;
                     this.direction.y = 1;
                     exitIndex = 0;
-                    StartCoroutine(Move(new Vector3(transform.position.x, transform.position.y + 1)));
-                    break;
+                    return MoveIfPossible(new Vector3(transform.position.x, transform.position.y + 1));
                 case (Command.Walk_Right):
                     exitIndex = 1;
                     this.direction.x = 1; 
                     this.direction.y = 0;
-                    StartCoroutine(Move(new Vector3(transform.position.x + 1, transform.position.y)));
-               
-                    break;
+                    return MoveIfPossible(new Vector3(transform.position.x + 1, transform.position.y));
                 case (Command.Walk_Bot):
                     this.direction.x = 0;
                     this.direction.y = -1;
                     exitIndex = 2;
-                    StartCoroutine(Move(new Vector3(transform.position.x, transform.position.y - 1)));
-                    break;
+                    return MoveIfPossible(new Vector3(transform.position.x, transform.position.y - 1));
                 case (Command.Walk_Left):
                     this.direction.x = -1;
                     this.direction.y = 0;
                     exitIndex = 3;
-                    StartCoroutine(Move(new Vector3(transform.position.x - 1, transform.position.y)));
-                    break;
+                    return MoveIfPossible(new Vector3(transform.position.x - 1, transform.position.y));
+                default:
+                    return false;
             }
+
+        } else
+        {
+            Debug.Log("false");
+            return false;
         }
 
-
+        
     }
 
 
-    public void setActiveCommand(Command playerCommand)
+    public bool setActiveCommand(Command playerCommand)
     {
 
         //PlayerCommand playerCommand = (PlayerCommand)Enum.Parse(typeof(PlayerCommand), command);
         if (playerCommand == Command.Walk_Top || playerCommand == Command.Walk_Right || playerCommand == Command.Walk_Bot || playerCommand == Command.Walk_Left )
         {
             Debug.Log("Iniciando a movimentação do personagem, ---- " + playerCommand.ToString());
-            MoveToDirection(playerCommand);  
+            return MoveToDirection(playerCommand);
+          
         } else if ( playerCommand == Command.Collect_Coin)
         {
-            CollectCoin();
+            return CollectCoin();
         } else if ( playerCommand == Command.Open_Chest)
         {
-            OpenChest();
+            return OpenChest();
+        } else
+        {
+            return false;
         }
     }
     

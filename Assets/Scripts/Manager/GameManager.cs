@@ -1,47 +1,35 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public class GameManager : MonoBehaviour {
     [SerializeField] private Transform spawnpoint;
+    [SerializeField] private Player player;
     public static GameManager instance;
 
-    [SerializeField] private List<GameObject> coins;
-    [SerializeField] private GameObject chestObject;
-
-
-
-    public bool RequestCoinCollect(Transform transform)
+    public bool SendCommandToPlayer(Command command)
     {
-        for (int i = 0; i < coins.Count; i++) {
-            GameObject coinObject = coins[i];
-            Coin coin = coinObject.GetComponent<Coin>();
-
-            if (coin.RemoveCoin(transform))
-            {
-                return true;
-            } 
-        }
-        return false;
+        return player.setActiveCommand(command);
     }
 
-    public Direction RequestOpenChest(Transform transform)
-    {
-        Chest chest = chestObject.GetComponent<Chest>();
-        return chest.OpenChest(transform);
-    }
+   // public void ResetGame()
+    //{
+     //   foreach (GameObject coin in coins)
+      //  {
+       //     coin.SetActive(true);
+
+///        }
+   //     player.transform.position = spawnpoint.transform.position;
+    //}
 
 
     // Use this for initialization
-    void Awake () {
+    void Start () {
         instance = this;
-    }
+	}
 	
 	// Update is called once per frame
 	void Update () {
 		
 	}
-
-
 }

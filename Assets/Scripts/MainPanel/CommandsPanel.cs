@@ -17,7 +17,9 @@ public enum Command
     Spell2,
     Spell3,
     Collect_Coin,
-    Open_Chest
+    Open_Chest,
+    Function1,
+    Function2
 }
 
 public class CommandsPanel : MonoBehaviour
@@ -27,7 +29,7 @@ public class CommandsPanel : MonoBehaviour
     private Text entries;
     private int maxComands;
 
-    public List<Command> Comands
+    public List<Command> Commands
     {
         get
         {
@@ -42,7 +44,9 @@ public class CommandsPanel : MonoBehaviour
 
     public void Start()
     {
+        
         maxComands = LevelManager.instance.ActiveLevel.ComandsAvaiable;
+        Debug.Log("Level Manages commands Avaiable: " + maxComands );
         commands = new List<Command>();
         UpdateEntries();
     }
