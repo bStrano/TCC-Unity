@@ -12,6 +12,10 @@ public class CodeOutputPanel : MonoBehaviour {
     [SerializeField] private ScrollRect scrollView;
     protected List<GameObject> buttons = new List<GameObject>();
 
+    public void reset()
+    {
+        StopAllCoroutines();
+    }
 
     public List<GameObject> Buttons
     {

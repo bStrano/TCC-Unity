@@ -7,29 +7,18 @@ using System;
 
 
 public class MainPanel : MonoBehaviour {
-    [SerializeField] private GameObject mainPanel;
-    
+    [SerializeField] private GameObject mainPanel;  
     [SerializeField] private CodeOutputPanel codeOutputPanel;
     [SerializeField]
     private CommandsPanel commandsPanel;
   
-
-
-
     private GameObject playerGO;
     private Player player;
-
-
-
-
 
     public void AddFunction(Function function)
     {
 
     }
-
-
-
     // Use this for initialization
     void Start () {
         playerGO = GameObject.Find("Player");

@@ -29,6 +29,7 @@ public class CommandsPanel : MonoBehaviour
     private Text entries;
     private int maxComands;
 
+
     public List<Command> Commands
     {
         get
@@ -50,6 +51,7 @@ public class CommandsPanel : MonoBehaviour
         commands = new List<Command>();
         UpdateEntries();
     }
+  
 
 
     public bool AddComand(Command command)

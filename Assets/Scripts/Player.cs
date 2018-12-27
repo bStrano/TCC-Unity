@@ -29,6 +29,11 @@ public class Player : Character {
         base.Update();
     }
 
+    public void StopAllCouroutines()
+    {
+        StopAllCoroutines();
+        isWalking = false;
+    }
 
     IEnumerator Move(Vector3 nextPosition)
     {

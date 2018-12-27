@@ -8,6 +8,8 @@ public class GameCanvas : MonoBehaviour {
     [SerializeField] private MainPanel functionPanel1;
     [SerializeField] private MainPanel functionPanel2;
     private GameObject activeCodePanel;
+    private bool alreadyPlayed = false;
+    private bool isPlaying = false;
 
     public void SwitchToFunctionPanel(int functionNumber)
     {
@@ -24,62 +26,92 @@ public class GameCanvas : MonoBehaviour {
         activeCodePanel.SetActive(true);
     }
 
+    public void RestartLevel()
+    {
+        Debug.Log("Restart");
+        LevelManager.instance.RestartLevel();
+    }
+
+
+    public IEnumerator Play()
+    {
+        int position = 0;
+            isPlaying = true;
+            CodeOutputPanel activeCodeOutputPanel = GetActiveCodePanel();
+            foreach (Command command in activeCodeOutputPanel.CommandsPanel.Commands)
+            {
+                activeCodeOutputPanel = GetActiveCodePanel();
+                GameObject button = activeCodeOutputPanel.Buttons[position];
+                button.GetComponent<Image>().color = Color.green;
+
+                if (command != Command.Function1 && command != Command.Function2)
+                {
+
+                    if (!GameManager.instance.SendCommandToPlayer(command))
+                    {
+                        button.GetComponent<Image>().color = Color.red;
+                    }
+                }
+                yield return new WaitForSeconds(2);
+                if (!(button.GetComponent<Image>().color == Color.red))
+                {
+                    button.GetComponent<Image>().color = Color.white;
+                }
+
+                activeCodeOutputPanel.ScrollView.velocity = new Vector2(0f, 30f);
+
+                position++;
+
+                if ( command == Command.Function1)
+                {
+                    SwitchToFunctionPanel(1);
+                     yield return GetActiveCodePanel().StartCoroutine(Play());
+                    SwitchToCodePanel();
+                    yield return new WaitForSeconds(2);
+                } else if (command == Command.Function2)
+                {
+                    SwitchToFunctionPanel(2);
+                    yield return GetActiveCodePanel().StartCoroutine(Play());
+                    SwitchToCodePanel();
+                    yield return new WaitForSeconds(2);
+                } 
+            }
+            isPlaying = false;
+            alreadyPlayed = true;
+        
+        
+    }
+
 
     public void StartPlayRoutine()
     {
         //CodeOutputPanel codeOutput = codePanel.GetComponentInChildren<CodeOutputPanel>();
+        if (!alreadyPlayed && !isPlaying)
+        {
+            isPlaying = true;
+            StartCoroutine(Play());
+        }
+        else
+        {
+            Debug.Log("Testeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+            foreach (GameObject image in GetActiveCodePanel().Buttons)
+            {
+                image.GetComponent<Image>().color = Color.white;
+            }
+
+            GameManager.instance.ResetGame();
+
+            alreadyPlayed = false;
+            Restart();
+        }
+    }
+
+    private void Restart()
+    {
+        StopAllCoroutines();
         StartCoroutine(Play());
     }
 
-    public IEnumerator Play()
-    {
-
-        int position = 0;
-
-        CodeOutputPanel activeCodeOutputPanel = GetActiveCodePanel();
-        foreach (Command command in activeCodeOutputPanel.CommandsPanel.Commands)
-        {
-            activeCodeOutputPanel = GetActiveCodePanel();
-            GameObject button = activeCodeOutputPanel.Buttons[position];
-            button.GetComponent<Image>().color = Color.green;
-
-            if (command != Command.Function1 && command != Command.Function2)
-            {
-
-                if (!GameManager.instance.SendCommandToPlayer(command))
-                {
-                    button.GetComponent<Image>().color = Color.red;
-                }
-            }
-            yield return new WaitForSeconds(2);
-            if (!(button.GetComponent<Image>().color == Color.red))
-            {
-                button.GetComponent<Image>().color = Color.white;
-            }
-
-            activeCodeOutputPanel.ScrollView.velocity = new Vector2(0f, 30f);
-
-            position++;
-
-            if ( command == Command.Function1)
-            {
-                SwitchToFunctionPanel(1);
-                 yield return GetActiveCodePanel().StartCoroutine(Play());
-                SwitchToCodePanel();
-                yield return new WaitForSeconds(2);
-            } else if (command == Command.Function2)
-            {
-                SwitchToFunctionPanel(2);
-                yield return GetActiveCodePanel().StartCoroutine(Play());
-                SwitchToCodePanel();
-                yield return new WaitForSeconds(2);
-            } 
-            
-             
-  
-             
-        }
-    }
     public IEnumerator PlayFunction()
     {
         SwitchToFunctionPanel(1);

@@ -15,10 +15,16 @@ public abstract class Character : MonoBehaviour {
     protected Rigidbody2D rb;
     protected Animator animator;
 
-    protected bool isWalking, isAttackink;
+    protected bool isWalking;
 
 
     protected bool isAttacking = false;
+
+    public void stopWalking()
+    {
+        isWalking = false;
+        
+    }
   
     public Direction GetDirection()
     {
