@@ -93,7 +93,6 @@ public class GameCanvas : MonoBehaviour {
         }
         else
         {
-            Debug.Log("Testeeeeeeeeeeeeeeeeeeeeeeeeeeee");
             foreach (GameObject image in GetActiveCodePanel().Buttons)
             {
                 image.GetComponent<Image>().color = Color.white;
