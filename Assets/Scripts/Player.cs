@@ -51,10 +51,12 @@ public class Player : Character {
 
      bool MoveIfPossible(Vector3 nextPosition)
     {
-       // groundSprite = map.GetSprite(Vector3Int.RoundToInt(new Vector3(transform.position.x, transform.position.y)));
-        Sprite nextPositionSprite = map.GetSprite(Vector3Int.RoundToInt(new Vector3(nextPosition.x, nextPosition.y)));
+        // groundSprite = map.GetSprite(Vector3Int.RoundToInt(new Vector3(transform.position.x, transform.position.y)));
+        Sprite nextPositionSprite = map.GetSprite(Vector3Int.RoundToInt(new Vector3(nextPosition.x - 0.10f, nextPosition.y)));
+        Debug.Log(Vector3Int.RoundToInt(new Vector3(nextPosition.x-0.10f, nextPosition.y)));
         //Debug.Log(" O próximo tile é : " + nextPositionSprite.name);
         //Debug.Log(nextPositionSprite.name == "sand_tile" || nextPositionSprite.name.Contains("grass"));
+        Debug.Log("Next Position Sprite: " + nextPositionSprite);
         if ( nextPositionSprite.name == "sand_tile" || nextPositionSprite.name.Contains("grass"))
         {
 

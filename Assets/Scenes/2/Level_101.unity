@@ -1812,7 +1812,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1157805205}
   m_HandleRect: {fileID: 1157805203}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -6011,12 +6011,12 @@ Prefab:
     - target: {fileID: 3664157346287749612, guid: 73f1db056899c204c8038027a9156caa,
         type: 2}
       propertyPath: m_ChunkCullingBounds.x
-      value: 0.2703098
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3664157346287749612, guid: 73f1db056899c204c8038027a9156caa,
         type: 2}
       propertyPath: m_ChunkCullingBounds.y
-      value: 2.055762
+      value: 0.90985143
       objectReference: {fileID: 0}
     - target: {fileID: 8195094281912328422, guid: 73f1db056899c204c8038027a9156caa,
         type: 2}
@@ -12903,6 +12903,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnpoint: {fileID: 1447089145}
   player: {fileID: 891221911}
+  codeOutputPanel: {fileID: 0}
 --- !u!4 &1311332150
 Transform:
   m_ObjectHideFlags: 0
@@ -15336,8 +15337,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000015258789, y: 0}
-  m_SizeDelta: {x: 0, y: -163.86398}
+  m_AnchoredPosition: {x: 0.000015258789, y: -0.000015258789}
+  m_SizeDelta: {x: 0, y: -163.44858}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1656264693
 MonoBehaviour:

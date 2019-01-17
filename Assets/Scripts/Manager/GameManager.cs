@@ -16,9 +16,11 @@ public class GameManager : MonoBehaviour {
 
     public void ResetGame()
     {
-        coins = GameObject.FindGameObjectsWithTag("Coin");
+        
+        Debug.Log("Rest Game: " + coins.Length);
         foreach (GameObject coin in coins)
         {
+            Debug.Log("COIN");
             coin.SetActive(true);
 
         }
@@ -33,6 +35,8 @@ public class GameManager : MonoBehaviour {
     // Use this for initialization
     void Start () {
         instance = this;
+        coins = GameObject.FindGameObjectsWithTag("Coin");
+        Debug.Log("LENGHT" + coins.Length);
     }
 	
 	// Update is called once per frame

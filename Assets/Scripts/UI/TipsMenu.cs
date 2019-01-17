@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class TipsMenu : MonoBehaviour {
     [SerializeField] private GameObject tipPanelObject;
     [SerializeField] private Button[] tips;
+    private float buttonHeight;
     private bool isColapsed = true;
 
     public void ShowTip(int tipNumber)
@@ -18,11 +19,12 @@ public class TipsMenu : MonoBehaviour {
 
     private void ShowMenu()
     {
-        int nextPosition = 30;
+        float buttonHeight = this.buttonHeight + (this.buttonHeight*0.10f);
+        float nextPosition = buttonHeight;
         foreach(Button button in tips)
         {
             button.gameObject.transform.position= new Vector2(button.gameObject.transform.position.x,button.gameObject.transform.position.y-nextPosition);
-            nextPosition +=30;
+            nextPosition +=buttonHeight;
         }
         isColapsed = false;
     }
@@ -34,11 +36,13 @@ public class TipsMenu : MonoBehaviour {
 
     private void HideMenu()
     {
-        int nextPosition = 30;
+
+        float buttonHeight = this.buttonHeight + (this.buttonHeight * 0.10f);
+        float nextPosition = buttonHeight;
         foreach (Button button in tips)
         {
             button.gameObject.transform.position = new Vector2(button.gameObject.transform.position.x, button.gameObject.transform.position.y + nextPosition);
-            nextPosition += 30;
+            nextPosition += buttonHeight;
         }
         isColapsed = true;
     }
@@ -57,7 +61,8 @@ public class TipsMenu : MonoBehaviour {
 
 
 	void Start () {
-	}
+        buttonHeight = tips[0].GetComponent<RectTransform>().sizeDelta.y;
+    }
 	
 	// Update is called once per frame
 	void Update () {

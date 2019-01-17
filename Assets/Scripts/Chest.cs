@@ -5,6 +5,7 @@ using System;
 
 public class Chest : MonoBehaviour {
     private Animator animator;
+    [SerializeField] private bool isOpen;
 
     public Direction IsNear(Transform transform)
     {
@@ -58,8 +59,12 @@ public class Chest : MonoBehaviour {
     }
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
         animator = GetComponent<Animator>();
+        if (isOpen)
+        {
+            animator.SetTrigger("Open");
+        }
 	}
 	
 	// Update is called once per frame

@@ -15,6 +15,7 @@ public class ObjectsManager : MonoBehaviour {
     {
         for (int i = 0; i < coins.Count; i++) {
             GameObject coinObject = coins[i];
+            Debug.Log(coinObject);
             Coin coin = coinObject.GetComponent<Coin>();
 
             if (coin.RemoveCoin(transform))
