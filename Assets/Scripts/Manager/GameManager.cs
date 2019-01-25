@@ -9,6 +9,56 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private CodeOutputPanel codeOutputPanel;
     public static GameManager instance;
 
+    private bool loopMode = false;
+    private bool functionMode = false;
+    private bool varMode = false;
+
+    public bool LoopMode
+    {
+        get
+        {
+            return loopMode;
+        }
+
+        set
+        {
+            loopMode = value;
+        }
+    }
+
+    public bool FunctionMode
+    {
+        get
+        {
+            return functionMode;
+        }
+
+        set
+        {
+            functionMode = value;
+        }
+    }
+
+    public bool VarMode
+    {
+        get
+        {
+            return varMode;
+        }
+
+        set
+        {
+            varMode = value;
+        }
+    }
+
+    public void SetupCodeMode()
+    {
+        this.loopMode = false;
+        this.varMode = false;
+        this.functionMode = false;
+    }
+
     public bool SendCommandToPlayer(Command command)
     {
         return player.setActiveCommand(command);
