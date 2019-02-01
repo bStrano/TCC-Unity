@@ -64,6 +64,9 @@ public class CommandsPanel : MonoBehaviour
 
     public bool AddComand(Command command)
     {
+        Debug.Log("Add" + command);
+        Debug.Log("Add" + maxComands);
+        Debug.Log("Add" + commands.Count);
         if (commands.Count < maxComands)
         {
             commands.Add(command);
@@ -79,20 +82,27 @@ public class CommandsPanel : MonoBehaviour
 
     public void UpdateEntries()
     {
-        entries.text = commands.Count + " / " + maxComands;
+        entries.text = commands.Count + "/" + maxComands;
         if(commands.Count == maxComands)
         {
             entries.color = Color.red;
         }
     }
 
+    public void RemoveCommand(int commandIndex)
+    {
+        commands.RemoveAt(commandIndex);
+        UpdateEntries();
+    }
+
     public Command ReciveComand(string commandString)
     {
         Command command = ((Command)Enum.Parse(typeof(Command), commandString));
-
+        Debug.Log(command);
         if (AddComand(command))
         {
             Debug.Log("A");
+            Debug.Log(command);
             UpdateEntries();
             return command;
         } else

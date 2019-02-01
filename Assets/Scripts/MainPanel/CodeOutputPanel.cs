@@ -68,7 +68,7 @@ public class CodeOutputPanel : MonoBehaviour {
             {
                 button.GetComponent<Image>().color = Color.red;
             }
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(1);
             if (!(button.GetComponent<Image>().color == Color.red))
             {
                 button.GetComponent<Image>().color = Color.white;
@@ -82,12 +82,13 @@ public class CodeOutputPanel : MonoBehaviour {
     public void HandleCommands(string commandString)
     {
         Command command = commands.ReciveComand(commandString);
-        TranslateCommandToCode(command, commands.Commands.Count);
+        TranslateCommandToCode(command);
     }
 
-    public void TranslateCommandToCode(Command command, int lineNumber)
+    public void TranslateCommandToCode(Command command)
     {
 
+        int lineNumber = buttons.Count+1;
         // foreach (Command command in commandsPanel.Comands)
         //{
         if(command != Command.None )
@@ -96,6 +97,30 @@ public class CodeOutputPanel : MonoBehaviour {
             Buttons.Add(newButton);
             CodeButton codeButton = newButton.GetComponent<CodeButton>();
             codeButton.LineNumber.text = lineNumber.ToString();
+            codeButton.DeleteButton.onClick.AddListener(() =>
+            {
+                Debug.Log(codeButton.gameObject.GetComponent<CodeButton>().LineNumber.text);
+
+                for (int i = buttons.Count - 1; i >= 0; i--)
+                {
+                    if (buttons[i].gameObject.GetComponent<CodeButton>().LineNumber.text == codeButton.LineNumber.text)
+                    {
+                        Debug.Log("TESTEEEEEEEEEEEEEEEEEEEEEE");
+                        buttons.RemoveAt(i);
+                        commands.RemoveCommand(i);
+                        break;
+                    }
+                }
+                Destroy(codeButton.gameObject);
+                for (int i = buttons.Count - 1; i >= 0; i--)
+                {
+                    CodeButton codeButtonTemp = buttons[i].gameObject.GetComponent<CodeButton>();
+                    codeButtonTemp.LineNumber.text = (i+1).ToString();
+                }
+
+                Debug.Log(buttons.Count);
+            }
+                );
             
             codeButton.CommandName.text = TranslateCommandToString(command);
 

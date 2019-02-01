@@ -11,6 +11,8 @@ public class CodeButton : MonoBehaviour {
     private Text lineNumber;
     [SerializeField]
     private Text commandName;
+    [SerializeField]
+    private Button deleteButton;
 
     public Text CommandName
     {
@@ -35,6 +37,19 @@ public class CodeButton : MonoBehaviour {
         set
         {
             lineNumber = value;
+        }
+    }
+
+    public Button DeleteButton
+    {
+        get
+        {
+            return deleteButton;
+        }
+
+        set
+        {
+            deleteButton = value;
         }
     }
 

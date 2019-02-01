@@ -7,6 +7,7 @@ public class GameCanvas : MonoBehaviour {
     [SerializeField] private MainPanel codePanel;
     [SerializeField] private MainPanel functionPanel1;
     [SerializeField] private MainPanel functionPanel2;
+    [SerializeField] private MainPanel functionPanel3;
     [SerializeField] private MainPanel loopPanel;
     private GameObject activeCodePanel;
     private bool alreadyPlayed = false;
@@ -24,6 +25,9 @@ public class GameCanvas : MonoBehaviour {
                 activeCodePanel = functionPanel2.gameObject;
                 break;
             case 3:
+                activeCodePanel = functionPanel3.gameObject;
+                break;
+            case 4:
                 GameManager.instance.LoopMode = true;
                 activeCodePanel = loopPanel.gameObject;
                 break;
