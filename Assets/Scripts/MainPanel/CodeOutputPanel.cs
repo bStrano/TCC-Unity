@@ -83,6 +83,7 @@ public class CodeOutputPanel : MonoBehaviour {
     {
         Command command = commands.ReciveComand(commandString);
         TranslateCommandToCode(command);
+        GameManager.instance.NextCommandTutoredGameplay();
     }
 
     public void TranslateCommandToCode(Command command)
@@ -138,13 +139,13 @@ public class CodeOutputPanel : MonoBehaviour {
         switch (command)
         {
             case Command.Walk_Top:
-                return "andarParaCima()";
+                return "andarCima()";
             case Command.Walk_Right:
-                return "andarParaDireita()";
+                return "andarDireita()";
             case Command.Walk_Bot:
-                return "andarParaBaixo()";
+                return "andarBaixo()";
             case Command.Walk_Left:
-                return "andarParaEsquerda()";
+                return "andarEsquerda()";
             case Command.Collect_Coin:
                 return "coletarMoeda()";
             case Command.Open_Chest:

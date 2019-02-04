@@ -33,6 +33,7 @@ public class GameCanvas : MonoBehaviour {
                 break;
         }
         activeCodePanel.SetActive(true);
+        GameManager.instance.NextCommandTutoredGameplay();
     }
 
     public void RestartLevel()
@@ -141,6 +142,7 @@ public class GameCanvas : MonoBehaviour {
         activeCodePanel.SetActive(false);
         activeCodePanel = codePanel.gameObject;
         activeCodePanel.SetActive(true);
+        GameManager.instance.NextCommandTutoredGameplay();
     }
 
 

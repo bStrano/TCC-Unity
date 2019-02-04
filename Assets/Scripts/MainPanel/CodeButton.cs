@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class CodeButton : MonoBehaviour {
 
+
     [SerializeField]
     private Button button;
     [SerializeField]
@@ -13,7 +14,6 @@ public class CodeButton : MonoBehaviour {
     private Text commandName;
     [SerializeField]
     private Button deleteButton;
-
     public Text CommandName
     {
         get
@@ -58,7 +58,8 @@ public class CodeButton : MonoBehaviour {
     void Start () {
 		
 	}
-	
+
+
 
 
 }

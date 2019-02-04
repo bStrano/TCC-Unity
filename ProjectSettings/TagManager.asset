@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Tree
   - Coin
+  - GameplayButton
   layers:
   - Default
   - TransparentFX

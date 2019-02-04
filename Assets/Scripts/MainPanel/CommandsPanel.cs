@@ -64,9 +64,6 @@ public class CommandsPanel : MonoBehaviour
 
     public bool AddComand(Command command)
     {
-        Debug.Log("Add" + command);
-        Debug.Log("Add" + maxComands);
-        Debug.Log("Add" + commands.Count);
         if (commands.Count < maxComands)
         {
             commands.Add(command);
@@ -75,8 +72,7 @@ public class CommandsPanel : MonoBehaviour
         else
         {
             return false;
-            // Not implemented yet;
-            Debug.Log("Lista Cheia");
+            // Not implemented yet
         }
     }
 
@@ -98,11 +94,8 @@ public class CommandsPanel : MonoBehaviour
     public Command ReciveComand(string commandString)
     {
         Command command = ((Command)Enum.Parse(typeof(Command), commandString));
-        Debug.Log(command);
         if (AddComand(command))
         {
-            Debug.Log("A");
-            Debug.Log(command);
             UpdateEntries();
             return command;
         } else
