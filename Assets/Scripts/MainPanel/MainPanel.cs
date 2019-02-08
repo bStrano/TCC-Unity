@@ -21,7 +21,7 @@ public class MainPanel : MonoBehaviour {
     // Use this for initialization
     void Start () {
         playerGO = GameObject.Find("Player");
-        player = playerGO.GetComponent<Player>();
+        // player = playerGO.GetComponent<Player>();
     }
 	
 	// Update is called once per frame

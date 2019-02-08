@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class GameCanvas : MonoBehaviour {
@@ -95,6 +96,7 @@ public class GameCanvas : MonoBehaviour {
 
     public void StartPlayRoutine()
     {
+        EventSystem.current.SetSelectedGameObject(null);
         //CodeOutputPanel codeOutput = codePanel.GetComponentInChildren<CodeOutputPanel>();
         if (!alreadyPlayed && !isPlaying)
         {

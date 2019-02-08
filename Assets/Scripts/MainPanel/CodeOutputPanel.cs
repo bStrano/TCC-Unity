@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
@@ -58,7 +59,7 @@ public class CodeOutputPanel : MonoBehaviour {
 
     public IEnumerator Play()
     {
-       
+        
         int position = 0;
         foreach (Command command in commands.Commands)
         {

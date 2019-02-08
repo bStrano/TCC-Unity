@@ -31,17 +31,12 @@ public class GameManager : MonoBehaviour {
 
     public void NextCommandTutoredGameplay()
     {
+        Debug.Log("Next Command Tutored Gameplay");
         if (tutoredGameplayMode)
         {
             tutoredGameplayMode = parentPanel.GetComponent<TutoredGameplay>().NextButton();
-            if (!tutoredGameplayMode)
-            {
-                Image image = parentPanel.GetComponent<Image>();
-                var tempColor = image.color;
-                tempColor.a = 0f;
-                image.color = tempColor;
 
-            }
+            Debug.Log("Next Command Tutored Gameplay");
             Debug.Log(tutoredGameplayMode);
         }
     }
@@ -72,11 +67,11 @@ public class GameManager : MonoBehaviour {
 
         if(parentPanel.GetComponent<TutoredGameplay>().Buttons.Count > 0)
         {
-            TutoredGameplayMode = true;
-            Image image = parentPanel.GetComponent<Image>();
-            var tempColor = image.color;
-            tempColor.a = 0.6f;
-            image.color = tempColor;
+            tutoredGameplayMode = true;
+            //Image image = parentPanel.GetComponent<Image>();
+            //var tempColor = image.color;
+            //tempColor.a = 0.6f;
+            //image.color = tempColor;
 
         }
     }

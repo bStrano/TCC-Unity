@@ -10,6 +10,8 @@ public class TutoredGameplay : MonoBehaviour
     [SerializeField] private GameObject mainPanel;
     [SerializeField] private GameObject functionPanel;
     [SerializeField] private List<Button> buttons;
+    [SerializeField] private List<String> labels;
+    [SerializeField] private GameObject labelPanel;
     private int activeIndex = 0;
 
     public List<Button> Buttons
@@ -31,19 +33,48 @@ public class TutoredGameplay : MonoBehaviour
         Debug.Log(activeIndex);
         DesactivateButton(buttons[activeIndex]);
         activeIndex++;
-        if(activeIndex < buttons.Count)
+        
+        if (activeIndex < buttons.Count)
         {
             ActivateButton(buttons[activeIndex]);
+            ChangeLabel();
             return true;
         }
+        
         return false;
     }
 
+    public void ChangeLabel()
+    {
+
+        if(labels.Count <= 0)
+        {
+            labelPanel.SetActive(false);
+            return;
+        }
+        if(labels[activeIndex] != "")
+        {
+            labelPanel.SetActive(true);
+            Text labelText = labelPanel.GetComponentInChildren<Text>();
+            Debug.Log(labels[activeIndex]);
+            labelText.text = labels[activeIndex];
+        } else
+        {
+            labelPanel.SetActive(false);
+        }
+    }
+
+    public void DesactivateLabelPanel()
+    {
+        labelPanel.SetActive(false);
+    }
     // Start is called before the first frame update
     void Start()
     {
+        ChangeLabel();
         if (buttons.Count > 0)
         {
+            buttons[buttons.Count - 1].onClick.AddListener(() => this.labelPanel.SetActive(false));
             Button[] mainPanelButtons = mainPanel.GetComponentsInChildren<Button>();
             Button[] functionPanelButtons = functionPanel.GetComponentsInChildren<Button>();
             foreach(Button button in mainPanelButtons)
