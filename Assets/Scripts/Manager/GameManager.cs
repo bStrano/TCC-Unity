@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private GameObject parentPanel;
     [SerializeField] private CodeOutputPanel codeOutputPanel;
     public static GameManager instance;
-
+   
 
     private bool tutoredGameplayMode = false;
     private bool loopMode = false;
@@ -59,6 +59,11 @@ public class GameManager : MonoBehaviour {
     }
 
 
+    public void FinishTutorial()
+    {
+        parentPanel.GetComponent<TutoredGameplay>().ShowLabelPanel();
+
+    }
     // Use this for initialization
     void Start () {
         instance = this;

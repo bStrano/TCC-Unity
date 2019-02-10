@@ -59,7 +59,7 @@ public class SectionContentView : MonoBehaviour {
 
             if (LevelPersistence.IsLevelUnlocked(level.LevelNumber.ToString()) || level.Unlocked)
             {
-                levelButton.LevelNumber.text = level.LevelNumber.ToString();
+                levelButton.LevelNumber.text = (levelIndex+1).ToString();
                 levelButton.GetComponent<Button>().interactable = true;
             }
             else

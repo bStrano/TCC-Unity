@@ -12,6 +12,7 @@ public class TutoredGameplay : MonoBehaviour
     [SerializeField] private List<Button> buttons;
     [SerializeField] private List<String> labels;
     [SerializeField] private GameObject labelPanel;
+    [SerializeField] private GameObject tutorialPanel;
     private int activeIndex = 0;
 
     public List<Button> Buttons
@@ -69,9 +70,17 @@ public class TutoredGameplay : MonoBehaviour
         labelPanel.SetActive(false);
     }
     // Start is called before the first frame update
+
+    public void ShowLabelPanel()
+    {
+        labelPanel.SetActive(true);
+    }
+
     void Start()
     {
         ChangeLabel();
+        
+       
         if (buttons.Count > 0)
         {
             buttons[buttons.Count - 1].onClick.AddListener(() => this.labelPanel.SetActive(false));
@@ -90,8 +99,13 @@ public class TutoredGameplay : MonoBehaviour
             ActivateButton(buttons[activeIndex]);
         }
 
+        if (tutorialPanel.activeSelf)
+        {
+            DesactivateLabelPanel();
+        }
 
-    }
+
+        }
 
     // Update is called once per frame
     void Update()

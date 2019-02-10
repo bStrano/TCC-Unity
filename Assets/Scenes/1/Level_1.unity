@@ -154,6 +154,12 @@ MonoBehaviour:
   m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &836294695 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5209772869857210106, guid: 39dddcf892040e54b9535b36d47c624a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1206953625}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1190002213 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3938713388882567675, guid: 39dddcf892040e54b9535b36d47c624a,
@@ -286,7 +292,7 @@ PrefabInstance:
     - target: {fileID: 1148634978557403994, guid: 39dddcf892040e54b9535b36d47c624a,
         type: 3}
       propertyPath: buttons.Array.size
-      value: 9
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1148634978557403994, guid: 39dddcf892040e54b9535b36d47c624a,
         type: 3}
@@ -333,6 +339,11 @@ PrefabInstance:
       propertyPath: buttons.Array.data[8]
       value: 
       objectReference: {fileID: 1482129516}
+    - target: {fileID: 1148634978557403994, guid: 39dddcf892040e54b9535b36d47c624a,
+        type: 3}
+      propertyPath: labelPanel
+      value: 
+      objectReference: {fileID: 836294695}
     - target: {fileID: 3756338828427297467, guid: 39dddcf892040e54b9535b36d47c624a,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -681,7 +692,7 @@ PrefabInstance:
     - target: {fileID: 3237006197491210772, guid: 39dddcf892040e54b9535b36d47c624a,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000015258789
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3237854066114513954, guid: 39dddcf892040e54b9535b36d47c624a,
         type: 3}
