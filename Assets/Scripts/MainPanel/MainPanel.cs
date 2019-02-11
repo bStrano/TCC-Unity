@@ -14,6 +14,32 @@ public class MainPanel : MonoBehaviour {
     private GameObject playerGO;
     private Player player;
 
+    public CodeOutputPanel CodeOutputPanel
+    {
+        get
+        {
+            return codeOutputPanel;
+        }
+
+        set
+        {
+            codeOutputPanel = value;
+        }
+    }
+
+    public CommandsPanel CommandsPanel
+    {
+        get
+        {
+            return commandsPanel;
+        }
+
+        set
+        {
+            commandsPanel = value;
+        }
+    }
+
     public void AddFunction(Function function)
     {
 

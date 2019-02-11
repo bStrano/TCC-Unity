@@ -4075,6 +4075,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f7719a3b46875643b23b93b4ee92f64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  codeOutputPanel: {fileID: 7721342893469914222}
   codePanel: {fileID: 7721293857038444160}
   functionPanel1: {fileID: 7721216740465105862}
   functionPanel2: {fileID: 7013543190155731857}

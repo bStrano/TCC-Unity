@@ -4,12 +4,14 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class GameCanvas : MonoBehaviour {
+public class GameCanvas : MonoBehaviour
+{
+    [SerializeField] private CodeOutputPanel codeOutputPanel;
     [SerializeField] private MainPanel codePanel;
     [SerializeField] private MainPanel functionPanel1;
     [SerializeField] private MainPanel functionPanel2;
     [SerializeField] private MainPanel functionPanel3;
-    [SerializeField] private MainPanel loopPanel;
+    [SerializeField] private GameObject loopPanel;
     private GameObject activeCodePanel;
     private bool alreadyPlayed = false;
     private bool isPlaying = false;
@@ -47,50 +49,97 @@ public class GameCanvas : MonoBehaviour {
     public IEnumerator Play()
     {
         int position = 0;
-            isPlaying = true;
-            CodeOutputPanel activeCodeOutputPanel = GetActiveCodePanel();
-            foreach (Command command in activeCodeOutputPanel.CommandsPanel.Commands)
+        isPlaying = true;
+        bool isLooping = false;
+        int loopIndex = 0;
+        int iterationLoopNumber = 1;
+        CodeOutputPanel activeCodeOutputPanel = GetActiveCodePanel();
+        Debug.Log(activeCodeOutputPanel.CommandsPanel.Commands.Count);
+        while (position < activeCodeOutputPanel.CommandsPanel.Commands.Count)
+        {
+            Command command = activeCodeOutputPanel.CommandsPanel.Commands[position];
+
+            activeCodeOutputPanel = GetActiveCodePanel();
+            GameObject button = activeCodeOutputPanel.Buttons[position];
+            button.GetComponent<CodeButton>().ChangeBackgroundColor(Color.green);
+            if (command == Command.Loop)
             {
-                activeCodeOutputPanel = GetActiveCodePanel();
-                GameObject button = activeCodeOutputPanel.Buttons[position];
-                button.GetComponent<Image>().color = Color.green;
-
-                if (command != Command.Function1 && command != Command.Function2)
-                {
-
-                    if (!GameManager.instance.SendCommandToPlayer(command))
-                    {
-                        button.GetComponent<Image>().color = Color.red;
-                    }
-                }
-                yield return new WaitForSeconds(2);
-                if (!(button.GetComponent<Image>().color == Color.red))
-                {
-                    button.GetComponent<Image>().color = Color.white;
-                }
-
-                activeCodeOutputPanel.ScrollView.velocity = new Vector2(0f, 30f);
-
-                position++;
-
-                if ( command == Command.Function1)
-                {
-                    SwitchToFunctionPanel(1);
-                     yield return GetActiveCodePanel().StartCoroutine(Play());
-                    SwitchToCodePanel();
-                    yield return new WaitForSeconds(2);
-                } else if (command == Command.Function2)
-                {
-                    SwitchToFunctionPanel(2);
-                    yield return GetActiveCodePanel().StartCoroutine(Play());
-                    SwitchToCodePanel();
-                    yield return new WaitForSeconds(2);
-                } 
+                isLooping = true;
             }
-            isPlaying = false;
-            alreadyPlayed = true;
-        
-        
+            else if (command == Command.EndLoop)
+            {
+                isLooping = false;
+                loopIndex++;
+                iterationLoopNumber = 0;
+                position++;
+                continue;
+            }
+            else if (command != Command.Function1 && command != Command.Function2 && !(command == Command.Loop || command == Command.EndLoop))
+            {
+
+                if (!GameManager.instance.SendCommandToPlayer(command))
+                {
+                    button.GetComponent<CodeButton>().ChangeBackgroundColor(Color.red);
+                }
+            }
+
+
+
+
+            yield return new WaitForSeconds(2);
+
+            if (!(button.GetComponent<CodeButton>().BackgroundColor == Color.red))
+            {
+                button.GetComponent<CodeButton>().ChangeBackgroundColor(Color.white);
+            }
+
+
+            position++;
+
+            if (command == Command.Function1)
+            {
+                SwitchToFunctionPanel(1);
+                yield return GetActiveCodePanel().StartCoroutine(Play());
+                SwitchToCodePanel();
+                yield return new WaitForSeconds(2);
+            }
+            else if (command == Command.Function2)
+            {
+                SwitchToFunctionPanel(2);
+                yield return GetActiveCodePanel().StartCoroutine(Play());
+                SwitchToCodePanel();
+                yield return new WaitForSeconds(2);
+            }
+
+
+            if (isLooping)
+            {
+                Debug.Log("Is Looping");
+                Debug.Log(activeCodeOutputPanel.Loops[loopIndex].FinalIndex + "/" + position);
+                if (activeCodeOutputPanel.Loops[loopIndex].FinalIndex == position)
+                {
+                    
+                    Debug.Log("Is Looping: Ultimo elemento do loop");
+                    Debug.Log("Iteration Loop Number: " + iterationLoopNumber + "/" + activeCodeOutputPanel.Loops[loopIndex].NumberIterations);
+                    if (iterationLoopNumber < activeCodeOutputPanel.Loops[loopIndex].NumberIterations)
+                    {
+                        
+                        Debug.Log("Is Looping: Ultimo iteração do loop");
+                        position = activeCodeOutputPanel.Loops[loopIndex].InitialIndex;
+                        
+                    }
+                    iterationLoopNumber++;
+                }
+                Debug.Log(position);
+            } else
+            {
+                activeCodeOutputPanel.ScrollView.velocity = new Vector2(0f, 35f);
+            }
+        }
+        isPlaying = false;
+        alreadyPlayed = true;
+
+
     }
 
 
@@ -148,6 +197,25 @@ public class GameCanvas : MonoBehaviour {
     }
 
 
+    public void DesactivateLoopPanel()
+    {
+        loopPanel.SetActive(false);
+    }
+
+    public void ToogleLoopPanel()
+    {
+
+        if (!GameManager.instance.LoopMode)
+        {
+            loopPanel.SetActive(!loopPanel.activeSelf);
+        }
+        else
+        {
+            codeOutputPanel.EndLoopCommand();
+            GameManager.instance.LoopMode = false;
+        }
+
+    }
 
 
     public void CancelFunctionCreation()
@@ -165,12 +233,14 @@ public class GameCanvas : MonoBehaviour {
 
     }
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         activeCodePanel = codePanel.gameObject;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 }

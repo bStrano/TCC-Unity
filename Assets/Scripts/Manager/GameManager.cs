@@ -31,13 +31,9 @@ public class GameManager : MonoBehaviour {
 
     public void NextCommandTutoredGameplay()
     {
-        Debug.Log("Next Command Tutored Gameplay");
         if (tutoredGameplayMode)
         {
             tutoredGameplayMode = parentPanel.GetComponent<TutoredGameplay>().NextButton();
-
-            Debug.Log("Next Command Tutored Gameplay");
-            Debug.Log(tutoredGameplayMode);
         }
     }
 

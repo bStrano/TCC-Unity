@@ -19,14 +19,16 @@ public enum Command
     Collect_Coin,
     Open_Chest,
     Function1,
-    Function2
+    Function2,
+    Loop,
+    EndLoop,
 }
 
 public class CommandsPanel : MonoBehaviour
 {
     private List<Command> commands;
-    [SerializeField]
-    private Text entries;
+    [SerializeField]private Text entries;
+    [SerializeField] private Button loopButton;
     private int maxComands;
 
 
@@ -40,6 +42,21 @@ public class CommandsPanel : MonoBehaviour
         set
         {
             commands = value;
+        }
+    }
+
+
+
+    public Button LoopButton
+    {
+        get
+        {
+            return loopButton;
+        }
+
+        set
+        {
+            loopButton = value;
         }
     }
 
@@ -91,6 +108,9 @@ public class CommandsPanel : MonoBehaviour
         UpdateEntries();
     }
 
+
+ 
+
     public Command ReciveComand(string commandString)
     {
         Command command = ((Command)Enum.Parse(typeof(Command), commandString));
@@ -102,37 +122,7 @@ public class CommandsPanel : MonoBehaviour
         {
            return Command.None;
         }
-        
-        
 
-        //switch ((Command)Enum.Parse(typeof(Command), commandString))
-        //{
-        //    case Command.Walk_Top:
-        //        Debug.Log("Walk_Top");
-        //        AddComand(Command.Walk_Top);
-        //        break;
-        //    case Command.Walk_Right:
-        //        Debug.Log("Walk Right");
-        //        AddComand(Command.Walk_Right);
-        //        break;
-        //    case Command.Walk_Bot:
-        //        Debug.Log("Walk Bot");
-        //        AddComand(Command.Walk_Bot);
-        //        break;
-        //    case Command.Walk_Left:
-        //        Debug.Log("Walk Left");
-        //        AddComand(Command.Walk_Left);
-        //        break;
-        //    case Command.Spell1:
-        //        AddComand(Command.Spell1);
-        //        break;
-        //    case Command.Spell2:
-        //        AddComand(Command.Spell2);
-        //        break;
-        //    case Command.Spell3:
-        //        AddComand(Command.Spell3);
-        //        break;
-        //}
 
     }
 

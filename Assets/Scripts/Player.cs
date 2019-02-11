@@ -53,10 +53,10 @@ public class Player : Character {
     {
         // groundSprite = map.GetSprite(Vector3Int.RoundToInt(new Vector3(transform.position.x, transform.position.y)));
         Sprite nextPositionSprite = map.GetSprite(Vector3Int.RoundToInt(new Vector3(nextPosition.x - 0.10f, nextPosition.y)));
-        Debug.Log(Vector3Int.RoundToInt(new Vector3(nextPosition.x-0.10f, nextPosition.y)));
+        //Debug.Log(Vector3Int.RoundToInt(new Vector3(nextPosition.x-0.10f, nextPosition.y)));
         //Debug.Log(" O próximo tile é : " + nextPositionSprite.name);
         //Debug.Log(nextPositionSprite.name == "sand_tile" || nextPositionSprite.name.Contains("grass"));
-        Debug.Log("Next Position Sprite: " + nextPositionSprite);
+        //Debug.Log("Next Position Sprite: " + nextPositionSprite);
         if ( nextPositionSprite.name == "sand_tile" || nextPositionSprite.name.Contains("grass"))
         {
 
@@ -138,7 +138,7 @@ public class Player : Character {
         //PlayerCommand playerCommand = (PlayerCommand)Enum.Parse(typeof(PlayerCommand), command);
         if (playerCommand == Command.Walk_Top || playerCommand == Command.Walk_Right || playerCommand == Command.Walk_Bot || playerCommand == Command.Walk_Left )
         {
-            Debug.Log("Iniciando a movimentação do personagem, ---- " + playerCommand.ToString());
+            //Debug.Log("Iniciando a movimentação do personagem, ---- " + playerCommand.ToString());
             return MoveToDirection(playerCommand);
           
         } else if ( playerCommand == Command.Collect_Coin)

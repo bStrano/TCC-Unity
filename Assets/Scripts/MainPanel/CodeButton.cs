@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class CodeButton : MonoBehaviour {
 
-
+    [SerializeField] GameObject mainPanel;
     [SerializeField]
     private Button button;
     [SerializeField]
@@ -14,6 +14,26 @@ public class CodeButton : MonoBehaviour {
     private Text commandName;
     [SerializeField]
     private Button deleteButton;
+
+
+    public void AddSpaceLeft()
+    {
+        mainPanel.transform.position = new Vector2(mainPanel.transform.position.x + 10, mainPanel.transform.position.y);
+        deleteButton.transform.position = new Vector2(deleteButton.transform.position.x - 10, mainPanel.transform.position.y);
+    }
+
+    public void ChangeBackgroundColor(Color color)
+    {
+        mainPanel.GetComponent<Image>().color = color;
+    }
+
+    public Color BackgroundColor
+    {
+        get
+        {
+            return mainPanel.GetComponent<Image>().color;
+        }
+    }
     public Text CommandName
     {
         get
@@ -50,6 +70,19 @@ public class CodeButton : MonoBehaviour {
         set
         {
             deleteButton = value;
+        }
+    }
+
+    public GameObject MainPanel
+    {
+        get
+        {
+            return mainPanel;
+        }
+
+        set
+        {
+            mainPanel = value;
         }
     }
 
