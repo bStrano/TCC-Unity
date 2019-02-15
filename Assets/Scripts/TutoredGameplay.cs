@@ -9,6 +9,7 @@ public class TutoredGameplay : MonoBehaviour
 
     [SerializeField] private GameObject mainPanel;
     [SerializeField] private GameObject functionPanel;
+    [SerializeField] private GameObject loopPanel;
     [SerializeField] private List<Button> buttons;
     [SerializeField] private List<String> labels;
     [SerializeField] private GameObject labelPanel;
@@ -86,12 +87,18 @@ public class TutoredGameplay : MonoBehaviour
             buttons[buttons.Count - 1].onClick.AddListener(() => this.labelPanel.SetActive(false));
             Button[] mainPanelButtons = mainPanel.GetComponentsInChildren<Button>();
             Button[] functionPanelButtons = functionPanel.GetComponentsInChildren<Button>();
+            Button[] loopPanelButtons = loopPanel.GetComponentsInChildren<Button>();
             foreach(Button button in mainPanelButtons)
             {
                 DesactivateButton(button);
             }
         
             foreach (Button button in functionPanelButtons)
+            {
+                DesactivateButton(button);
+            }
+
+            foreach (Button button in loopPanelButtons)
             {
                 DesactivateButton(button);
             }

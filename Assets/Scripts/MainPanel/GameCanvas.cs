@@ -72,6 +72,7 @@ public class GameCanvas : MonoBehaviour
                 loopIndex++;
                 iterationLoopNumber = 0;
                 position++;
+                button.GetComponent<CodeButton>().ChangeBackgroundColor(Color.white);
                 continue;
             }
             else if (command != Command.Function1 && command != Command.Function2 && !(command == Command.Loop || command == Command.EndLoop))
@@ -205,6 +206,7 @@ public class GameCanvas : MonoBehaviour
     public void ToogleLoopPanel()
     {
 
+        GameManager.instance.NextCommandTutoredGameplay();
         if (!GameManager.instance.LoopMode)
         {
             loopPanel.SetActive(!loopPanel.activeSelf);

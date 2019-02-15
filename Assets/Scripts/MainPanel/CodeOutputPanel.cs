@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System;
 
 
-public class CodeOutputPanel : MonoBehaviour {
+public class CodeOutputPanel : MonoBehaviour
+{
     [SerializeField] protected GameObject mainPanel;
     [SerializeField] protected CommandsPanel commands;
     [SerializeField] private GameObject button;
@@ -20,7 +22,7 @@ public class CodeOutputPanel : MonoBehaviour {
         StopAllCoroutines();
     }
 
-    
+
 
     public void HandleLoopCommand(int numberOfRepetitions)
     {
@@ -31,7 +33,7 @@ public class CodeOutputPanel : MonoBehaviour {
         GameManager.instance.LoopMode = true;
         LoopButton loopButton = mainPanel.GetComponent<MainPanel>().CommandsPanel.LoopButton.GetComponent<LoopButton>();
         loopButton.ActivateLoopMode();
-   
+
     }
 
 
@@ -39,11 +41,10 @@ public class CodeOutputPanel : MonoBehaviour {
     {
         Command command = commands.ReciveComand(Command.EndLoop.ToString());
 
-        
+
         GameManager.instance.LoopMode = false;
-        GameManager.instance.NextCommandTutoredGameplay();
         TranslateCommandToCode(Command.EndLoop, null);
-        Loops[Loops.Count-1].FinalIndex = buttons.Count-1;
+        Loops[Loops.Count - 1].FinalIndex = buttons.Count - 1;
         LoopButton loopButton = mainPanel.GetComponent<MainPanel>().CommandsPanel.LoopButton.GetComponent<LoopButton>();
         loopButton.DesactivateLoopmode();
     }
@@ -55,13 +56,21 @@ public class CodeOutputPanel : MonoBehaviour {
         GameManager.instance.NextCommandTutoredGameplay();
     }
 
+    private void RemoveButton(int i)
+    {
+        Destroy(buttons[i].gameObject);
+        buttons.RemoveAt(i);
+        commands.RemoveCommand(i);
+        
+    }
+
     public void TranslateCommandToCode(Command command, string additional)
     {
 
-        int lineNumber = buttons.Count+1;
+        int lineNumber = buttons.Count + 1;
         // foreach (Command command in commandsPanel.Comands)
         //{
-        if(command != Command.None )
+        if (command != Command.None)
         {
             GameObject newButton = GameObject.Instantiate(button);
             Buttons.Add(newButton);
@@ -75,23 +84,72 @@ public class CodeOutputPanel : MonoBehaviour {
                 {
                     if (buttons[i].gameObject.GetComponent<CodeButton>().LineNumber.text == codeButton.LineNumber.text)
                     {
-                        buttons.RemoveAt(i);
-                        commands.RemoveCommand(i);
-                        break;
+                        Debug.Log("Index: " + i);
+                        if (command == Command.Loop)
+                        {
+                            while (true)
+                            {
+                                try
+                                {
+                                    Command commandAux = commands.Commands[i];
+  
+                                    RemoveButton(i);
+
+                                    if (commandAux == Command.EndLoop)
+                                    {
+                                        break;
+                                    }
+
+
+                                }
+                                catch (ArgumentOutOfRangeException e)
+                                {
+                                    Debug.Log("Exception");
+                                    break;
+                                }
+                            }
+                            break;
+                        } else if (command == Command.EndLoop)
+                        {
+                            while (true)
+                            {
+
+
+                                Command commandAux = commands.Commands[i];
+                                RemoveButton(i);
+    
+                                if (commandAux == Command.Loop)
+                                {
+                                    break;
+                                } else
+                                {
+                                    i--;
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            buttons.RemoveAt(i);
+                            commands.RemoveCommand(i);
+                            Destroy(codeButton.gameObject);
+                            break;
+                        }
+
                     }
+
                 }
-                Destroy(codeButton.gameObject);
                 for (int i = buttons.Count - 1; i >= 0; i--)
                 {
                     CodeButton codeButtonTemp = buttons[i].gameObject.GetComponent<CodeButton>();
-                    codeButtonTemp.LineNumber.text = (i+1).ToString();
+                    codeButtonTemp.LineNumber.text = (i + 1).ToString();
                 }
 
                 Debug.Log(buttons.Count);
             }
                 );
-            
-            codeButton.CommandName.text = TranslateCommandToString(command,additional);
+
+            codeButton.CommandName.text = TranslateCommandToString(command, additional);
 
 
             if (GameManager.instance.LoopMode)
@@ -99,10 +157,10 @@ public class CodeOutputPanel : MonoBehaviour {
 
                 codeButton.AddSpaceLeft();
             }
-            newButton.transform.SetParent(contentPanel,false);
-            
+            newButton.transform.SetParent(contentPanel, false);
+
         }
-            
+
         //}
     }
 
@@ -137,10 +195,11 @@ public class CodeOutputPanel : MonoBehaviour {
         return null;
     }
 
-	// Use this for initialization
-	void Start () {
-		//GameObject lineCode = Instantiate
-	}
+    // Use this for initialization
+    void Start()
+    {
+        //GameObject lineCode = Instantiate
+    }
 
 
 
