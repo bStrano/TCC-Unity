@@ -16,16 +16,28 @@ public class GameCanvas : MonoBehaviour
     private bool alreadyPlayed = false;
     private bool isPlaying = false;
 
+    public MainPanel FunctionPanel1
+    {
+        get { return functionPanel1; }
+        set { functionPanel1 = value; }
+    }
+
+    public MainPanel FunctionPanel2
+    {
+        get { return functionPanel2; }
+        set { functionPanel2 = value; }
+    }
+
     public void SwitchToFunctionPanel(int functionNumber)
     {
         codePanel.gameObject.SetActive(false);
         switch (functionNumber)
         {
             case 1:
-                activeCodePanel = functionPanel1.gameObject;
+                activeCodePanel = FunctionPanel1.gameObject;
                 break;
             case 2:
-                activeCodePanel = functionPanel2.gameObject;
+                activeCodePanel = FunctionPanel2.gameObject;
                 break;
             case 3:
                 activeCodePanel = functionPanel3.gameObject;
@@ -70,7 +82,7 @@ public class GameCanvas : MonoBehaviour
             {
                 isLooping = false;
                 loopIndex++;
-                iterationLoopNumber = 0;
+                iterationLoopNumber = 1;
                 position++;
                 button.GetComponent<CodeButton>().ChangeBackgroundColor(Color.white);
                 continue;
@@ -115,23 +127,20 @@ public class GameCanvas : MonoBehaviour
 
             if (isLooping)
             {
-                Debug.Log("Is Looping");
-                Debug.Log(activeCodeOutputPanel.Loops[loopIndex].FinalIndex + "/" + position);
                 if (activeCodeOutputPanel.Loops[loopIndex].FinalIndex == position)
                 {
-                    
-                    Debug.Log("Is Looping: Ultimo elemento do loop");
-                    Debug.Log("Iteration Loop Number: " + iterationLoopNumber + "/" + activeCodeOutputPanel.Loops[loopIndex].NumberIterations);
+                   
                     if (iterationLoopNumber < activeCodeOutputPanel.Loops[loopIndex].NumberIterations)
                     {
                         
-                        Debug.Log("Is Looping: Ultimo iteração do loop");
+                      
                         position = activeCodeOutputPanel.Loops[loopIndex].InitialIndex;
                         
                     }
+                    Debug.Log("iterationLoopNumber");
+                    Debug.Log(iterationLoopNumber);
                     iterationLoopNumber++;
                 }
-                Debug.Log(position);
             } else
             {
                 activeCodeOutputPanel.ScrollView.velocity = new Vector2(0f, 35f);

@@ -8,6 +8,7 @@ using System;
 
 public class CodeOutputPanel : MonoBehaviour
 {
+    [SerializeField] private GameCanvas gameCanvas;
     [SerializeField] protected GameObject mainPanel;
     [SerializeField] protected CommandsPanel commands;
     [SerializeField] private GameObject button;
@@ -46,11 +47,51 @@ public class CodeOutputPanel : MonoBehaviour
         TranslateCommandToCode(Command.EndLoop, null);
         Loops[Loops.Count - 1].FinalIndex = buttons.Count - 1;
         LoopButton loopButton = mainPanel.GetComponent<MainPanel>().CommandsPanel.LoopButton.GetComponent<LoopButton>();
-        loopButton.DesactivateLoopmode();
+        loopButton.DisableLoopMode();
     }
 
     public void HandleCommands(string commandString)
     {
+        Debug.Log(commandString);
+        switch (commandString)
+        {
+            case "Function1":
+            {
+                try
+                {
+                    if (gameCanvas.FunctionPanel1.CommandsPanel.Commands.Count == 0)
+                    {
+                        GameManager.instance.AlertDialog.SetupDialog("Mantenha pressionado o botão de função para abrir o painel de funções", "Entendi!");
+                        GameManager.instance.AlertDialog.OpenDialog();
+                        
+                        return;
+                      
+                    }
+
+                    break;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    GameManager.instance.AlertDialog.SetupDialog("Mantenha pressionado o botão de função para abrir o painel de funções", "Entendi!");
+                    GameManager.instance.AlertDialog.OpenDialog();
+                    return;
+                    throw;
+                    
+                }
+
+            }
+            case "Function2":
+            {
+                if (gameCanvas.FunctionPanel2.CommandsPanel.Commands.Count == 0)
+                {
+                    GameManager.instance.AlertDialog.OpenDialog();
+                    return;
+                }
+
+                break;
+            }
+        }
         Command command = commands.ReciveComand(commandString);
         TranslateCommandToCode(command, null);
         GameManager.instance.NextCommandTutoredGameplay();
@@ -72,7 +113,7 @@ public class CodeOutputPanel : MonoBehaviour
         //{
         if (command != Command.None)
         {
-            GameObject newButton = GameObject.Instantiate(button);
+            GameObject newButton = GameObject.Instantiate(button, contentPanel, false);
             Buttons.Add(newButton);
             CodeButton codeButton = newButton.GetComponent<CodeButton>();
             codeButton.LineNumber.text = lineNumber.ToString();
@@ -157,8 +198,6 @@ public class CodeOutputPanel : MonoBehaviour
 
                 codeButton.AddSpaceLeft();
             }
-            newButton.transform.SetParent(contentPanel, false);
-
         }
 
         //}

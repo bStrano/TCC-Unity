@@ -5,56 +5,42 @@ using UnityEngine.UI;
 using System;
 
 
-
-public class MainPanel : MonoBehaviour {
-    [SerializeField] private GameObject mainPanel;  
+public class MainPanel : MonoBehaviour
+{
+    [SerializeField] private GameObject mainPanel;
     [SerializeField] private CodeOutputPanel codeOutputPanel;
     [SerializeField] private CommandsPanel commandsPanel;
-  
+
     private GameObject playerGO;
     private Player player;
 
     public CodeOutputPanel CodeOutputPanel
     {
-        get
-        {
-            return codeOutputPanel;
-        }
+        get { return codeOutputPanel; }
 
-        set
-        {
-            codeOutputPanel = value;
-        }
+        set { codeOutputPanel = value; }
     }
 
     public CommandsPanel CommandsPanel
     {
-        get
-        {
-            return commandsPanel;
-        }
+        get { return commandsPanel; }
 
-        set
-        {
-            commandsPanel = value;
-        }
+        set { commandsPanel = value; }
     }
 
     public void AddFunction(Function function)
     {
-
     }
+
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         playerGO = GameObject.Find("Player");
         // player = playerGO.GetComponent<Player>();
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
-
-
+    // Update is called once per frame
+    void Update()
+    {
+    }
 }

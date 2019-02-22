@@ -16,11 +16,11 @@ public class LoopButton : MonoBehaviour
 
     public void ActivateLoopMode()
     {
-        this.image.color = new Color(30,0,255);
-        this.text.color = new Color(0,189,255);
+        this.image.color = new Color(0,0,255);
+        this.text.color = new Color(209,163,255);
     }
     
-    public void DesactivateLoopmode()
+    public void DisableLoopMode()
     {
         this.image.color = new Color(255, 255, 255);
         this.text.color = new Color(255, 255, 255);

@@ -5,13 +5,13 @@ using UnityEngine;
 [System.Serializable]
 public class Level  {
 
-    [SerializeField]
-    private int levelNumber;
-    [SerializeField]
-    private int comandsAvaiable;
-    [SerializeField]
-    private bool unlocked;
+    [SerializeField] private int sceneNumber;
+    [SerializeField] private int levelNumber;
+    [SerializeField] private int comandsAvaiable;
+    [SerializeField] private bool unlocked;
 
+    
+    
     public int ComandsAvaiable
     {
         get
@@ -64,5 +64,9 @@ public class Level  {
         }
     }
 
-
+    public int SceneNumber
+    {
+        get { return sceneNumber; }
+        set { sceneNumber = value; }
+    }
 }

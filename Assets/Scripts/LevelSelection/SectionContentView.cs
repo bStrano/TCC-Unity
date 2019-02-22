@@ -52,7 +52,7 @@ public class SectionContentView : MonoBehaviour {
         int levelIndex = 0;
         foreach (Level level in section.LevelList)
         {
-            GameObject button = GameObject.Instantiate(levelButtonPrefab);
+            GameObject button = GameObject.Instantiate(levelButtonPrefab, buttonsPanelLocation.transform, false);
 
             LevelButton levelButton = button.GetComponent<LevelButton>();
 
@@ -69,7 +69,6 @@ public class SectionContentView : MonoBehaviour {
             }
 
             ButtonLevelClickHandler(levelButton, level);
-            button.transform.SetParent(buttonsPanelLocation.transform, false);
             levelIndex++;
 
         }
@@ -81,9 +80,9 @@ public class SectionContentView : MonoBehaviour {
     }
 
 
-    public void CallSwitchScene(Level level)
+    void CallSwitchScene(Level level)
     {
-        LevelManager.instance.SwitchScene("Level_" + level.LevelNumber, level);
+        LevelManager.instance.SwitchScene(level.SceneNumber.ToString());
     }
 
 

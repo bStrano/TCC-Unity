@@ -11,7 +11,7 @@ public class SectionMenuView : MonoBehaviour
     [SerializeField] private GameObject levelButtonPrefab;
     [SerializeField] private Transform buttonsPanelLocation;
     [SerializeField] private GameObject mainPanel;
-   
+    
 
 
     [SerializeField] private GameObject sectionContent;

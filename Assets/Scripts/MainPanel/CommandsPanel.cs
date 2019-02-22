@@ -26,64 +26,46 @@ public enum Command
 
 public class CommandsPanel : MonoBehaviour
 {
-    private List<Command> commands;
-    [SerializeField]private Text entries;
+    [SerializeField] private Text entries;
     [SerializeField] private Button loopButton;
     private int maxComands;
+    private int programmingCommands = 0;
 
 
-    public List<Command> Commands
-    {
-        get
-        {
-            return commands;
-        }
-
-        set
-        {
-            commands = value;
-        }
-    }
-
+    public List<Command> Commands { get; private set; }
 
 
     public Button LoopButton
     {
-        get
-        {
-            return loopButton;
-        }
+        get { return loopButton; }
 
-        set
-        {
-            loopButton = value;
-        }
+        set { loopButton = value; }
+    }
+
+
+    public void Awake()
+    {
+        Commands = new List<Command>();
     }
 
     public void Start()
     {
-        try
-        {
-            maxComands = LevelManager.instance.ActiveLevel.ComandsAvaiable;
-        }catch(NullReferenceException ex)
-        {
-            // Debug only
-            maxComands = 1000;
-            Debug.LogWarning(ex);
-        }
-        
-        Debug.Log("Level Manages commands Avaiable: " + maxComands );
-        commands = new List<Command>();
+        Debug.Log(GameManager.instance.CommandsAvailable);
+        Debug.Log("Teste");
+
+        maxComands = GameManager.instance.CommandsAvailable;
+        Debug.Log(maxComands);
+
+
         UpdateEntries();
     }
-  
 
 
     public bool AddComand(Command command)
     {
-        if (commands.Count < maxComands)
+        if (Commands.Count < maxComands)
         {
-            commands.Add(command);
+            Commands.Add(command);
             return true;
         }
         else
@@ -95,39 +77,35 @@ public class CommandsPanel : MonoBehaviour
 
     public void UpdateEntries()
     {
-        entries.text = commands.Count + "/" + maxComands;
-        if(commands.Count == maxComands)
+        entries.text = Commands.Count + "/" + maxComands;
+        if (Commands.Count == maxComands)
         {
             entries.color = Color.red;
+        }
+        else
+        {
+            entries.color = Color.black;
         }
     }
 
     public void RemoveCommand(int commandIndex)
     {
-        commands.RemoveAt(commandIndex);
+        Commands.RemoveAt(commandIndex);
         UpdateEntries();
     }
 
 
- 
-
     public Command ReciveComand(string commandString)
     {
-        Command command = ((Command)Enum.Parse(typeof(Command), commandString));
+        Command command = ((Command) Enum.Parse(typeof(Command), commandString));
         if (AddComand(command))
         {
             UpdateEntries();
             return command;
-        } else
-        {
-           return Command.None;
         }
-
-
+        else
+        {
+            return Command.None;
+        }
     }
-
-   
-
 }
-
-

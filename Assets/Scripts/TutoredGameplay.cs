@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class TutoredGameplay : MonoBehaviour
 {
-
     [SerializeField] private GameObject mainPanel;
     [SerializeField] private GameObject functionPanel;
     [SerializeField] private GameObject loopPanel;
@@ -18,15 +17,9 @@ public class TutoredGameplay : MonoBehaviour
 
     public List<Button> Buttons
     {
-        get
-        {
-            return buttons;
-        }
+        get { return buttons; }
 
-        set
-        {
-            buttons = value;
-        }
+        set { buttons = value; }
     }
 
     public bool NextButton()
@@ -35,32 +28,33 @@ public class TutoredGameplay : MonoBehaviour
         Debug.Log(activeIndex);
         DesactivateButton(buttons[activeIndex]);
         activeIndex++;
-        
+
         if (activeIndex < buttons.Count)
         {
             ActivateButton(buttons[activeIndex]);
             ChangeLabel();
             return true;
         }
-        
+
         return false;
     }
 
     public void ChangeLabel()
     {
-
-        if(labels.Count <= 0)
+        if (labels.Count <= 0)
         {
             labelPanel.SetActive(false);
             return;
         }
-        if(labels[activeIndex] != "")
+
+        if (labels[activeIndex] != "")
         {
             labelPanel.SetActive(true);
             Text labelText = labelPanel.GetComponentInChildren<Text>();
             Debug.Log(labels[activeIndex]);
             labelText.text = labels[activeIndex];
-        } else
+        }
+        else
         {
             labelPanel.SetActive(false);
         }
@@ -80,28 +74,35 @@ public class TutoredGameplay : MonoBehaviour
     void Start()
     {
         ChangeLabel();
-        
-       
+
+
         if (buttons.Count > 0)
         {
             buttons[buttons.Count - 1].onClick.AddListener(() => this.labelPanel.SetActive(false));
             Button[] mainPanelButtons = mainPanel.GetComponentsInChildren<Button>();
             Button[] functionPanelButtons = functionPanel.GetComponentsInChildren<Button>();
-            Button[] loopPanelButtons = loopPanel.GetComponentsInChildren<Button>();
-            foreach(Button button in mainPanelButtons)
+            if (loopPanel != null)
+            {
+                Button[] loopPanelButtons = loopPanel.GetComponentsInChildren<Button>();
+                if (loopPanelButtons != null)
+                {
+                    foreach (Button button in loopPanelButtons)
+                    {
+                        DesactivateButton(button);
+                    }
+                }
+            }
+
+            foreach (Button button in mainPanelButtons)
             {
                 DesactivateButton(button);
             }
-        
+
             foreach (Button button in functionPanelButtons)
             {
                 DesactivateButton(button);
             }
 
-            foreach (Button button in loopPanelButtons)
-            {
-                DesactivateButton(button);
-            }
 
             ActivateButton(buttons[activeIndex]);
         }
@@ -110,14 +111,11 @@ public class TutoredGameplay : MonoBehaviour
         {
             DesactivateLabelPanel();
         }
-
-
-        }
+    }
 
     // Update is called once per frame
     void Update()
     {
-        
     }
 
     void ActivateButton(Button button)
@@ -131,7 +129,6 @@ public class TutoredGameplay : MonoBehaviour
     {
         ChangeInternalImageAlpha(button, 0.2f);
         button.interactable = false;
-        
     }
 
     private void ChangeInternalImageAlpha(Button button, float alpha)
@@ -149,6 +146,4 @@ public class TutoredGameplay : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
-
-
 }

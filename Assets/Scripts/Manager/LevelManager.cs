@@ -9,7 +9,7 @@ public class LevelManager : MonoBehaviour {
     public static LevelManager instance = null;
 
 
-    public Level ActiveLevel { get; set; }
+    private string ActiveLevel { get; set; }
 
     void Awake()
     {
@@ -26,14 +26,23 @@ public class LevelManager : MonoBehaviour {
         
     }
 
+    public void NextLevel()
+    {
+        Debug.Log(ActiveLevel);;
+        int nextLevel = int.Parse(ActiveLevel)+1;
+        Debug.Log(nextLevel);
+        SwitchScene(nextLevel.ToString());
+        
+    }
 
 
-    public void SwitchScene(string sceneName, Level level)
+    public void SwitchScene(string level)
     {
         this.ActiveLevel = level;
-        SceneManager.LoadScene(sceneName);
+        SceneManager.LoadScene("Level_" + level);
        
     }
+    
 
     public void RestartLevel()
     {
@@ -46,7 +55,7 @@ public class LevelManager : MonoBehaviour {
     }
 
 
-    public Level GetActiveLevel()
+    public string GetActiveLevel()
     {
         return ActiveLevel;
         //int activeIndex = SceneManager.GetActiveScene().buildIndex;

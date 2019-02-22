@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviour
+{
+    [SerializeField] private AlertDialog alertDialog;
+   
+    [SerializeField] private int commandsAvailable;
     [SerializeField] private Transform spawnpoint;
     [SerializeField] private Player player;
     private GameObject[] coins;
@@ -26,6 +30,14 @@ public class GameManager : MonoBehaviour {
 
     public bool SendCommandToPlayer(Command command)
     {
+        if (command == Command.Open_Chest)
+        {
+            if (player.setActiveCommand(command))
+            {
+                LevelManager.instance.NextLevel();
+                return true;
+            }
+        }
         return player.setActiveCommand(command);
     }
 
@@ -60,9 +72,14 @@ public class GameManager : MonoBehaviour {
         parentPanel.GetComponent<TutoredGameplay>().ShowLabelPanel();
 
     }
+
+    void Awake()
+    {
+       instance = this;
+    }
     // Use this for initialization
     void Start () {
-        instance = this;
+
         coins = GameObject.FindGameObjectsWithTag("Coin");
         Debug.Log("LENGHT" + coins.Length);
 
@@ -139,5 +156,17 @@ public class GameManager : MonoBehaviour {
         {
             tutoredGameplayMode = value;
         }
+    }
+
+    public int CommandsAvailable
+    {
+        get { return commandsAvailable; }
+        set { commandsAvailable = value; }
+    }
+
+    public AlertDialog AlertDialog
+    {
+        get { return alertDialog; }
+        set { alertDialog = value; }
     }
 }
