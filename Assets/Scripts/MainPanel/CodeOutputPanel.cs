@@ -187,8 +187,7 @@ public class CodeOutputPanel : MonoBehaviour
                 }
 
                 Debug.Log(buttons.Count);
-            }
-                );
+            });
 
             codeButton.CommandName.text = TranslateCommandToString(command, additional);
 
@@ -230,6 +229,12 @@ public class CodeOutputPanel : MonoBehaviour
                 return "Repetir " + additional + " vezes";
             case Command.EndLoop:
                 return "Fim repetir";
+            case Command.Fireball:
+                return "bolaDeFogo()";
+            case Command.Ice:
+                return "gelo()";
+            case Command.Lightning:
+                return "raio()";
         }
         return null;
     }
