@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Analytics;
 using UnityEngine.Tilemaps;
 
 public class Player : Character
@@ -35,18 +36,6 @@ public class Player : Character
         isWalking = false;
     }
 
-    IEnumerator Move(Vector3 nextPosition)
-    {
-        isWalking = true;
-        rb.velocity = direction.normalized * speed;
-        while (transform.position != nextPosition)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, nextPosition, speed * Time.deltaTime);
-            yield return null;
-        }
-
-        isWalking = false;
-    }
 
 
     bool MoveIfPossible(Vector3 nextPosition)
@@ -130,7 +119,7 @@ public class Player : Character
             this.direction.y = directionY;
             this.exitIndex = exitIndex;
             this.lastMovementCommand = command;
-            Debug.Log(lastMovementCommand);
+   
         }
 
         return hasMoved;
@@ -247,4 +236,6 @@ public class Player : Character
         }
 
     }
+    
+    
 }

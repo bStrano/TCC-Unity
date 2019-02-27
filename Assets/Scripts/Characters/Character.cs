@@ -16,14 +16,32 @@ public abstract class Character : MonoBehaviour {
     protected Animator animator;
 
     protected bool isWalking;
-
-
     protected bool isAttacking = false;
+    protected bool isDead = false;
+    
+    [SerializeField] protected int damage;
+    [SerializeField] protected int maxHealth;
+    protected int actualHealth;
 
     public void stopWalking()
     {
         isWalking = false;
         
+    }
+    
+    protected IEnumerator Move(Vector3 nextPosition)
+    {
+        isWalking = true;
+//        rb.velocity = direction.normalized * speed;
+      
+        while (transform.position != nextPosition)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, nextPosition, speed * Time.deltaTime);
+            yield return null;
+        }
+
+        
+        isWalking = false;
     }
   
     public Direction GetDirection()
@@ -53,7 +71,9 @@ public abstract class Character : MonoBehaviour {
     protected virtual void Start () {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-	}
+        actualHealth = maxHealth;
+        Debug.Log("Vida Atual: " + actualHealth);
+    }
 	
 	// Update is called once per frame
 	protected virtual void Update () {
@@ -98,6 +118,41 @@ public abstract class Character : MonoBehaviour {
         animator.SetLayerWeight(animator.GetLayerIndex(layerName), 1);
     }
  
+    
+    public  void TakeDamage(int damage)
+    {
+        
+        this.actualHealth -= damage;
+        Debug.Log("DIEEEEEEEEEEEEEEEEEEEEEEEEEEEE " + actualHealth + " / " + maxHealth);
+
+
+        if(actualHealth <= 0)
+        {
+            Die();
+        } 
+    }
+    
+    public  void TakeDamage(int damage, string audioClip)
+    {
+        TakeDamage(damage);
+        // Todo: Implementar sons de recebimento de dano
+    }
+
+
+    public virtual void Die()
+    {
+        isDead = true;
+//        animator.SetBool("Run", false);
+//        if (transform.rotation.y == 180)
+//        {
+//            animator.SetBool("DieFront", true);
+//        }
+//        else
+//        {
+//            animator.SetBool("DieBack", true);
+//        }
+//        GameOver.instance.DisplayGameOver();
+    }
 
     public void AnimateMovement()
     {

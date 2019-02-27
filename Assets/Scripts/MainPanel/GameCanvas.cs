@@ -66,7 +66,6 @@ public class GameCanvas : MonoBehaviour
         int loopIndex = 0;
         int iterationLoopNumber = 1;
         CodeOutputPanel activeCodeOutputPanel = GetActiveCodePanel();
-        Debug.Log(activeCodeOutputPanel.CommandsPanel.Commands.Count);
         while (position < activeCodeOutputPanel.CommandsPanel.Commands.Count)
         {
             Command command = activeCodeOutputPanel.CommandsPanel.Commands[position];
@@ -89,7 +88,8 @@ public class GameCanvas : MonoBehaviour
             }
             else if (command != Command.Function1 && command != Command.Function2 && !(command == Command.Loop || command == Command.EndLoop))
             {
-
+                
+                GameManager.instance.NotifyEnemies(command);
                 if (!GameManager.instance.SendCommandToPlayer(command))
                 {
                     button.GetComponent<CodeButton>().ChangeBackgroundColor(Color.red);
@@ -137,8 +137,6 @@ public class GameCanvas : MonoBehaviour
                         position = activeCodeOutputPanel.Loops[loopIndex].InitialIndex;
                         
                     }
-                    Debug.Log("iterationLoopNumber");
-                    Debug.Log(iterationLoopNumber);
                     iterationLoopNumber++;
                 }
             } else

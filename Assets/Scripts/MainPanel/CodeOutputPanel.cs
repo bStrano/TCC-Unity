@@ -52,7 +52,6 @@ public class CodeOutputPanel : MonoBehaviour
 
     public void HandleCommands(string commandString)
     {
-        Debug.Log(commandString);
         switch (commandString)
         {
             case "Function1":
@@ -119,13 +118,11 @@ public class CodeOutputPanel : MonoBehaviour
             codeButton.LineNumber.text = lineNumber.ToString();
             codeButton.DeleteButton.onClick.AddListener(() =>
             {
-                Debug.Log(codeButton.gameObject.GetComponent<CodeButton>().LineNumber.text);
 
                 for (int i = buttons.Count - 1; i >= 0; i--)
                 {
                     if (buttons[i].gameObject.GetComponent<CodeButton>().LineNumber.text == codeButton.LineNumber.text)
                     {
-                        Debug.Log("Index: " + i);
                         if (command == Command.Loop)
                         {
                             while (true)

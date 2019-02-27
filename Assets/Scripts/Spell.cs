@@ -32,32 +32,25 @@ public class Spell : MonoBehaviour {
 		Debug.Log(target);
 	}
 
-    private void FixedUpdate()
+	public void OnTriggerEnter2D(Collider2D other)
+	{
+		if (other.CompareTag("Enemy"))
+		{
+			CEnemy enemy = other.GetComponent<CEnemy>();
+			enemy.TakeDamage(1);
+			Destroy(gameObject);
+		}
+	}
+
+	private void FixedUpdate()
     {
 	    float step = speed * Time.deltaTime;
-
-	    // move sprite towards the target location
-
 	    transform.position = Vector2.MoveTowards(transform.position, target, step);
-	    Debug.Log(transform.position + " / " +target);
+//	    Debug.Log(transform.position + " / " +target);
 	    if (transform.position == target)
 	    {
 		    Destroy(this.gameObject);
 	    }
-	   // rb.velocity = new Vector2(speed, 0);
-        // Vector2 direction = target.position - transform.position;
-        //  rb.velocity = direction.normalized * speed;
-       //Debug.DrawLine(transform.position, transform.forward,Color.yellow);
-       // RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.forward,range);
-       // if (!hit.Equals(null))
-        //{
-          //  Debug.Log(hit.transform.name);
-        //}
-            
-        
-       
-//        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-  //      transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
     }
 }
