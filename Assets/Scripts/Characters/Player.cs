@@ -9,6 +9,8 @@ public class Player : Character
 {
     public Tilemap map;
 
+
+
     [SerializeField] private GameObject[] spellPrefab;
     [SerializeField] private Transform[] exitPoints;
     private int exitIndex = 2;
@@ -16,8 +18,11 @@ public class Player : Character
 
     private Sprite groundSprite;
     private Command lastMovementCommand = Command.Walk_Bot;
+    
+    [SerializeField] private GameObject deathEffect;
+    [SerializeField] private GameObject victoryEffect;
 
-
+   
     // Use this for initialization
     protected override void Start()
     {
@@ -164,6 +169,7 @@ public class Player : Character
 
     public bool AttackTest(string spellName)
     {
+        if (isDead) return false;
         if (!isAttacking && !isWalking)
         {
             StartCoroutine(Attack(spellName));
@@ -219,23 +225,30 @@ public class Player : Character
         {
             case Command.Walk_Top:
                 prefab.transform.rotation = Quaternion.Euler(0, 0, 90);
-                spell.Cast(new Vector2(position.x, position.y+2) );
+                spell.Cast(new Vector2(position.x, position.y+3) );
                 break;
             case Command.Walk_Bot:
                 prefab.transform.rotation = Quaternion.Euler(0, 0, 270);
-                spell.Cast(new Vector2(position.x, position.y-2) );
+                spell.Cast(new Vector2(position.x, position.y-3) );
                 break;
             case Command.Walk_Left:
                 prefab.transform.rotation = Quaternion.Euler(0, 180, 0);
-                spell.Cast(new Vector2(position.x-2, position.y) );
+                spell.Cast(new Vector2(position.x-3, position.y) );
                 break;
             case Command.Walk_Right:
                 prefab.transform.rotation = Quaternion.Euler(0, 0, 0);
-                spell.Cast(new Vector2(position.x+2, position.y) );
+                spell.Cast(new Vector2(position.x+3, position.y) );
                 break;
         }
 
     }
-    
-    
+
+    public override void Die()
+    {
+        base.Die();
+       
+        deathEffect.SetActive(true);
+        spriteRenderer.enabled = false;
+
+    }
 }

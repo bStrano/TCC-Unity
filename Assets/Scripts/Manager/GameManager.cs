@@ -73,6 +73,19 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public bool CheckPlayerDied()
+    {
+        if (player.IsDead)
+        {
+            foreach (var enemy in enemies)
+            {
+                enemy.StopAllCoroutines();
+            }   
+        }
+        return player.IsDead;
+        
+    }
+    
     public void NextCommandTutoredGameplay()
     {
         if (tutoredGameplayMode)

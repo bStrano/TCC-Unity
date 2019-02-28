@@ -60,6 +60,9 @@ public class GameCanvas : MonoBehaviour
 
     public IEnumerator Play()
     {
+    
+        
+
         int position = 0;
         isPlaying = true;
         bool isLooping = false;
@@ -68,8 +71,14 @@ public class GameCanvas : MonoBehaviour
         CodeOutputPanel activeCodeOutputPanel = GetActiveCodePanel();
         while (position < activeCodeOutputPanel.CommandsPanel.Commands.Count)
         {
+            if (GameManager.instance.CheckPlayerDied())
+            {
+                StopAllCoroutines();
+                break;
+            }
             Command command = activeCodeOutputPanel.CommandsPanel.Commands[position];
 
+            
             activeCodeOutputPanel = GetActiveCodePanel();
             GameObject button = activeCodeOutputPanel.Buttons[position];
             button.GetComponent<CodeButton>().ChangeBackgroundColor(Color.green);

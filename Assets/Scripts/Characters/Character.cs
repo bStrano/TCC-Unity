@@ -18,10 +18,17 @@ public abstract class Character : MonoBehaviour {
     protected bool isWalking;
     protected bool isAttacking = false;
     protected bool isDead = false;
-    
+
+    public bool IsDead
+    {
+        get { return isDead; }
+        set { isDead = value; }
+    }
+
     [SerializeField] protected int damage;
     [SerializeField] protected int maxHealth;
     protected int actualHealth;
+    protected SpriteRenderer spriteRenderer;
 
     public void stopWalking()
     {
@@ -69,6 +76,7 @@ public abstract class Character : MonoBehaviour {
 
     // Use this for initialization
     protected virtual void Start () {
+        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         actualHealth = maxHealth;

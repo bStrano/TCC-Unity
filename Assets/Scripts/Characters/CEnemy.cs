@@ -10,21 +10,28 @@ public class CEnemy : Character
 //    [SerializeField] protected Image healthUI;
     private AudioSource audioSource;
     protected Animator animator;
-    
+
     protected int maxHealth;
     private Vector2 target;
-    [SerializeField] private bool left; 
-    
+    [SerializeField] private bool left;
+
     private Vector2 initialPosition;
 //    [SerializeField] private GameObject HealthCanvas;
 
+    // Efeitos Visuais
+//     [SerializeField] private GameObject fireParticle;
+    [SerializeField] private GameObject fireExplosionParticle;
+    [SerializeField] private GameObject LightningParticle;
+    [SerializeField] private GameObject LightningParticle2;
+
+    [SerializeField] private GameObject IceParticle;
 
     // Use this for initialization
     public virtual void Start()
     {
         base.Start();
         animator = GetComponentInChildren<Animator>();
- 
+
         audioSource = GetComponent<AudioSource>();
         initialPosition = new Vector2(transform.position.x, transform.position.y);
     }
@@ -43,11 +50,10 @@ public class CEnemy : Character
     }
 
 
-
     public void AttackPlayer(Player player, Vector2 nextPlayerPosition)
     {
-        int playerPositionY ;
-        int playerPositionX ;
+        int playerPositionY;
+        int playerPositionX;
         if (nextPlayerPosition == Vector2.zero)
         {
             playerPositionY = (int) Math.Truncate(player.transform.position.y);
@@ -58,22 +64,22 @@ public class CEnemy : Character
             playerPositionY = (int) Math.Truncate(nextPlayerPosition.y);
             playerPositionX = (int) Math.Truncate(nextPlayerPosition.x);
         }
-        
+
         int transformX = (int) Math.Truncate(transform.position.x);
         int transformY = (int) Math.Truncate(transform.position.y);
 
 
         if (playerPositionY == transformY)
         {
-            
             int difference = Math.Abs(playerPositionX - transformX);
             Debug.Log("DIFF: " + difference);
-            if (difference == 1) 
+            if (difference == 1)
             {
                 Attack();
-            } else if (difference == 2)
+            }
+            else if (difference == 2 || difference == 3)
             {
-                if (Math.Abs(transformX -(int) Math.Truncate(initialPosition.x)) >= 2)
+                if (Math.Abs(transformX - (int) Math.Truncate(initialPosition.x)) >= 2)
                 {
                     Debug.Log("TESTTTTEEEEEEEEEEEEEEEEE");
                     Debug.Log(Math.Abs(transformX - (int) Math.Truncate(initialPosition.x)));
@@ -95,14 +101,13 @@ public class CEnemy : Character
                 MoveToSpawnPoint();
             }
         }
-       
     }
 
     void MoveToPlayer()
     {
         Rotate(true);
         Vector2 nextPosition = GetNextPosition(true);
-        if(Math.Abs((nextPosition.x - initialPosition.x)) > 2)
+        if (Math.Abs((nextPosition.x - initialPosition.x)) > 2)
         {
             MoveToSpawnPoint();
         }
@@ -123,7 +128,6 @@ public class CEnemy : Character
         else
         {
             Rotate(true);
-
         }
     }
 
@@ -136,17 +140,17 @@ public class CEnemy : Character
         {
             condition = !left;
         }
+
         if (condition)
         {
-            transform.eulerAngles = new Vector3(0, 180, 0); 
+            transform.eulerAngles = new Vector3(0, 180, 0);
         }
         else
         {
-            transform.eulerAngles = new Vector3(0, 0, 0); 
+            transform.eulerAngles = new Vector3(0, 0, 0);
         }
     }
-    
-    
+
 
     Vector2 GetNextPosition(bool inverse)
     {
@@ -158,6 +162,7 @@ public class CEnemy : Character
         {
             condition = !left;
         }
+
         Vector2 nextPosition;
         if (condition)
         {
@@ -166,28 +171,26 @@ public class CEnemy : Character
         }
         else
         {
-            nextPosition =  new Vector2(transform.position.x + 1, transform.position.y);
+            nextPosition = new Vector2(transform.position.x + 1, transform.position.y);
             Debug.Log("YYY: " + nextPosition);
         }
 
         return nextPosition;
-
     }
 
 
     protected virtual void Attack()
     {
-     Debug.Log("Attack 1");   
+        Debug.Log("Attack 1");
     }
 
     void TakeDamage(int damage)
     {
         base.TakeDamage(damage);
     }
-    
+
     public override void Die()
     {
-
         base.Die();
         if (transform.rotation.y == 180)
         {
@@ -217,5 +220,26 @@ public class CEnemy : Character
             Player player = other.gameObject.GetComponent<Player>();
             player.TakeDamage(damage);
         }
+    }
+
+
+    public void ReceiveSpellDamage(int damage, Spell.ElementEnum spell)
+    {
+        this.TakeDamage(damage);
+        switch (spell)
+        {
+            case Spell.ElementEnum.Fire:
+                fireExplosionParticle.SetActive(true);
+                break;
+            case Spell.ElementEnum.Lightning:
+                LightningParticle.SetActive(true);
+                LightningParticle2.SetActive(true);
+                break;
+            case Spell.ElementEnum.Ice:
+                IceParticle.SetActive(true);
+                break;
+        }
+
+//        fireParticle.SetActive(true);
     }
 }
