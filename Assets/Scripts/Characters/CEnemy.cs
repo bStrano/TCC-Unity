@@ -11,7 +11,7 @@ public class CEnemy : Character
     private AudioSource audioSource;
     protected Animator animator;
 
-    protected int maxHealth;
+//    protected int maxHealth;
     private Vector2 target;
     [SerializeField] private bool left;
 

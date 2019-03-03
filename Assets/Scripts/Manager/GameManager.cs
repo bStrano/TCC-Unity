@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private AlertDialog alertDialog;
-
+    [SerializeField] private List<Variable> variables;
     [SerializeField] private int commandsAvailable;
     [SerializeField] private Transform spawnpoint;
     [SerializeField] private Player player;
@@ -186,5 +186,11 @@ public class GameManager : MonoBehaviour
     {
         get { return alertDialog; }
         set { alertDialog = value; }
+    }
+
+    public List<Variable> Variables
+    {
+        get { return variables; }
+        set { variables = value; }
     }
 }

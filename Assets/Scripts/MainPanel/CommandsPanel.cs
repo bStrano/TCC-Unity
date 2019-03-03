@@ -22,11 +22,12 @@ public enum Command
     Function2,
     Loop,
     EndLoop,
+    Variable,
 }
 
 public class CommandsPanel : MonoBehaviour
 {
-    [SerializeField] private Text entries;
+    
     [SerializeField] private Button loopButton;
     private int maxComands;
     private int programmingCommands = 0;
@@ -56,8 +57,6 @@ public class CommandsPanel : MonoBehaviour
         maxComands = GameManager.instance.CommandsAvailable;
         Debug.Log(maxComands);
 
-
-        UpdateEntries();
     }
 
 
@@ -75,23 +74,11 @@ public class CommandsPanel : MonoBehaviour
         }
     }
 
-    public void UpdateEntries()
-    {
-        entries.text = Commands.Count + "/" + maxComands;
-        if (Commands.Count == maxComands)
-        {
-            entries.color = Color.red;
-        }
-        else
-        {
-            entries.color = Color.black;
-        }
-    }
+
 
     public void RemoveCommand(int commandIndex)
     {
         Commands.RemoveAt(commandIndex);
-        UpdateEntries();
     }
 
 
@@ -100,7 +87,6 @@ public class CommandsPanel : MonoBehaviour
         Command command = ((Command) Enum.Parse(typeof(Command), commandString));
         if (AddComand(command))
         {
-            UpdateEntries();
             return command;
         }
         else

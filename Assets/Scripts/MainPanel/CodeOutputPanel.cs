@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System;
+using System.Linq;
+using TMPro;
 
 
 public class CodeOutputPanel : MonoBehaviour
@@ -12,8 +14,11 @@ public class CodeOutputPanel : MonoBehaviour
     [SerializeField] protected GameObject mainPanel;
     [SerializeField] protected CommandsPanel commands;
     [SerializeField] private GameObject button;
+    [SerializeField] private GameObject variableButton;
     [SerializeField] private RectTransform contentPanel;
     [SerializeField] private ScrollRect scrollView;
+    [SerializeField] private TMP_Dropdown dropdown;
+
 
     protected List<GameObject> buttons = new List<GameObject>();
     private List<Loop> loops = new List<Loop>();
@@ -24,6 +29,22 @@ public class CodeOutputPanel : MonoBehaviour
     }
 
 
+    public void HandleVariableCommand()
+    {
+        dropdown.Hide();
+        if (dropdown.value == 0) return;
+        
+        int numberOfRepetitions = GameManager.instance.Variables.ElementAt(dropdown.value - 1).Value;
+        HandleLoopCommand(numberOfRepetitions);
+        Invoke ("CallDeactivateLoopPanelLoopPanel", 0.2f);
+        
+        dropdown.value = 0;
+    }
+
+    private void CallDeactivateLoopPanelLoopPanel()
+    {
+        gameCanvas.DeactivateLoopPanel();
+    }
 
     public void HandleLoopCommand(int numberOfRepetitions)
     {
@@ -34,7 +55,6 @@ public class CodeOutputPanel : MonoBehaviour
         GameManager.instance.LoopMode = true;
         LoopButton loopButton = mainPanel.GetComponent<MainPanel>().CommandsPanel.LoopButton.GetComponent<LoopButton>();
         loopButton.ActivateLoopMode();
-
     }
 
 
@@ -60,11 +80,11 @@ public class CodeOutputPanel : MonoBehaviour
                 {
                     if (gameCanvas.FunctionPanel1.CommandsPanel.Commands.Count == 0)
                     {
-                        GameManager.instance.AlertDialog.SetupDialog("Mantenha pressionado o botão de função para abrir o painel de funções", "Entendi!");
+                        GameManager.instance.AlertDialog.SetupDialog(
+                            "Mantenha pressionado o botão de função para abrir o painel de funções", "Entendi!");
                         GameManager.instance.AlertDialog.OpenDialog();
-                        
+
                         return;
-                      
                     }
 
                     break;
@@ -72,13 +92,12 @@ public class CodeOutputPanel : MonoBehaviour
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
-                    GameManager.instance.AlertDialog.SetupDialog("Mantenha pressionado o botão de função para abrir o painel de funções", "Entendi!");
+                    GameManager.instance.AlertDialog.SetupDialog(
+                        "Mantenha pressionado o botão de função para abrir o painel de funções", "Entendi!");
                     GameManager.instance.AlertDialog.OpenDialog();
                     return;
-                    throw;
                     
                 }
-
             }
             case "Function2":
             {
@@ -91,6 +110,7 @@ public class CodeOutputPanel : MonoBehaviour
                 break;
             }
         }
+
         Command command = commands.ReciveComand(commandString);
         TranslateCommandToCode(command, null);
         GameManager.instance.NextCommandTutoredGameplay();
@@ -101,24 +121,27 @@ public class CodeOutputPanel : MonoBehaviour
         Destroy(buttons[i].gameObject);
         buttons.RemoveAt(i);
         commands.RemoveCommand(i);
-        
+        gameCanvas.UpdateEntries(false);
     }
 
     public void TranslateCommandToCode(Command command, string additional)
     {
-
         int lineNumber = buttons.Count + 1;
         // foreach (Command command in commandsPanel.Comands)
         //{
         if (command != Command.None)
         {
             GameObject newButton = GameObject.Instantiate(button, contentPanel, false);
+            if (command != Command.EndLoop && command != Command.Loop && command != Command.Variable)
+            {
+                gameCanvas.UpdateEntries(true);
+            }
+
             Buttons.Add(newButton);
             CodeButton codeButton = newButton.GetComponent<CodeButton>();
             codeButton.LineNumber.text = lineNumber.ToString();
             codeButton.DeleteButton.onClick.AddListener(() =>
             {
-
                 for (int i = buttons.Count - 1; i >= 0; i--)
                 {
                     if (buttons[i].gameObject.GetComponent<CodeButton>().LineNumber.text == codeButton.LineNumber.text)
@@ -130,40 +153,38 @@ public class CodeOutputPanel : MonoBehaviour
                                 try
                                 {
                                     Command commandAux = commands.Commands[i];
-  
+
                                     RemoveButton(i);
 
                                     if (commandAux == Command.EndLoop)
                                     {
                                         break;
                                     }
-
-
                                 }
                                 catch (ArgumentOutOfRangeException e)
                                 {
-                                    Debug.Log("Exception");
+                                    Debug.Log(e);
                                     break;
                                 }
                             }
+
                             break;
-                        } else if (command == Command.EndLoop)
+                        }
+                        else if (command == Command.EndLoop)
                         {
                             while (true)
                             {
-
-
                                 Command commandAux = commands.Commands[i];
                                 RemoveButton(i);
-    
+
                                 if (commandAux == Command.Loop)
                                 {
                                     break;
-                                } else
+                                }
+                                else
                                 {
                                     i--;
                                 }
-
                             }
                         }
                         else
@@ -173,10 +194,9 @@ public class CodeOutputPanel : MonoBehaviour
                             Destroy(codeButton.gameObject);
                             break;
                         }
-
                     }
-
                 }
+
                 for (int i = buttons.Count - 1; i >= 0; i--)
                 {
                     CodeButton codeButtonTemp = buttons[i].gameObject.GetComponent<CodeButton>();
@@ -191,15 +211,12 @@ public class CodeOutputPanel : MonoBehaviour
 
             if (GameManager.instance.LoopMode)
             {
-
                 codeButton.AddSpaceLeft();
             }
         }
 
         //}
     }
-
-
 
 
     public string TranslateCommandToString(Command command, string additional)
@@ -233,81 +250,55 @@ public class CodeOutputPanel : MonoBehaviour
             case Command.Lightning:
                 return "raio()";
         }
+
         return null;
     }
 
     // Use this for initialization
     void Start()
     {
+        foreach (var variable in GameManager.instance.Variables)
+        {
+            GameObject newButton = GameObject.Instantiate(variableButton, contentPanel, false);
+            newButton.GetComponent<VariableButton>().TitleText.text = variable.Title;
+        }
+
         //GameObject lineCode = Instantiate
     }
 
 
-
     public List<GameObject> Buttons
     {
-        get
-        {
-            return buttons;
-        }
+        get { return buttons; }
 
-        set
-        {
-            buttons = value;
-        }
+        set { buttons = value; }
     }
 
     public ScrollRect ScrollView
     {
-        get
-        {
-            return scrollView;
-        }
+        get { return scrollView; }
 
-        set
-        {
-            scrollView = value;
-        }
+        set { scrollView = value; }
     }
 
     public CommandsPanel CommandsPanel
     {
-        get
-        {
-            return commands;
-        }
+        get { return commands; }
 
-        set
-        {
-            commands = value;
-        }
+        set { commands = value; }
     }
 
     public List<Loop> Loops
     {
-        get
-        {
-            return Loops1;
-        }
+        get { return Loops1; }
 
-        set
-        {
-            Loops1 = value;
-        }
+        set { Loops1 = value; }
     }
 
     public List<Loop> Loops1
     {
-        get
-        {
-            return loops;
-        }
+        get { return loops; }
 
-        set
-        {
-            loops = value;
-        }
+        set { loops = value; }
     }
 }
-
-

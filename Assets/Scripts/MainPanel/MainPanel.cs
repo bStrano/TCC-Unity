@@ -11,7 +11,6 @@ public class MainPanel : MonoBehaviour
     [SerializeField] private CodeOutputPanel codeOutputPanel;
     [SerializeField] private CommandsPanel commandsPanel;
 
-    private GameObject playerGO;
     private Player player;
 
     public CodeOutputPanel CodeOutputPanel
@@ -35,7 +34,6 @@ public class MainPanel : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        playerGO = GameObject.Find("Player");
         // player = playerGO.GetComponent<Player>();
     }
 
