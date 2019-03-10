@@ -23,11 +23,15 @@ public enum Command
     Loop,
     EndLoop,
     Variable,
+    If,
+    Else,
+    EndIf,
 }
 
 public class CommandsPanel : MonoBehaviour
 {
-    
+
+    [SerializeField] private Button conditionalButton;
     [SerializeField] private Button loopButton;
     private int maxComands;
     private int programmingCommands = 0;
@@ -41,6 +45,12 @@ public class CommandsPanel : MonoBehaviour
         get { return loopButton; }
 
         set { loopButton = value; }
+    }
+
+    public Button ConditionalButton
+    {
+        get => conditionalButton;
+        set => conditionalButton = value;
     }
 
 
@@ -82,6 +92,8 @@ public class CommandsPanel : MonoBehaviour
     }
 
 
+    
+    
     public Command ReciveComand(string commandString)
     {
         Command command = ((Command) Enum.Parse(typeof(Command), commandString));

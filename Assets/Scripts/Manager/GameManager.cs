@@ -17,10 +17,13 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
 
-    private bool tutoredGameplayMode = false;
-    private bool loopMode = false;
-    private bool functionMode = false;
-    private bool varMode = false;
+    private bool tutoredGameplayMode;
+   
+    private bool loopMode;
+    private bool functionMode;
+    private bool varMode;
+    // 0 - False, 1 - If , 2 - Else
+    private int conditionalMode;
 
     public void SetupCodeMode()
     {
@@ -192,5 +195,13 @@ public class GameManager : MonoBehaviour
     {
         get { return variables; }
         set { variables = value; }
+    }
+
+
+
+    public int ConditionalMode
+    {
+        get { return conditionalMode; }
+        set { conditionalMode = value; }
     }
 }

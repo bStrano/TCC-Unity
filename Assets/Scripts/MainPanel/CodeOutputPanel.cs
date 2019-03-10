@@ -18,8 +18,7 @@ public class CodeOutputPanel : MonoBehaviour
     [SerializeField] private RectTransform contentPanel;
     [SerializeField] private ScrollRect scrollView;
     [SerializeField] private TMP_Dropdown dropdown;
-
-
+    
     protected List<GameObject> buttons = new List<GameObject>();
     private List<Loop> loops = new List<Loop>();
 
@@ -34,9 +33,9 @@ public class CodeOutputPanel : MonoBehaviour
         dropdown.Hide();
         if (dropdown.value == 0) return;
         
-        int numberOfRepetitions = GameManager.instance.Variables.ElementAt(dropdown.value - 1).Value;
-        HandleLoopCommand(numberOfRepetitions);
-        Invoke ("CallDeactivateLoopPanelLoopPanel", 0.2f);
+        var numberOfRepetitions = GameManager.instance.Variables.ElementAt(dropdown.value - 1).Value;
+        if (numberOfRepetitions != null) HandleLoopCommand((int) numberOfRepetitions);
+        Invoke (nameof(CallDeactivateLoopPanelLoopPanel), 0.2f);
         
         dropdown.value = 0;
     }
@@ -45,6 +44,8 @@ public class CodeOutputPanel : MonoBehaviour
     {
         gameCanvas.DeactivateLoopPanel();
     }
+
+    
 
     public void HandleLoopCommand(int numberOfRepetitions)
     {
@@ -70,6 +71,14 @@ public class CodeOutputPanel : MonoBehaviour
         loopButton.DisableLoopMode();
     }
 
+
+    public void HandleCommands(Command command, string additional)
+    {
+        commands.ReciveComand(command.ToString());
+        TranslateCommandToCode(command, additional);
+        GameManager.instance.NextCommandTutoredGameplay();
+    }
+    
     public void HandleCommands(string commandString)
     {
         switch (commandString)
@@ -208,7 +217,40 @@ public class CodeOutputPanel : MonoBehaviour
 
             codeButton.CommandName.text = TranslateCommandToString(command, additional);
 
+            
+            
+            if (command != Command.If && command != Command.Else && command != Command.EndIf)
+            {
+                Debug.Log(command);
+                if (GameManager.instance.ConditionalMode == 1 || GameManager.instance.ConditionalMode == 2)
+                {
+                    codeButton.MainPanel.GetComponent<RectTransform>().offsetMin = new Vector2(10,0);
+                }
+                    
+            }
 
+
+            if (command == Command.If)
+            {
+                codeButton.CommandName.GetComponent<Text>().fontSize = 12;
+                GameManager.instance.ConditionalMode = 1;
+                Debug.Log(commands);
+                Debug.Log(commands.ConditionalButton);
+                commands.ConditionalButton.GetComponentInChildren<Text>().text = "Senão";
+            } else if (command == Command.Else)
+            {
+                GameManager.instance.ConditionalMode = 2;
+                commands.ConditionalButton.GetComponentInChildren<Text>().text = "Fimse";
+            } else if (command == Command.EndIf)
+            {
+                GameManager.instance.ConditionalMode = 0;
+                commands.ConditionalButton.GetComponentInChildren<Text>().text = "Se";
+            } 
+
+            
+
+           
+            
             if (GameManager.instance.LoopMode)
             {
                 codeButton.AddSpaceLeft();
@@ -249,6 +291,12 @@ public class CodeOutputPanel : MonoBehaviour
                 return "gelo()";
             case Command.Lightning:
                 return "raio()";
+            case Command.If:
+                return "se (" + additional + ") então";
+            case Command.Else:
+                return "senão";
+            case Command.EndIf:
+                return "fimse";
         }
 
         return null;

@@ -2257,7 +2257,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000019073486, y: -0.00006866455}
+  m_AnchoredPosition: {x: -0.000019073486, y: -0.000015258789}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &7721379717524489158
@@ -2413,7 +2413,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 7614893119774808732}
   m_Direction: 0
   m_Value: 1
-  m_Size: 0.9999999
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3986,8 +3986,10 @@ MonoBehaviour:
   mainPanel: {fileID: 7689403681623604286}
   commands: {fileID: 8352937256218219109}
   button: {fileID: 1312671861567574, guid: 3ff63453e07cd234aa714e2a9fe349da, type: 3}
+  variableButton: {fileID: 0}
   contentPanel: {fileID: 7615169225572912298}
   scrollView: {fileID: 7721621131038422880}
+  dropdown: {fileID: 0}
 --- !u!1 &7689448827928773320
 GameObject:
   m_ObjectHideFlags: 0
@@ -4084,6 +4086,7 @@ MonoBehaviour:
   functionPanel2: {fileID: 7013543190155731857}
   functionPanel3: {fileID: 0}
   loopPanel: {fileID: 0}
+  entries: {fileID: 7721073261965288556}
 --- !u!1 &7689449174503757206
 GameObject:
   m_ObjectHideFlags: 0
@@ -5548,7 +5551,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69885590cc63c6e4bbba5d820689cfc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entries: {fileID: 7721073261965288556}
   loopButton: {fileID: 0}
 --- !u!114 &7932960483401637522
 MonoBehaviour:

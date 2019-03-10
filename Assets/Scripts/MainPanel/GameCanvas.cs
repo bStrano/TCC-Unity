@@ -12,11 +12,13 @@ public class GameCanvas : MonoBehaviour
     [SerializeField] private MainPanel functionPanel2;
     [SerializeField] private MainPanel functionPanel3;
     [SerializeField] private GameObject loopPanel;
+    [SerializeField] private ConditionalPanel conditionalPanel;
     [SerializeField] private Text entries;
     private int commandsCount;
     private GameObject activeCodePanel;
     private bool alreadyPlayed = false;
     private bool isPlaying = false;
+    private bool runningConditional;
 
     public MainPanel FunctionPanel1
     {
@@ -30,6 +32,8 @@ public class GameCanvas : MonoBehaviour
         set { functionPanel2 = value; }
     }
 
+    
+    
     
     public void UpdateEntries(bool increment)
     {
@@ -118,6 +122,46 @@ public class GameCanvas : MonoBehaviour
                 position++;
                 button.GetComponent<CodeButton>().ChangeBackgroundColor(Color.white);
                 continue;
+            } else if (command == Command.If)
+            {
+                yield return new WaitForSeconds(0.4f);
+                if (!conditionalPanel.CheckStatement(codeOutputPanel.Buttons[position].GetComponentInChildren<Text>()
+                    .text))
+                {
+
+                    while (command != Command.Else)
+                    {
+                        command = activeCodeOutputPanel.CommandsPanel.Commands[position];
+                        position++;
+                    }
+                    button.GetComponent<CodeButton>().ChangeBackgroundColor(Color.white);
+                    continue;
+                }
+                else
+                {
+          
+                    runningConditional = true;
+                }
+
+                ;
+            } else if (command == Command.Else)
+            {
+                if (runningConditional)
+                {
+                    while (command != Command.EndIf)
+                    {
+                        command = activeCodeOutputPanel.CommandsPanel.Commands[position];
+                        position++;
+                    }
+
+                    position--;
+                    button.GetComponent<CodeButton>().ChangeBackgroundColor(Color.white);
+                    continue;
+                }
+            } else if (command == Command.EndIf)
+            {
+                yield return new WaitForSeconds(0.4f);
+                runningConditional = false;
             }
             else if (command != Command.Function1 && command != Command.Function2 && !(command == Command.Loop || command == Command.EndLoop))
             {
@@ -259,6 +303,24 @@ public class GameCanvas : MonoBehaviour
 
     }
 
+    
+    public void OnClickConditional()
+    {
+        if (GameManager.instance.ConditionalMode == 0)
+        {
+            conditionalPanel.gameObject.SetActive(!conditionalPanel.gameObject.activeSelf);
+        } else if (GameManager.instance.ConditionalMode == 1)
+        {
+            codeOutputPanel.HandleCommands(Command.Else, null);
+        } else if (GameManager.instance.ConditionalMode == 2)
+        {
+            codeOutputPanel.HandleCommands(Command.EndIf, null);
+        }
+    }
+    public void ToggleConditionalPanel()
+    {
+        // conditionalPanel.CheckIsValid();
+    }
 
     public void CancelFunctionCreation()
     {
