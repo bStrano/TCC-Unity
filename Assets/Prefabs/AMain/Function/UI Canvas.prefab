@@ -2257,7 +2257,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000019073486, y: -0.000015258789}
+  m_AnchoredPosition: {x: -0.000019073486, y: -0.000076293945}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &7721379717524489158
@@ -2413,7 +2413,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 7614893119774808732}
   m_Direction: 0
   m_Value: 1
-  m_Size: 1
+  m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3982,6 +3982,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d89167f6ab8f604bb01ace69729eb70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  entries: {fileID: 7721073261965288556}
   gameCanvas: {fileID: 7720900639998575202}
   mainPanel: {fileID: 7689403681623604286}
   commands: {fileID: 8352937256218219109}
@@ -4086,7 +4087,7 @@ MonoBehaviour:
   functionPanel2: {fileID: 7013543190155731857}
   functionPanel3: {fileID: 0}
   loopPanel: {fileID: 0}
-  entries: {fileID: 7721073261965288556}
+  conditionalPanel: {fileID: 0}
 --- !u!1 &7689449174503757206
 GameObject:
   m_ObjectHideFlags: 0
@@ -5551,6 +5552,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69885590cc63c6e4bbba5d820689cfc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  conditionalButton: {fileID: 0}
   loopButton: {fileID: 0}
 --- !u!114 &7932960483401637522
 MonoBehaviour:
@@ -7222,6 +7224,11 @@ PrefabInstance:
       propertyPath: gameCanvas
       value: 
       objectReference: {fileID: 7720900639998575202}
+    - target: {fileID: 3305378483548083253, guid: 73db37baf997ac7469b1912dbbe87072,
+        type: 3}
+      propertyPath: entries
+      value: 
+      objectReference: {fileID: 7721066287895146018}
     - target: {fileID: 4203441507756137754, guid: 73db37baf997ac7469b1912dbbe87072,
         type: 3}
       propertyPath: entries
@@ -8115,6 +8122,11 @@ PrefabInstance:
       propertyPath: gameCanvas
       value: 
       objectReference: {fileID: 7720900639998575202}
+    - target: {fileID: 3305378483548083253, guid: 73db37baf997ac7469b1912dbbe87072,
+        type: 3}
+      propertyPath: entries
+      value: 
+      objectReference: {fileID: 7013482349662082677}
     - target: {fileID: 3411946844082337429, guid: 73db37baf997ac7469b1912dbbe87072,
         type: 3}
       propertyPath: m_AnchorMax.x

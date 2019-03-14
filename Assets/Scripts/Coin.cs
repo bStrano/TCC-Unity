@@ -2,9 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Random = System.Random;
 
-public class Coin : MonoBehaviour {
+public class Coin : MonoBehaviour
+{
+    [SerializeField] private bool canExplode;
+    [SerializeField] private ParticleSystem defaultEffect;
+    [SerializeField] private ParticleSystem collectEffect;
+    [SerializeField] private ParticleSystem explosionEffect;
+    private Renderer spriteRenderer;
 
+    public bool IsTrap { get; set; }
 
     public bool HasCoin(Transform transform)
     {
@@ -23,21 +31,39 @@ public class Coin : MonoBehaviour {
 
     public bool RemoveCoin(Transform transform)
     {
-        if (HasCoin(transform))
+        if (canExplode && IsTrap)
         {
-            this.gameObject.SetActive(false);
+            defaultEffect.gameObject.SetActive(false);
+            explosionEffect.gameObject.SetActive(true);
+            spriteRenderer.enabled = false;
+            GameManager.instance.HandleExplosion();
             return true;
-        } else
-        {
-            return false;
         }
+
+        if (HasCoin(transform) && spriteRenderer.enabled )
+        {    
+            defaultEffect.gameObject.SetActive(false);
+            collectEffect.gameObject.SetActive(true);
+            spriteRenderer.enabled = false;
+            //this.gameObject.SetActive(false);
+            return true;
+        }
+
+        return false;
+
+
     }
 
 
 	// Use this for initialization
-	void Start () {
-		
-	}
+	void Start ()
+    {
+        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+       
+        Random rng = new Random();
+        IsTrap = rng.Next(0, 2) > 0;
+        Debug.Log(IsTrap);
+    }
 	
 	// Update is called once per frame
 	void Update () {

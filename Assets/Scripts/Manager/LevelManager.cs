@@ -26,6 +26,8 @@ public class LevelManager : MonoBehaviour {
         
     }
 
+   
+
     public void NextLevel()
     {
         Debug.Log(ActiveLevel);;

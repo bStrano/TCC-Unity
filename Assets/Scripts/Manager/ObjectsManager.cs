@@ -26,6 +26,31 @@ public class ObjectsManager : MonoBehaviour {
         return false;
     }
 
+    public bool HasChest(Vector2 pos)
+    {
+        var position = chestObject.transform.position;
+        var chestIntTransform = new Vector2((float) Math.Truncate(position.x),(float) Math.Truncate(position.y));
+       
+        var transformInt = new Vector2((float) Math.Truncate(pos.x), (float) Math.Truncate(pos.y));
+
+        return chestIntTransform.Equals(transformInt);
+    }
+    
+    public bool HasTrap(Transform transform)
+    {
+        foreach (GameObject gameObject in coins)
+        {
+            Coin coin = gameObject.GetComponent<Coin>();
+            if (coin.HasCoin(transform))
+            {
+                return coin.IsTrap;
+            }
+        }
+
+        return false;
+    }
+    
+    
     public Direction RequestOpenChest(Transform transform)
     {
         Chest chest = chestObject.GetComponent<Chest>();

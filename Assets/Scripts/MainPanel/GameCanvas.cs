@@ -13,8 +13,6 @@ public class GameCanvas : MonoBehaviour
     [SerializeField] private MainPanel functionPanel3;
     [SerializeField] private GameObject loopPanel;
     [SerializeField] private ConditionalPanel conditionalPanel;
-    [SerializeField] private Text entries;
-    private int commandsCount;
     private GameObject activeCodePanel;
     private bool alreadyPlayed = false;
     private bool isPlaying = false;
@@ -35,26 +33,6 @@ public class GameCanvas : MonoBehaviour
     
     
     
-    public void UpdateEntries(bool increment)
-    {
-        if (increment)
-        {
-            commandsCount++;
-        }
-        else
-        {
-            commandsCount--;
-        }
-        entries.text = commandsCount + "/" + GameManager.instance.CommandsAvailable;
-        if (commandsCount == GameManager.instance.CommandsAvailable)
-        {
-            entries.color = Color.red;
-        }
-        else
-        {
-            entries.color = Color.black;
-        }
-    }
     
     public void SwitchToFunctionPanel(int functionNumber)
     {
@@ -340,7 +318,7 @@ public class GameCanvas : MonoBehaviour
     void Start()
     {
         activeCodePanel = codePanel.gameObject;
-        entries.text = commandsCount + "/" + GameManager.instance.CommandsAvailable;
+        
     }
 
     // Update is called once per frame

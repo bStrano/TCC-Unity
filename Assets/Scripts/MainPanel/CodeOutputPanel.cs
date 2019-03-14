@@ -10,6 +10,8 @@ using TMPro;
 
 public class CodeOutputPanel : MonoBehaviour
 {
+    [SerializeField] private Text entries;
+    private int commandsCount;
     [SerializeField] private GameCanvas gameCanvas;
     [SerializeField] protected GameObject mainPanel;
     [SerializeField] protected CommandsPanel commands;
@@ -124,13 +126,35 @@ public class CodeOutputPanel : MonoBehaviour
         TranslateCommandToCode(command, null);
         GameManager.instance.NextCommandTutoredGameplay();
     }
+    
+    
+    public void UpdateEntries(bool increment)
+    {
+        if (increment)
+        {
+            commandsCount++;
+        }
+        else
+        {
+            commandsCount--;
+        }
+        entries.text = commandsCount + "/" + GameManager.instance.CommandsAvailable;
+        if (commandsCount == GameManager.instance.CommandsAvailable)
+        {
+            entries.color = Color.red;
+        }
+        else
+        {
+            entries.color = Color.black;
+        }
+    }
 
     private void RemoveButton(int i)
     {
         Destroy(buttons[i].gameObject);
         buttons.RemoveAt(i);
         commands.RemoveCommand(i);
-        gameCanvas.UpdateEntries(false);
+        UpdateEntries(false);
     }
 
     public void TranslateCommandToCode(Command command, string additional)
@@ -143,7 +167,7 @@ public class CodeOutputPanel : MonoBehaviour
             GameObject newButton = GameObject.Instantiate(button, contentPanel, false);
             if (command != Command.EndLoop && command != Command.Loop && command != Command.Variable)
             {
-                gameCanvas.UpdateEntries(true);
+                UpdateEntries(true);
             }
 
             Buttons.Add(newButton);
@@ -305,6 +329,7 @@ public class CodeOutputPanel : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        entries.text = commandsCount + "/" + GameManager.instance.CommandsAvailable;
         foreach (var variable in GameManager.instance.Variables)
         {
             GameObject newButton = GameObject.Instantiate(variableButton, contentPanel, false);

@@ -50,10 +50,10 @@ public class ProgressBar : MonoBehaviour {
         }
 
         SetPercentageDescriptionText();
-        currentAmount = currentAmount * 100;
-        if((int) currentAmount == 100)
+        var percentage = currentAmount/maxValue * 100;
+        if((int) percentage == 100)
         {
-            percentageText.fontSize = 5;
+            percentageText.fontSize = 7;
             percentageText.text = "Concluido!";
         } else
         {

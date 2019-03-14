@@ -178,8 +178,28 @@ public class ConditionalPanel : MonoBehaviour
         var secondArgument = statement.Substring(statement.LastIndexOf(' ') + 1);
 
 
-        var firstArgumentValue = GameManager.instance.Variables.Find(item => item.Title == firstArgument).GetValue();
-        var secondArgumentValue = GameManager.instance.Variables.Find(item => item.Title == secondArgument).GetValue();
+        dynamic firstArgumentValue;
+        dynamic secondArgumentValue;
+        var hasTrap = ObjectsManager.instance.HasTrap(GameManager.instance.Player1.transform);
+        if (firstArgument == "posicaoAtual")
+        {
+            firstArgumentValue = hasTrap;
+        }
+        else
+        {
+            firstArgumentValue = GameManager.instance.Variables.Find(item => item.Title == firstArgument).GetValue();    
+        }
+        
+       
+        if (secondArgument == "posicaoAtual")
+        {
+            secondArgumentValue = hasTrap;
+        }
+        else
+        {
+            secondArgumentValue = GameManager.instance.Variables.Find(item => item.Title == secondArgument).GetValue();
+        }
+        
         Debug.Log("ARGUMENTVALUE: " + firstArgumentValue );
         Debug.Log("ARGUMENTVALUE: " + secondArgumentValue );
         switch (condition)

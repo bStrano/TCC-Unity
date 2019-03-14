@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    private GameObject[] maps;
     [SerializeField] private AlertDialog alertDialog;
     [SerializeField] private List<Variable> variables;
     [SerializeField] private int commandsAvailable;
@@ -32,18 +34,39 @@ public class GameManager : MonoBehaviour
         this.functionMode = false;
     }
 
+    public bool IsWalkable(Vector3 position)
+    {
+        if (ObjectsManager.instance.HasChest(position)) return false;
+        
+        foreach (var tilemap in maps)
+        {
+            Sprite nextPositionSprite =
+                tilemap.GetComponent<Tilemap>().GetSprite(Vector3Int.RoundToInt(new Vector3(position.x - 0.10f, position.y)));
+            if (nextPositionSprite == null)
+            {
+                continue;
+            }
+            Debug.Log(nextPositionSprite);
+            if (!(nextPositionSprite.name == "sand_tile" || nextPositionSprite.name.Contains("grass") || nextPositionSprite.name.Contains("concrete")))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public bool SendCommandToPlayer(Command command)
     {
         if (command == Command.Open_Chest)
         {
-            if (player.setActiveCommand(command))
+            if (Player1.setActiveCommand(command))
             {
                 LevelManager.instance.NextLevel();
                 return true;
             }
         }
 
-        return player.setActiveCommand(command);
+        return Player1.setActiveCommand(command);
     }
 
     public void NotifyEnemies(Command command)
@@ -51,7 +74,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("Notify Enemies");
 
         Vector2 nextPlayerPosition = Vector2.zero;
-        Vector2 playerPosition = player.transform.position;
+        Vector2 playerPosition = Player1.transform.position;
         switch (command)
         {
             case Command.Walk_Top:
@@ -72,20 +95,20 @@ public class GameManager : MonoBehaviour
         foreach (var enemy in enemies)
         {
             Debug.Log("Enemy");
-            enemy.AttackPlayer(player,nextPlayerPosition);
+            enemy.AttackPlayer(Player1,nextPlayerPosition);
         }
     }
 
     public bool CheckPlayerDied()
     {
-        if (player.IsDead)
+        if (Player1.IsDead)
         {
             foreach (var enemy in enemies)
             {
                 enemy.StopAllCoroutines();
             }   
         }
-        return player.IsDead;
+        return Player1.IsDead;
         
     }
     
@@ -97,6 +120,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
+    public void HandleExplosion()
+    {
+        Player1.TakeDamage(1000);
+    }
+    
     public void ResetGame()
     {
         Debug.Log("Rest Game: " + coins.Length);
@@ -106,10 +135,10 @@ public class GameManager : MonoBehaviour
             coin.SetActive(true);
         }
 
-        player.StopAllCoroutines();
-        player.stopWalking();
+        Player1.StopAllCoroutines();
+        Player1.stopWalking();
         codeOutputPanel.StopAllCoroutines();
-        player.transform.position = spawnpoint.transform.position;
+        Player1.transform.position = spawnpoint.transform.position;
         StopAllCoroutines();
     }
 
@@ -127,6 +156,8 @@ public class GameManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        maps = GameObject.FindGameObjectsWithTag("Map");
+        Debug.Log(maps.Length);
         coins = GameObject.FindGameObjectsWithTag("Coin");
         Debug.Log("LENGHT" + coins.Length);
 
@@ -203,5 +234,11 @@ public class GameManager : MonoBehaviour
     {
         get { return conditionalMode; }
         set { conditionalMode = value; }
+    }
+
+    public Player Player1
+    {
+        get { return player; }
+        set { player = value; }
     }
 }
