@@ -71,13 +71,13 @@ public class CEnemy : Character
 
         if (playerPositionY == transformY)
         {
-            int difference = Math.Abs(playerPositionX - transformX);
+            int difference = playerPositionX - transformX;
             Debug.Log("DIFF: " + difference);
-            if (difference == 1)
+            if (difference == 1|| difference == 0 )
             {
                 Attack();
             }
-            else if (difference == 2 || difference == 3)
+            else if (difference > 1 && difference <=  3)
             {
                 if (Math.Abs(transformX - (int) Math.Truncate(initialPosition.x)) >= 2)
                 {
@@ -209,6 +209,8 @@ public class CEnemy : Character
         {
             audioSource.enabled = false;
         }
+
+        gameObject.GetComponent<CapsuleCollider>().enabled = false;
 
 //        HealthCanvas.SetActive(false);
     }

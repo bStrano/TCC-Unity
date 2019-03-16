@@ -6,16 +6,38 @@ using UnityEngine;
 [System.Serializable]
 public class Variable
 {
+    [SerializeField] private CEnemy enemy;
     [SerializeField] private string title;
     [SerializeField] private int intValue;
     [SerializeField] private bool boolValue;
+
+
+    [SerializeField] private bool isInt;
+    [SerializeField] private bool isBool;
+    [SerializeField] private bool isEnemyHealth;
 
  
     
     public dynamic GetValue()
     {
-        if (intValue != -1) return intValue;
-        return boolValue;
+        if (isInt)
+        {
+            return intValue;
+        }
+
+        if (isBool)
+        {
+            return boolValue;
+        }
+
+        if (isEnemyHealth)
+        {
+            return enemy.MaxHealth;
+        }
+
+        return null;
+//        if (intValue != -1) return intValue;
+//        return boolValue;
 
     }
     

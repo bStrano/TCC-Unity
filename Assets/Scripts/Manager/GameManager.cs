@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -27,6 +28,9 @@ public class GameManager : MonoBehaviour
     // 0 - False, 1 - If , 2 - Else
     private int conditionalMode;
 
+    
+    
+    
     public void SetupCodeMode()
     {
         this.loopMode = false;
@@ -34,8 +38,43 @@ public class GameManager : MonoBehaviour
         this.functionMode = false;
     }
 
+    public int HasEnemy(Vector3 position)
+    {
+        // 0 Diferente  / -1 Esquerda / 1 Direita /  2 Mesma Posição
+        foreach (CEnemy enemy in enemies)
+        {
+            var enemyPosition = enemy.transform.position;
+            var enemyIntPosition = new Vector2((float) Math.Truncate(enemyPosition.x),(float) Math.Truncate(enemyPosition.y));
+       
+            var positionInt = new Vector2((float) Math.Truncate(position.x), (float) Math.Truncate(position
+                .y));
+
+
+            int xDifference = (int) (enemyIntPosition.x -  positionInt.x);
+            Debug.Log("Diferença");
+            Debug.Log(xDifference);
+            if (positionInt.y != enemyIntPosition.y) continue;
+            if (xDifference == 0)
+            {
+                return 2;
+            } else
+            if (xDifference >= 0 && xDifference <= 3)
+            {
+                return 1;
+            } else if (xDifference <= 0 && xDifference >= -3)
+            {
+                return -1;
+            }
+           
+        }
+
+        return 0;
+    }
+    
     public bool IsWalkable(Vector3 position)
     {
+
+        if (HasEnemy(position) == 2)  return false;
         if (ObjectsManager.instance.HasChest(position)) return false;
         
         foreach (var tilemap in maps)
@@ -133,6 +172,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("COIN");
             coin.SetActive(true);
+            coin.GetComponent<Coin>().Show();
         }
 
         Player1.StopAllCoroutines();

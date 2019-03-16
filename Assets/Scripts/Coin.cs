@@ -29,6 +29,18 @@ public class Coin : MonoBehaviour
         }
     }
 
+    public void Hide()
+    {
+        defaultEffect.gameObject.SetActive(false);
+        spriteRenderer.enabled = false;
+    }
+
+    public void Show()
+    {
+        defaultEffect.gameObject.SetActive(true);
+        spriteRenderer.enabled = true;
+    }
+    
     public bool RemoveCoin(Transform transform)
     {
         if (canExplode && IsTrap)

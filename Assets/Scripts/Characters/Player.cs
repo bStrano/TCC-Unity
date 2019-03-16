@@ -179,6 +179,18 @@ public class Player : Character
         {
             isAttacking = true;
 
+            Debug.Log(GameManager.instance.HasEnemy(transform.position));
+            if (GameManager.instance.HasEnemy(transform.position) == -1)
+            {
+                lastMovementCommand = Command.Walk_Left;
+                this.ChangeLookingDirection(Direction.LEFT);
+           
+            } else if (GameManager.instance.HasEnemy(transform.position) == 1)
+            {    
+                lastMovementCommand = Command.Walk_Right;
+                this.ChangeLookingDirection(Direction.RIGHT);
+            }
+
             animator.SetBool("isAttacking", isAttacking);
 
             yield return new WaitForSeconds(1);
@@ -198,6 +210,7 @@ public class Player : Character
 
     public void CastSpell(string spellIndex)
     {
+      
         GameObject prefab;
         switch (spellIndex)
         {
@@ -216,6 +229,7 @@ public class Player : Character
 
         Spell spell = prefab.GetComponent<Spell>();
         Vector3 position = prefab.transform.position;
+
         switch (lastMovementCommand)
         {
             case Command.Walk_Top:
