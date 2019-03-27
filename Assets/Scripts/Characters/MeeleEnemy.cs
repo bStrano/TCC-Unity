@@ -28,20 +28,20 @@ public class MeeleEnemy : CEnemy
 
     protected override void Attack()
     {
-        animator.SetBool("Slash", true);
-        bool sucessHit = false;
-
-        Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsPlayer);
-        foreach (Collider2D enemy in enemiesToDamage)
+        Debug.Log("Attack");
+        if (!isDead)
         {
-            sucessHit = true;
-            enemy.GetComponent<Player>().TakeDamage(damage, "successHit");
+            animator.SetBool("Slash", true);
+            bool sucessHit = false;
+
+            Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsPlayer);
+            foreach (Collider2D enemy in enemiesToDamage)
+            {
+                sucessHit = true;
+                enemy.GetComponent<Player>().TakeDamage(damage, "successHit");
+            }
         }
 
-//        if (!sucessHit)
-//        {
-//            audioSource.Play();
-//        }
     }
 
     private void OnDrawGizmosSelected()

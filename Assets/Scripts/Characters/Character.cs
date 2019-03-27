@@ -26,6 +26,9 @@ public abstract class Character : MonoBehaviour
 
     [SerializeField] protected int damage;
     [SerializeField] protected int maxHealth;
+    [SerializeField] private bool hasRandomHealth;
+    [SerializeField] private int maxHealthMin;
+    [SerializeField] private int maxHealthMax;
     protected int actualHealth;
     protected SpriteRenderer spriteRenderer;
     private static readonly int Y = Animator.StringToHash("y");
@@ -90,14 +93,24 @@ public abstract class Character : MonoBehaviour
         }
     }
 
+
+    public void SetupActualHealth()
+    {
+        if (hasRandomHealth)
+        {
+            this.maxHealth = Random.Range(this.maxHealthMin, this.maxHealthMax);
+        }
+        actualHealth = this.maxHealth;
+    }
+
     // Use this for initialization
     protected virtual void Start()
     {
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        actualHealth = MaxHealth;
-        Debug.Log("Vida Atual: " + actualHealth);
+
+        SetupActualHealth();
     }
 
     // Update is called once per frame
@@ -186,14 +199,13 @@ public abstract class Character : MonoBehaviour
         {
             case Direction.LEFT:
                 animator.SetFloat(X, -1);
-                animator.SetFloat(Y, 0);                
+                animator.SetFloat(Y, 0);
                 break;
             case Direction.RIGHT:
                 animator.SetFloat(X, 1);
                 animator.SetFloat(Y, 0);
                 break;
-        } 
-        
+        }
     }
 
     public bool IsMoving()

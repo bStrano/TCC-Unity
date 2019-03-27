@@ -18,8 +18,11 @@ public class CodeButton : MonoBehaviour {
 
     public void AddSpaceLeft()
     {
-        mainPanel.transform.position = new Vector2(mainPanel.transform.position.x + 10, mainPanel.transform.position.y);
-        deleteButton.transform.position = new Vector2(deleteButton.transform.position.x - 10, mainPanel.transform.position.y);
+        
+        mainPanel.transform.GetComponent<RectTransform>().anchoredPosition= new Vector2(5,0);
+        deleteButton.transform.GetComponent<RectTransform>().anchoredPosition = new Vector2(-2, 0);
+//        mainPanel.transform.position = new Vector2(mainPanel.transform.position.x + 10, mainPanel.transform.position.y);
+//        deleteButton.transform.position = new Vector2(deleteButton.transform.position.x - 10, mainPanel.transform.position.y);
     }
 
     public void ChangeBackgroundColor(Color color)

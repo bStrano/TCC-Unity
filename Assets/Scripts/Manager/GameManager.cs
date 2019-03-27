@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     private GameObject[] maps;
     [SerializeField] private AlertDialog alertDialog;
     [SerializeField] private List<Variable> variables;
-    [SerializeField] private int commandsAvailable;
+    [SerializeField] private int commandsAvailable = 0;
     [SerializeField] private Transform spawnpoint;
     [SerializeField] private Player player;
     private GameObject[] coins;
@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour
         // 0 Diferente  / -1 Esquerda / 1 Direita /  2 Mesma Posição
         foreach (CEnemy enemy in enemies)
         {
+            if (enemy.IsDead) continue;
             var enemyPosition = enemy.transform.position;
             var enemyIntPosition = new Vector2((float) Math.Truncate(enemyPosition.x),(float) Math.Truncate(enemyPosition.y));
        
@@ -51,8 +52,8 @@ public class GameManager : MonoBehaviour
 
 
             int xDifference = (int) (enemyIntPosition.x -  positionInt.x);
-            Debug.Log("Diferença");
-            Debug.Log(xDifference);
+//            Debug.Log("Diferença");
+//            Debug.Log(xDifference);
             if (positionInt.y != enemyIntPosition.y) continue;
             if (xDifference == 0)
             {
@@ -74,13 +75,16 @@ public class GameManager : MonoBehaviour
     public bool IsWalkable(Vector3 position)
     {
 
+        Debug.Log("A");
         if (HasEnemy(position) == 2)  return false;
+        Debug.Log("b");
         if (ObjectsManager.instance.HasChest(position)) return false;
-        
+        Debug.Log("c");
         foreach (var tilemap in maps)
         {
             Sprite nextPositionSprite =
                 tilemap.GetComponent<Tilemap>().GetSprite(Vector3Int.RoundToInt(new Vector3(position.x - 0.10f, position.y)));
+            Debug.Log("Next Position Sprite: " + nextPositionSprite);
             if (nextPositionSprite == null)
             {
                 continue;
@@ -88,6 +92,7 @@ public class GameManager : MonoBehaviour
             Debug.Log(nextPositionSprite);
             if (!(nextPositionSprite.name == "sand_tile" || nextPositionSprite.name.Contains("grass") || nextPositionSprite.name.Contains("concrete")))
             {
+                
                 return false;
             }
         }
@@ -110,8 +115,6 @@ public class GameManager : MonoBehaviour
 
     public void NotifyEnemies(Command command)
     {
-        Debug.Log("Notify Enemies");
-
         Vector2 nextPlayerPosition = Vector2.zero;
         Vector2 playerPosition = Player1.transform.position;
         switch (command)
@@ -153,9 +156,9 @@ public class GameManager : MonoBehaviour
     
     public void NextCommandTutoredGameplay()
     {
-        if (tutoredGameplayMode)
+        if (TutoredGameplayMode)
         {
-            tutoredGameplayMode = parentPanel.GetComponent<TutoredGameplay>().NextButton();
+            TutoredGameplayMode = parentPanel.GetComponent<TutoredGameplay>().NextButton();
         }
     }
 
@@ -175,6 +178,11 @@ public class GameManager : MonoBehaviour
             coin.GetComponent<Coin>().Show();
         }
 
+        foreach (var enemy in enemies)
+        {
+            enemy.Respawn();
+        }
+
         Player1.StopAllCoroutines();
         Player1.stopWalking();
         codeOutputPanel.StopAllCoroutines();
@@ -191,19 +199,20 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         instance = this;
+        spawnpoint.position = new Vector2(player.transform.position.x, player.transform.position.y);
     }
 
     // Use this for initialization
     void Start()
     {
         maps = GameObject.FindGameObjectsWithTag("Map");
-        Debug.Log(maps.Length);
+  
         coins = GameObject.FindGameObjectsWithTag("Coin");
-        Debug.Log("LENGHT" + coins.Length);
+
 
         if (parentPanel.GetComponent<TutoredGameplay>().Buttons.Count > 0)
         {
-            tutoredGameplayMode = true;
+            TutoredGameplayMode = true;
             //Image image = parentPanel.GetComponent<Image>();
             //var tempColor = image.color;
             //tempColor.a = 0.6f;

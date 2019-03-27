@@ -37,10 +37,12 @@ public class GameCanvas : MonoBehaviour
     public void SwitchToFunctionPanel(int functionNumber)
     {
         codePanel.gameObject.SetActive(false);
+        Debug.Log("Teste: " + functionPanel1.CodeOutputPanel.Buttons.Count);
         switch (functionNumber)
         {
             case 1:
                 activeCodePanel = FunctionPanel1.gameObject;
+                if (GameManager.instance.TutoredGameplayMode && functionPanel1.CodeOutputPanel.Buttons.Count > 0) return;;
                 break;
             case 2:
                 activeCodePanel = FunctionPanel2.gameObject;
@@ -53,7 +55,9 @@ public class GameCanvas : MonoBehaviour
                 activeCodePanel = loopPanel.gameObject;
                 break;
         }
+        codePanel.gameObject.SetActive(false);
         activeCodePanel.SetActive(true);
+       
         GameManager.instance.NextCommandTutoredGameplay();
     }
 
@@ -66,9 +70,6 @@ public class GameCanvas : MonoBehaviour
 
     public IEnumerator Play()
     {
-    
-        
-
         int position = 0;
         isPlaying = true;
         bool isLooping = false;
@@ -169,14 +170,14 @@ public class GameCanvas : MonoBehaviour
                 SwitchToFunctionPanel(1);
                 yield return GetActiveCodePanel().StartCoroutine(Play());
                 SwitchToCodePanel();
-                yield return new WaitForSeconds(2);
+                yield return new WaitForSeconds(0.5f);
             }
             else if (command == Command.Function2)
             {
                 SwitchToFunctionPanel(2);
                 yield return GetActiveCodePanel().StartCoroutine(Play());
                 SwitchToCodePanel();
-                yield return new WaitForSeconds(2);
+                yield return new WaitForSeconds(0.5f);
             }
 
 

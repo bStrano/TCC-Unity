@@ -47,6 +47,7 @@ public class Player : Character
 
     bool MoveIfPossible(Vector3 nextPosition)
     {
+        Debug.Log("Is Walkable: " +GameManager.instance.IsWalkable(nextPosition) );
         if (GameManager.instance.IsWalkable(nextPosition))
         {
             StartCoroutine(Move(nextPosition));
@@ -69,6 +70,7 @@ public class Player : Character
 
     public bool OpenChest()
     {
+        if (!ObjectsManager.instance.HasCollectedCoins()) return false;
         Direction direction = ObjectsManager.instance.RequestOpenChest(transform);
         if (direction != Direction.NONE)
         {
@@ -203,7 +205,6 @@ public class Player : Character
 
     public void StopAttack()
     {
-        Debug.Log("Done");
         isAttacking = false;
         animator.SetBool("isAttacking", isAttacking);
     }

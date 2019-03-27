@@ -61,28 +61,13 @@ public class CommandsPanel : MonoBehaviour
 
     public void Start()
     {
-        Debug.Log(GameManager.instance.CommandsAvailable);
-        Debug.Log("Teste");
-
         maxComands = GameManager.instance.CommandsAvailable;
         Debug.Log(maxComands);
 
     }
 
 
-    public bool AddComand(Command command)
-    {
-        if (Commands.Count < maxComands)
-        {
-            Commands.Add(command);
-            return true;
-        }
-        else
-        {
-            return false;
-            // Not implemented yet
-        }
-    }
+
 
 
 
@@ -94,16 +79,5 @@ public class CommandsPanel : MonoBehaviour
 
     
     
-    public Command ReciveComand(string commandString)
-    {
-        Command command = ((Command) Enum.Parse(typeof(Command), commandString));
-        if (AddComand(command))
-        {
-            return command;
-        }
-        else
-        {
-            return Command.None;
-        }
-    }
+  
 }

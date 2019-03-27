@@ -13,6 +13,7 @@ public class TutoredGameplay : MonoBehaviour
     [SerializeField] private List<String> labels;
     [SerializeField] private GameObject labelPanel;
     [SerializeField] private GameObject tutorialPanel;
+    [SerializeField] private GameObject ifPanel;
     private int activeIndex = 0;
 
     public List<Button> Buttons
@@ -28,6 +29,11 @@ public class TutoredGameplay : MonoBehaviour
         Debug.Log(activeIndex);
         DesactivateButton(buttons[activeIndex]);
         activeIndex++;
+
+        if (buttons[activeIndex] == null)  activeIndex++;
+   
+      
+        
 
         if (activeIndex < buttons.Count)
         {
@@ -127,8 +133,16 @@ public class TutoredGameplay : MonoBehaviour
 
     public void DesactivateButton(Button button)
     {
-        ChangeInternalImageAlpha(button, 0.2f);
-        button.interactable = false;
+        try
+        {
+            ChangeInternalImageAlpha(button, 0.2f);
+            button.interactable = false;
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning(e);
+        }
+
     }
 
     private void ChangeInternalImageAlpha(Button button, float alpha)

@@ -26,6 +26,23 @@ public class ConditionalPanel : MonoBehaviour
         "Menor ( < )"
     };
 
+    private readonly List<string> arguments = new List<string>()
+    {
+        "Armadilha",
+        "Fogo",
+        "Gelo",
+        "Raio",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+    };
+
     // Start is called before the first frame update
     void Start()
     {
@@ -34,9 +51,9 @@ public class ConditionalPanel : MonoBehaviour
             variables.Add(variable.Title);
         }
 
-        variables.Add("Digite um valor");
+//        variables.Add("Digite um valor");
         valuesDropdown1.AddOptions(variables);
-        valuesDropdown2.AddOptions(variables);
+        valuesDropdown2.AddOptions(arguments);
         conditionsDropdown.AddOptions(conditions);
         valuesInput1.keyboardType = TouchScreenKeyboardType.NumberPad;
         valuesInput2.keyboardType = TouchScreenKeyboardType.NumberPad;
@@ -191,9 +208,9 @@ public class ConditionalPanel : MonoBehaviour
         }
         
        
-        if (secondArgument == "posicaoAtual")
+        if (secondArgument ==  "Armadilha")
         {
-            secondArgumentValue = hasTrap;
+            secondArgumentValue = true;
         }
         else
         {
@@ -202,6 +219,7 @@ public class ConditionalPanel : MonoBehaviour
         
         Debug.Log("ARGUMENTVALUE: " + firstArgumentValue );
         Debug.Log("ARGUMENTVALUE: " + secondArgumentValue );
+        
         switch (condition)
         {
             case "!=":

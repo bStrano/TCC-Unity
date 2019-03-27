@@ -49,9 +49,6 @@ public class Spell : MonoBehaviour
     public void Cast(Vector2 direction)
     {
         target = direction;
-        Debug.Log("Cast: " + direction);
-        Debug.Log("Target");
-        Debug.Log(target);
     }
 
     public void OnTriggerEnter2D(Collider2D other)
@@ -60,8 +57,9 @@ public class Spell : MonoBehaviour
         {
             CEnemy enemy = other.GetComponent<CEnemy>();
 
-            enemy.ReceiveSpellDamage(1,element);
             Destroy(gameObject);
+            enemy.ReceiveSpellDamage(1,element);
+           
         }
     }
 

@@ -24,6 +24,7 @@ public class CEnemy : Character
     [SerializeField] private GameObject LightningParticle;
     [SerializeField] private GameObject LightningParticle2;
 
+
     [SerializeField] private GameObject IceParticle;
 
     // Use this for initialization
@@ -71,7 +72,7 @@ public class CEnemy : Character
 
         if (playerPositionY == transformY)
         {
-            int difference = playerPositionX - transformX;
+            int difference = Math.Abs(playerPositionX - transformX);
             Debug.Log("DIFF: " + difference);
             if (difference == 1|| difference == 0 )
             {
@@ -189,6 +190,19 @@ public class CEnemy : Character
         base.TakeDamage(damage);
     }
 
+
+    public void Respawn()
+    {
+
+        SetupActualHealth();
+        animator.SetBool("DieBack", false);
+        animator.SetBool("DieFront", false);
+        animator.SetBool("Idle", true);
+        gameObject.transform.position = initialPosition;
+        gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
+        gameObject.GetComponent<Rigidbody2D>().WakeUp();
+    }
+    
     public override void Die()
     {
         base.Die();
@@ -210,8 +224,10 @@ public class CEnemy : Character
             audioSource.enabled = false;
         }
 
-        gameObject.GetComponent<CapsuleCollider>().enabled = false;
-
+        gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
+        gameObject.GetComponent<Rigidbody2D>().Sleep();
+        isDead = true;
+        //gameObject.SetActive(false);
 //        HealthCanvas.SetActive(false);
     }
 
@@ -219,8 +235,11 @@ public class CEnemy : Character
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            Player player = other.gameObject.GetComponent<Player>();
-            player.TakeDamage(damage);
+            if (!isDead)
+            {
+                Player player = other.gameObject.GetComponent<Player>();
+                player.TakeDamage(damage);
+            }
         }
     }
 

@@ -32,7 +32,7 @@ public class Variable
 
         if (isEnemyHealth)
         {
-            return enemy.MaxHealth;
+            return Enemy.MaxHealth;
         }
 
         return null;
@@ -53,5 +53,11 @@ public class Variable
     {
         get => intValue;
         set => this.intValue = value;
+    }
+
+    public CEnemy Enemy
+    {
+        get { return enemy; }
+        set { enemy = value; }
     }
 }

@@ -26,12 +26,26 @@ public class ObjectsManager : MonoBehaviour {
         return false;
     }
 
+    public bool HasCollectedCoins()
+    {
+        foreach (GameObject coin in coins)
+        {
+            SpriteRenderer spriteRenderer = coin.GetComponent<SpriteRenderer>();
+            if (spriteRenderer.enabled)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    
     public bool HasChest(Vector2 pos)
     {
         var position = chestObject.transform.position;
-        var chestIntTransform = new Vector2((float) Math.Truncate(position.x),(float) Math.Truncate(position.y));
+        var chestIntTransform = new Vector2((float) Math.Floor(position.x),(float) Math.Floor(position.y));
        
-        var transformInt = new Vector2((float) Math.Truncate(pos.x), (float) Math.Truncate(pos.y));
+        var transformInt = new Vector2((float) Math.Floor(pos.x), (float) Math.Floor(pos.y));
 
         return chestIntTransform.Equals(transformInt);
     }

@@ -35,7 +35,7 @@ public class CodeOutputPanel : MonoBehaviour
         dropdown.Hide();
         if (dropdown.value == 0) return;
         
-        var numberOfRepetitions = GameManager.instance.Variables.ElementAt(dropdown.value - 1).Value;
+        var numberOfRepetitions = GameManager.instance.Variables.ElementAt(dropdown.value - 1).GetValue();
         if (numberOfRepetitions != null) HandleLoopCommand((int) numberOfRepetitions);
         Invoke (nameof(CallDeactivateLoopPanelLoopPanel), 0.2f);
         
@@ -51,7 +51,7 @@ public class CodeOutputPanel : MonoBehaviour
 
     public void HandleLoopCommand(int numberOfRepetitions)
     {
-        Command command = commands.ReciveComand(Command.Loop.ToString());
+        Command command = ReciveComand(Command.Loop.ToString());
         Loops.Add(new Loop(this.buttons.Count, numberOfRepetitions));
         TranslateCommandToCode(Command.Loop, numberOfRepetitions.ToString());
         GameManager.instance.NextCommandTutoredGameplay();
@@ -63,7 +63,7 @@ public class CodeOutputPanel : MonoBehaviour
 
     public void EndLoopCommand()
     {
-        Command command = commands.ReciveComand(Command.EndLoop.ToString());
+        Command command = ReciveComand(Command.EndLoop.ToString());
 
 
         GameManager.instance.LoopMode = false;
@@ -76,7 +76,7 @@ public class CodeOutputPanel : MonoBehaviour
 
     public void HandleCommands(Command command, string additional)
     {
-        commands.ReciveComand(command.ToString());
+        ReciveComand(command.ToString());
         TranslateCommandToCode(command, additional);
         GameManager.instance.NextCommandTutoredGameplay();
     }
@@ -122,7 +122,7 @@ public class CodeOutputPanel : MonoBehaviour
             }
         }
 
-        Command command = commands.ReciveComand(commandString);
+        Command command = ReciveComand(commandString);
         TranslateCommandToCode(command, null);
         GameManager.instance.NextCommandTutoredGameplay();
     }
@@ -159,6 +159,7 @@ public class CodeOutputPanel : MonoBehaviour
 
     public void TranslateCommandToCode(Command command, string additional)
     {
+ 
         int lineNumber = buttons.Count + 1;
         // foreach (Command command in commandsPanel.Comands)
         //{
@@ -173,6 +174,11 @@ public class CodeOutputPanel : MonoBehaviour
             Buttons.Add(newButton);
             CodeButton codeButton = newButton.GetComponent<CodeButton>();
             codeButton.LineNumber.text = lineNumber.ToString();
+
+            if (GameManager.instance.TutoredGameplayMode)
+            {
+                codeButton.DeleteButton.gameObject.SetActive(false);
+            }
             codeButton.DeleteButton.onClick.AddListener(() =>
             {
                 for (int i = buttons.Count - 1; i >= 0; i--)
@@ -225,7 +231,9 @@ public class CodeOutputPanel : MonoBehaviour
                             buttons.RemoveAt(i);
                             commands.RemoveCommand(i);
                             Destroy(codeButton.gameObject);
+                            UpdateEntries(false);
                             break;
+
                         }
                     }
                 }
@@ -238,14 +246,12 @@ public class CodeOutputPanel : MonoBehaviour
 
                 Debug.Log(buttons.Count);
             });
-
             codeButton.CommandName.text = TranslateCommandToString(command, additional);
 
             
             
             if (command != Command.If && command != Command.Else && command != Command.EndIf)
             {
-                Debug.Log(command);
                 if (GameManager.instance.ConditionalMode == 1 || GameManager.instance.ConditionalMode == 2)
                 {
                     codeButton.MainPanel.GetComponent<RectTransform>().offsetMin = new Vector2(10,0);
@@ -258,8 +264,6 @@ public class CodeOutputPanel : MonoBehaviour
             {
                 codeButton.CommandName.GetComponent<Text>().fontSize = 12;
                 GameManager.instance.ConditionalMode = 1;
-                Debug.Log(commands);
-                Debug.Log(commands.ConditionalButton);
                 commands.ConditionalButton.GetComponentInChildren<Text>().text = "Senão";
             } else if (command == Command.Else)
             {
@@ -270,10 +274,6 @@ public class CodeOutputPanel : MonoBehaviour
                 GameManager.instance.ConditionalMode = 0;
                 commands.ConditionalButton.GetComponentInChildren<Text>().text = "Se";
             } 
-
-            
-
-           
             
             if (GameManager.instance.LoopMode)
             {
@@ -324,6 +324,34 @@ public class CodeOutputPanel : MonoBehaviour
         }
 
         return null;
+    }
+    
+    public bool AddComand(Command command)
+    {
+        Debug.Log("Command Avaiable" + GameManager.instance.CommandsAvailable);
+        if (commandsCount < GameManager.instance.CommandsAvailable)
+        {
+            CommandsPanel.Commands.Add(command);
+            return true;
+        }
+        else
+        {
+            return false;
+            // Not implemented yet
+        }
+    }
+    
+    public Command ReciveComand(string commandString)
+    {
+        Command command = ((Command) Enum.Parse(typeof(Command), commandString));
+        if (AddComand(command))
+        {
+            return command;
+        }
+        else
+        {
+            return Command.None;
+        }
     }
 
     // Use this for initialization

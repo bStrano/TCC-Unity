@@ -4,17 +4,23 @@ using UnityEngine;
 
 public class Loop
 {
-
-
     private int initialIndex;
     private int finalIndex;
     private int numberIterations;
-
+    private dynamic iterationVariable;
+    
     public Loop(int initialIndex, int finalIndex,int numberIterations)
     {
         this.initialIndex = initialIndex;
         this.finalIndex = finalIndex;
         this.NumberIterations = numberIterations;
+    }
+    
+    public Loop(int initialIndex, int finalIndex,CEnemy enemy)
+    {
+        this.initialIndex = initialIndex;
+        this.finalIndex = finalIndex;
+        this.iterationVariable = enemy.MaxHealth;
     }
 
     public Loop(int initialIndex,int numberIterations)
