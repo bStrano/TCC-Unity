@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,11 +11,14 @@ public class TutoredGameplay : MonoBehaviour
     [SerializeField] private GameObject functionPanel;
     [SerializeField] private GameObject loopPanel;
     [SerializeField] private List<Button> buttons;
+    [SerializeField] private List<TMP_Dropdown> dropdowns;
     [SerializeField] private List<String> labels;
     [SerializeField] private GameObject labelPanel;
     [SerializeField] private GameObject tutorialPanel;
     [SerializeField] private GameObject ifPanel;
-    private int activeIndex = 0;
+
+    private int activeIndex;
+    private int activeDropdownIndex;
 
     public List<Button> Buttons
     {
@@ -23,21 +27,73 @@ public class TutoredGameplay : MonoBehaviour
         set { buttons = value; }
     }
 
+    public GameObject LabelPanel
+    {
+        get { return labelPanel; }
+        set { labelPanel = value; }
+    }
+
+
+    private void NextDropdown()
+    {
+        if (activeDropdownIndex - 1 >= 0)
+        {
+            Debug.Log("Teste: " + activeDropdownIndex);
+            dropdowns[activeDropdownIndex - 1].interactable = false;
+        }
+
+        dropdowns[activeDropdownIndex].interactable = true;
+
+
+        activeDropdownIndex++;
+        Debug.Log("Teste: " + activeDropdownIndex);
+    }
+
     public bool NextButton()
     {
-        Debug.Log("Next Button");
-        Debug.Log(activeIndex);
-        DesactivateButton(buttons[activeIndex]);
+        if (buttons[activeIndex] != null)
+        {
+            DesactivateButton(buttons[activeIndex]);
+            Debug.Log("Active Dropdown Index: " + activeDropdownIndex + " / " + dropdowns.Count);
+        }
+
         activeIndex++;
 
-        if (buttons[activeIndex] == null)  activeIndex++;
-   
-      
-        
+
+        bool wasDropdown = false;
 
         if (activeIndex < buttons.Count)
         {
-            ActivateButton(buttons[activeIndex]);
+            if (buttons[activeIndex] == null)
+            {
+                if (dropdowns.Count == 0)
+                {
+                    activeIndex++;
+                    if (activeIndex < buttons.Count) return false;
+                }
+                else
+                {
+                    NextDropdown();
+                    wasDropdown = true;
+                }
+            }
+            else
+            {
+                if (dropdowns.Count > 0)
+                {
+                    if (activeDropdownIndex == dropdowns.Count)
+                    {
+                        dropdowns[activeDropdownIndex - 1].interactable = false;
+                    }
+                }
+            }
+
+
+            if (!wasDropdown)
+            {
+                ActivateButton(buttons[activeIndex]);
+            }
+
             ChangeLabel();
             return true;
         }
@@ -49,32 +105,48 @@ public class TutoredGameplay : MonoBehaviour
     {
         if (labels.Count <= 0)
         {
-            labelPanel.SetActive(false);
+            LabelPanel.SetActive(false);
             return;
         }
 
         if (labels[activeIndex] != "")
         {
-            labelPanel.SetActive(true);
-            Text labelText = labelPanel.GetComponentInChildren<Text>();
-            Debug.Log(labels[activeIndex]);
+            LabelPanel.SetActive(true);
+
+            if (ifPanel != null)
+            {
+                if (ifPanel.activeSelf)
+                {
+                    LabelPanel.transform.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 100);
+                }
+                else
+                {
+                    LabelPanel.transform.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+                }
+            }
+
+            Text labelText = LabelPanel.GetComponentInChildren<Text>();
             labelText.text = labels[activeIndex];
         }
         else
         {
-            labelPanel.SetActive(false);
+            LabelPanel.SetActive(false);
         }
     }
 
     public void DesactivateLabelPanel()
     {
-        labelPanel.SetActive(false);
+        LabelPanel.SetActive(false);
     }
     // Start is called before the first frame update
 
     public void ShowLabelPanel()
     {
-        labelPanel.SetActive(true);
+//        if (ifPanel.activeSelf)
+//        {
+        Debug.Log("Teste");
+//        }
+        LabelPanel.SetActive(true);
     }
 
     void Start()
@@ -84,7 +156,7 @@ public class TutoredGameplay : MonoBehaviour
 
         if (buttons.Count > 0)
         {
-            buttons[buttons.Count - 1].onClick.AddListener(() => this.labelPanel.SetActive(false));
+//            buttons[buttons.Count - 1].onClick.AddListener(() => this.labelPanel.SetActive(false));
             Button[] mainPanelButtons = mainPanel.GetComponentsInChildren<Button>();
             Button[] functionPanelButtons = functionPanel.GetComponentsInChildren<Button>();
             if (loopPanel != null)
@@ -109,6 +181,10 @@ public class TutoredGameplay : MonoBehaviour
                 DesactivateButton(button);
             }
 
+            foreach (var dropdown in dropdowns)
+            {
+                dropdown.interactable = false;
+            }
 
             ActivateButton(buttons[activeIndex]);
         }
@@ -142,7 +218,6 @@ public class TutoredGameplay : MonoBehaviour
         {
             Debug.LogWarning(e);
         }
-
     }
 
     private void ChangeInternalImageAlpha(Button button, float alpha)

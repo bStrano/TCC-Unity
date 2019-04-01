@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,12 +7,14 @@ public class MeeleEnemy : CEnemy
 {
     [SerializeField] private float attackSpeed;
 
+   
 //    [SerializeField] private AudioSource audioSource;
 //    [SerializeField] private string attackClip;
     [SerializeField] private Transform attackPos;
     [SerializeField] private LayerMask whatIsPlayer;
     [SerializeField] private float attackRange;
 
+   
     // Use this for initialization
     void Start()
     {

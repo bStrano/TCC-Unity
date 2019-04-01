@@ -10,11 +10,28 @@ public class ObjectsManager : MonoBehaviour {
     [SerializeField] private GameObject chestObject;
 
 
+    public Coin getCoinAtTransform(Transform transform)
+    {
+        Vector2 pos = new Vector2((float)Math.Truncate(transform.position.x), (float) Math.Truncate(transform.position.y));
+        Vector2 coinsPos;
+        foreach (var coinObj in coins)
+        {
+            coinsPos = new Vector2( (float) Math.Truncate(coinObj.transform.position.x), (float) Math.Truncate(transform.position.y));
+            if (coinsPos == pos) return coinObj.GetComponent<Coin>();
+        }
 
+        return null;
+    }
+
+    
+    
     public bool RequestCoinCollect(Transform transform)
     {
+        Vector2 pos = new Vector2((float) Math.Truncate(transform.position.x), (float) Math.Truncate(transform.position.y));
         for (int i = 0; i < coins.Count; i++) {
             GameObject coinObject = coins[i];
+            if(pos != new Vector2((float) Math.Truncate(coinObject.transform.position.x), (float) Math.Truncate(coinObject.transform.position.y))) continue;
+            
             Debug.Log(coinObject);
             Coin coin = coinObject.GetComponent<Coin>();
 
@@ -62,6 +79,22 @@ public class ObjectsManager : MonoBehaviour {
         }
 
         return false;
+    }
+
+    public Coin GetCoin(Transform trannsform)
+    {
+        Coin coin;
+        foreach (GameObject coinObj in coins)
+        {
+
+            coin = coinObj.GetComponent<Coin>();
+            if (coin.HasCoin(trannsform))
+            {
+                return coin;
+            }
+        }
+
+        return null;
     }
     
     

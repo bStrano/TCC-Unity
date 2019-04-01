@@ -10,7 +10,7 @@ public class CEnemy : Character
 //    [SerializeField] protected Image healthUI;
     private AudioSource audioSource;
     protected Animator animator;
-
+    [SerializeField] private string immunity;
 //    protected int maxHealth;
     private Vector2 target;
     [SerializeField] private bool left;
@@ -26,6 +26,12 @@ public class CEnemy : Character
 
 
     [SerializeField] private GameObject IceParticle;
+
+    public string Immunity
+    {
+        get { return immunity; }
+        set { immunity = value; }
+    }
 
     // Use this for initialization
     public virtual void Start()

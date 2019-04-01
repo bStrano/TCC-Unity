@@ -119,6 +119,7 @@ MonoBehaviour:
   defaultEffect: {fileID: 4058761741513338127}
   collectEffect: {fileID: 1473540659479729307}
   explosionEffect: {fileID: 8969037265991345128}
+  explode: 0
 --- !u!1001 &1473540659495062365
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -395,6 +396,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SortingOrder
       value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 114566962382578006, guid: 46876a2780737ec45a19d62f88e5ce56,
+        type: 3}
+      propertyPath: OnlyDeactivate
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46876a2780737ec45a19d62f88e5ce56, type: 3}

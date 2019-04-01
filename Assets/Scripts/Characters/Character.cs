@@ -153,7 +153,7 @@ public abstract class Character : MonoBehaviour
     }
 
 
-    public void TakeDamage(int damage)
+    public virtual void TakeDamage(int damage)
     {
         this.actualHealth -= damage;
         Debug.Log("DIEEEEEEEEEEEEEEEEEEEEEEEEEEEE " + actualHealth + " / " + MaxHealth);
@@ -171,6 +171,14 @@ public abstract class Character : MonoBehaviour
         // Todo: Implementar sons de recebimento de dano
     }
 
+    public void Respawn()
+    {
+        isDead = false;
+        this.SetupActualHealth();
+        gameObject.GetComponent<SpriteRenderer>().enabled = true;
+
+    }
+    
 
     public virtual void Die()
     {

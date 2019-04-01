@@ -10,9 +10,11 @@ public class Coin : MonoBehaviour
     [SerializeField] private ParticleSystem defaultEffect;
     [SerializeField] private ParticleSystem collectEffect;
     [SerializeField] private ParticleSystem explosionEffect;
+    [SerializeField] private bool explode;
     private Renderer spriteRenderer;
-
+    
     public bool IsTrap { get; set; }
+
 
     public bool HasCoin(Transform transform)
     {
@@ -29,6 +31,8 @@ public class Coin : MonoBehaviour
         }
     }
 
+    
+    
     public void Hide()
     {
         defaultEffect.gameObject.SetActive(false);
@@ -74,6 +78,10 @@ public class Coin : MonoBehaviour
        
         Random rng = new Random();
         IsTrap = rng.Next(0, 2) > 0;
+        if (explode)
+        {
+            IsTrap = true;
+        }
     }
 	
 	// Update is called once per frame

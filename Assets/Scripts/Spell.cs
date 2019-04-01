@@ -56,9 +56,12 @@ public class Spell : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             CEnemy enemy = other.GetComponent<CEnemy>();
-
             Destroy(gameObject);
-            enemy.ReceiveSpellDamage(1,element);
+            if (enemy.Immunity != elementString)
+            {
+                enemy.ReceiveSpellDamage(1,element);     
+            }
+           
            
         }
     }

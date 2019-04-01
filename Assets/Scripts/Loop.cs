@@ -30,6 +30,8 @@ public class Loop
         this.numberIterations = numberIterations;
     }
 
+    
+    
     public int InitialIndex
     {
         get

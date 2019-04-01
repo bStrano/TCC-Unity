@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
@@ -18,19 +19,28 @@ public class GameManager : MonoBehaviour
     [SerializeField] private CodeOutputPanel codeOutputPanel;
     [SerializeField] private List<CEnemy> enemies;
     public static GameManager instance;
-
+    private TutoredGameplay tutoredGameplay;
 
     private bool tutoredGameplayMode;
-   
+
     private bool loopMode;
     private bool functionMode;
+
     private bool varMode;
+
     // 0 - False, 1 - If , 2 - Else
     private int conditionalMode;
 
-    
-    
-    
+
+    public void resetHintPanelPosition()
+    {
+        if (tutoredGameplayMode)
+        {
+            tutoredGameplay.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+        }
+    }
+
+
     public void SetupCodeMode()
     {
         this.loopMode = false;
@@ -45,57 +55,55 @@ public class GameManager : MonoBehaviour
         {
             if (enemy.IsDead) continue;
             var enemyPosition = enemy.transform.position;
-            var enemyIntPosition = new Vector2((float) Math.Truncate(enemyPosition.x),(float) Math.Truncate(enemyPosition.y));
-       
+            var enemyIntPosition = new Vector2((float) Math.Truncate(enemyPosition.x),
+                (float) Math.Truncate(enemyPosition.y));
+
             var positionInt = new Vector2((float) Math.Truncate(position.x), (float) Math.Truncate(position
                 .y));
 
 
-            int xDifference = (int) (enemyIntPosition.x -  positionInt.x);
+            int xDifference = (int) (enemyIntPosition.x - positionInt.x);
 //            Debug.Log("Diferença");
 //            Debug.Log(xDifference);
             if (positionInt.y != enemyIntPosition.y) continue;
             if (xDifference == 0)
             {
                 return 2;
-            } else
-            if (xDifference >= 0 && xDifference <= 3)
+            }
+            else if (xDifference >= 0 && xDifference <= 3)
             {
                 return 1;
-            } else if (xDifference <= 0 && xDifference >= -3)
+            }
+            else if (xDifference <= 0 && xDifference >= -3)
             {
                 return -1;
             }
-           
         }
 
         return 0;
     }
-    
+
     public bool IsWalkable(Vector3 position)
     {
-
-        Debug.Log("A");
-        if (HasEnemy(position) == 2)  return false;
-        Debug.Log("b");
+        if (HasEnemy(position) == 2) return false;
         if (ObjectsManager.instance.HasChest(position)) return false;
-        Debug.Log("c");
         foreach (var tilemap in maps)
         {
             Sprite nextPositionSprite =
-                tilemap.GetComponent<Tilemap>().GetSprite(Vector3Int.RoundToInt(new Vector3(position.x - 0.10f, position.y)));
-            Debug.Log("Next Position Sprite: " + nextPositionSprite);
+                tilemap.GetComponent<Tilemap>()
+                    .GetSprite(Vector3Int.RoundToInt(new Vector3(position.x - 0.10f, position.y)));
             if (nextPositionSprite == null)
             {
                 continue;
             }
-            Debug.Log(nextPositionSprite);
-            if (!(nextPositionSprite.name == "sand_tile" || nextPositionSprite.name.Contains("grass") || nextPositionSprite.name.Contains("concrete")))
+
+            if (!(nextPositionSprite.name == "sand_tile" || nextPositionSprite.name.Contains("grass") ||
+                  nextPositionSprite.name.Contains("concrete")))
             {
-                
                 return false;
             }
         }
+
         return true;
     }
 
@@ -123,13 +131,13 @@ public class GameManager : MonoBehaviour
                 nextPlayerPosition = new Vector2(playerPosition.x, playerPosition.y + 1);
                 break;
             case Command.Walk_Bot:
-                nextPlayerPosition = new Vector2(playerPosition.x, playerPosition.y -1);
+                nextPlayerPosition = new Vector2(playerPosition.x, playerPosition.y - 1);
                 break;
             case Command.Walk_Right:
                 nextPlayerPosition = new Vector2(playerPosition.x + 1, playerPosition.y);
                 break;
             case Command.Walk_Left:
-                nextPlayerPosition = new Vector2(playerPosition.x -1, playerPosition.y);
+                nextPlayerPosition = new Vector2(playerPosition.x - 1, playerPosition.y);
                 break;
         }
 
@@ -137,7 +145,7 @@ public class GameManager : MonoBehaviour
         foreach (var enemy in enemies)
         {
             Debug.Log("Enemy");
-            enemy.AttackPlayer(Player1,nextPlayerPosition);
+            enemy.AttackPlayer(Player1, nextPlayerPosition);
         }
     }
 
@@ -148,12 +156,12 @@ public class GameManager : MonoBehaviour
             foreach (var enemy in enemies)
             {
                 enemy.StopAllCoroutines();
-            }   
+            }
         }
+
         return Player1.IsDead;
-        
     }
-    
+
     public void NextCommandTutoredGameplay()
     {
         if (TutoredGameplayMode)
@@ -167,13 +175,11 @@ public class GameManager : MonoBehaviour
     {
         Player1.TakeDamage(1000);
     }
-    
+
     public void ResetGame()
     {
-        Debug.Log("Rest Game: " + coins.Length);
         foreach (GameObject coin in coins)
         {
-            Debug.Log("COIN");
             coin.SetActive(true);
             coin.GetComponent<Coin>().Show();
         }
@@ -185,7 +191,11 @@ public class GameManager : MonoBehaviour
 
         Player1.StopAllCoroutines();
         Player1.stopWalking();
+
+        codeOutputPanel.GameCanvas.Reset();
         codeOutputPanel.StopAllCoroutines();
+        player.Respawn();
+
         Player1.transform.position = spawnpoint.transform.position;
         StopAllCoroutines();
     }
@@ -202,11 +212,34 @@ public class GameManager : MonoBehaviour
         spawnpoint.position = new Vector2(player.transform.position.x, player.transform.position.y);
     }
 
+    public CEnemy FindClosestEnemy()
+    {
+        Debug.Log("fIND CLOSEST ENEMY");
+        float distanceToClosestEnemy = Mathf.Infinity;
+        CEnemy closestEnemy = null;
+
+        foreach (CEnemy currentEnemy in enemies)
+        {
+            if (currentEnemy.IsDead) continue;
+            float distanceToEnemy = (currentEnemy.transform.position - this.transform.position).sqrMagnitude;
+            if (distanceToEnemy < distanceToClosestEnemy)
+            {
+                distanceToClosestEnemy = distanceToEnemy;
+                closestEnemy = currentEnemy;
+            }
+        }
+
+        Debug.Log(closestEnemy.gameObject.name);
+        return closestEnemy;
+
+        Debug.DrawLine(this.transform.position, closestEnemy.transform.position);
+    }
+
     // Use this for initialization
     void Start()
     {
         maps = GameObject.FindGameObjectsWithTag("Map");
-  
+        tutoredGameplay = parentPanel.GetComponent<TutoredGameplay>();
         coins = GameObject.FindGameObjectsWithTag("Coin");
 
 
@@ -276,7 +309,6 @@ public class GameManager : MonoBehaviour
         get { return variables; }
         set { variables = value; }
     }
-
 
 
     public int ConditionalMode

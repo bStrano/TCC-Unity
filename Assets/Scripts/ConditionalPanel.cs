@@ -1,7 +1,4 @@
-﻿using System;
-using System.Runtime.CompilerServices;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -52,17 +49,21 @@ public class ConditionalPanel : MonoBehaviour
         }
 
 //        variables.Add("Digite um valor");
-        valuesDropdown1.AddOptions(variables);
-        valuesDropdown2.AddOptions(arguments);
-        conditionsDropdown.AddOptions(conditions);
-        valuesInput1.keyboardType = TouchScreenKeyboardType.NumberPad;
-        valuesInput2.keyboardType = TouchScreenKeyboardType.NumberPad;
+        if (!GameManager.instance.TutoredGameplayMode)
+        {
+            valuesDropdown1.AddOptions(variables);
+            valuesDropdown2.AddOptions(arguments);
+            conditionsDropdown.AddOptions(conditions);
+            valuesInput1.keyboardType = TouchScreenKeyboardType.NumberPad;
+            valuesInput2.keyboardType = TouchScreenKeyboardType.NumberPad;
+        }
     }
 
     public void OnDropdownValuesChanged(int dropdownNumber)
     {
         TMP_Dropdown dropdown;
         TMP_InputField inputField;
+
         if (dropdownNumber == 0)
         {
             dropdown = valuesDropdown1;
@@ -81,6 +82,8 @@ public class ConditionalPanel : MonoBehaviour
 
         if (dropdown.value != 0)
         {
+            if (dropdown.value == 1 && GameManager.instance.TutoredGameplayMode)
+                GameManager.instance.NextCommandTutoredGameplay();
             if (dropdownNumber == 0 || dropdownNumber == 1)
             {
                 dropdown.GetComponent<Image>().color = new Color32(212, 216, 236, 255);
@@ -92,16 +95,16 @@ public class ConditionalPanel : MonoBehaviour
         }
 
         //var val = GameManager.instance.Variables.ElementAt(valuesDropdown1.value - 1).GetValue();
-        if (inputField == null) return;
-        if (CheckDropdownIsCustomMessage(dropdown))
-        {
-            inputField.gameObject.SetActive(true);
-        }
-        else
-        {
-            inputField.text = "";
-            inputField.gameObject.SetActive(false);
-        }
+//        if (inputField == null) return;
+//        if (CheckDropdownIsCustomMessage(dropdown))
+//        {
+//            inputField.gameObject.SetActive(true);
+//        }
+//        else
+//        {
+//            inputField.text = "";
+//            inputField.gameObject.SetActive(false);
+//        }
 
         //Debug.Log(val);
     }
@@ -167,6 +170,9 @@ public class ConditionalPanel : MonoBehaviour
 
     public void OnSave()
     {
+        CodeOutputPanel activeCodeOutputPanel = codeOutputPanel.GameCanvas.GetComponent<GameCanvas>().GetActiveCodePanel();
+        GameManager.instance.resetHintPanelPosition();
+//        GameManager.instance.NextCommandTutoredGameplay();
         if (CheckIsValid())
         {
             string condition = conditionsDropdown.options[conditionsDropdown.value].text;
@@ -176,7 +182,7 @@ public class ConditionalPanel : MonoBehaviour
                                + condition
                                + valuesDropdown2.options[valuesDropdown2.value].text;
             Debug.Log(statement);
-            codeOutputPanel.HandleCommands(Command.If, statement);
+            activeCodeOutputPanel.HandleCommands(Command.If, statement);
             gameObject.SetActive(false);
             GameManager.instance.ConditionalMode = 1;
         }
@@ -186,6 +192,7 @@ public class ConditionalPanel : MonoBehaviour
     public bool CheckStatement(string statement)
     {
         Debug.Log("CheckStatement");
+        Debug.Log(statement);
 
         statement = statement.Substring(statement.LastIndexOf('(') + 1);
         int lastIndex = statement.LastIndexOf(')');
@@ -195,31 +202,61 @@ public class ConditionalPanel : MonoBehaviour
         var secondArgument = statement.Substring(statement.LastIndexOf(' ') + 1);
 
 
-        dynamic firstArgumentValue;
         dynamic secondArgumentValue;
+        dynamic firstArgumentValue;
         var hasTrap = ObjectsManager.instance.HasTrap(GameManager.instance.Player1.transform);
-        if (firstArgument == "posicaoAtual")
+
+
+        Debug.Log(firstArgument);
+        switch (firstArgument)
         {
-            firstArgumentValue = hasTrap;
+            case "posicaoAtual":
+                firstArgumentValue = GameManager.instance.Player1.transform;
+                break;
+            case "imunInimigo":
+                firstArgumentValue = GameManager.instance.FindClosestEnemy().Immunity;
+                break;
+            default:
+                firstArgumentValue = GameManager.instance.Variables.Find(item => item.Title == firstArgument).GetValue();
+                break;
         }
-        else
-        {
-            firstArgumentValue = GameManager.instance.Variables.Find(item => item.Title == firstArgument).GetValue();    
-        }
+
         
-       
-        if (secondArgument ==  "Armadilha")
+
+        Debug.Log("Second Argument Statement: " + secondArgument);
+        switch (secondArgument)
         {
-            secondArgumentValue = true;
+            case "Armadilha":
+            {
+                secondArgumentValue = "Armadilha";
+                if (firstArgumentValue is Transform)
+                {
+                    firstArgumentValue = ObjectsManager.instance.GetCoin(firstArgumentValue);              
+                }
+
+                if (firstArgumentValue is Coin)
+                {
+                    firstArgumentValue = ((Coin) firstArgumentValue).IsTrap ? "Armadilha" : "Não";
+                } 
+
+                Debug.Log(firstArgumentValue);
+                break;
+            }
+            case "Fogo":
+                secondArgumentValue = "fire";
+                break;
+            case "Raio":
+                secondArgumentValue = "lightning";
+                break;
+            default:
+                secondArgumentValue =
+                    GameManager.instance.Variables.Find(item => item.Title == secondArgument).GetValue();
+                break;
         }
-        else
-        {
-            secondArgumentValue = GameManager.instance.Variables.Find(item => item.Title == secondArgument).GetValue();
-        }
-        
-        Debug.Log("ARGUMENTVALUE: " + firstArgumentValue );
-        Debug.Log("ARGUMENTVALUE: " + secondArgumentValue );
-        
+
+        Debug.Log("ARGUMENTVALUE: " + firstArgumentValue);
+        Debug.Log("ARGUMENTVALUE: " + secondArgumentValue);
+
         switch (condition)
         {
             case "!=":
@@ -233,9 +270,8 @@ public class ConditionalPanel : MonoBehaviour
             default:
                 return false;
         }
-
-      
     }
+
 
     // Update is called once per frame
     void Update()

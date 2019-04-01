@@ -13,11 +13,25 @@ public class GameCanvas : MonoBehaviour
     [SerializeField] private MainPanel functionPanel3;
     [SerializeField] private GameObject loopPanel;
     [SerializeField] private ConditionalPanel conditionalPanel;
+    private Button conditionalButton;
+    private Text conditionalButtonText;
     private GameObject activeCodePanel;
-    private bool alreadyPlayed = false;
-    private bool isPlaying = false;
+    private bool alreadyPlayed ;
+    private bool isPlaying;
     private bool runningConditional;
+    private bool isLooping;
 
+
+
+    public void Reset()
+    {
+        isPlaying = false;
+        alreadyPlayed = false;
+        isLooping = false;
+        runningConditional = false;
+        StopAllCoroutines();
+    }
+    
     public MainPanel FunctionPanel1
     {
         get { return functionPanel1; }
@@ -30,10 +44,19 @@ public class GameCanvas : MonoBehaviour
         set { functionPanel2 = value; }
     }
 
-    
-    
-    
-    
+    public bool IsPlaying
+    {
+        get { return isPlaying; }
+        set { isPlaying = value; }
+    }
+
+    public bool IsLooping
+    {
+        get => isLooping;
+        set => isLooping = value;
+    }
+
+
     public void SwitchToFunctionPanel(int functionNumber)
     {
         codePanel.gameObject.SetActive(false);
@@ -63,21 +86,40 @@ public class GameCanvas : MonoBehaviour
 
     public void RestartLevel()
     {
-        Debug.Log("Restart");
-        LevelManager.instance.RestartLevel();
+        StopAllCoroutines();
+        if (GameManager.instance.TutoredGameplayMode)
+        {
+            GameManager.instance.ResetGame();
+            GameManager.instance.NextCommandTutoredGameplay();
+            foreach (GameObject button in codeOutputPanel.Buttons)
+            {
+                Destroy(button);
+                
+            }
+            codeOutputPanel.Buttons.Clear();
+            codeOutputPanel.CommandsPanel.Commands.Clear();
+            codeOutputPanel.SetupEntries();
+        }
+        else
+        {
+            LevelManager.instance.RestartLevel();
+        }
+        
     }
 
 
     public IEnumerator Play()
     {
+        GameManager.instance.NextCommandTutoredGameplay();
         int position = 0;
-        isPlaying = true;
-        bool isLooping = false;
+        IsPlaying = true;
+        IsLooping = false;
         int loopIndex = 0;
         int iterationLoopNumber = 1;
         CodeOutputPanel activeCodeOutputPanel = GetActiveCodePanel();
         while (position < activeCodeOutputPanel.CommandsPanel.Commands.Count)
         {
+            Debug.Log("Commands Count: " + activeCodeOutputPanel.CommandsPanel.Commands.Count);
             if (GameManager.instance.CheckPlayerDied())
             {
                 StopAllCoroutines();
@@ -91,11 +133,12 @@ public class GameCanvas : MonoBehaviour
             button.GetComponent<CodeButton>().ChangeBackgroundColor(Color.green);
             if (command == Command.Loop)
             {
-                isLooping = true;
+                IsLooping = true;
             }
             else if (command == Command.EndLoop)
             {
-                isLooping = false;
+                Debug.Log("End Loop");
+                IsLooping = false;
                 loopIndex++;
                 iterationLoopNumber = 1;
                 position++;
@@ -104,7 +147,7 @@ public class GameCanvas : MonoBehaviour
             } else if (command == Command.If)
             {
                 yield return new WaitForSeconds(0.4f);
-                if (!conditionalPanel.CheckStatement(codeOutputPanel.Buttons[position].GetComponentInChildren<Text>()
+                if (!conditionalPanel.CheckStatement(activeCodeOutputPanel.Buttons[position].GetComponentInChildren<Text>()
                     .text))
                 {
 
@@ -155,7 +198,7 @@ public class GameCanvas : MonoBehaviour
 
 
 
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(1.8f);
 
             if (!(button.GetComponent<CodeButton>().BackgroundColor == Color.red))
             {
@@ -181,7 +224,7 @@ public class GameCanvas : MonoBehaviour
             }
 
 
-            if (isLooping)
+            if (IsLooping)
             {
                 if (activeCodeOutputPanel.Loops[loopIndex].FinalIndex == position)
                 {
@@ -197,10 +240,10 @@ public class GameCanvas : MonoBehaviour
                 }
             } else
             {
-                activeCodeOutputPanel.ScrollView.velocity = new Vector2(0f, 35f);
+                activeCodeOutputPanel.ScrollView.velocity = new Vector2(0f, 45f);
             }
         }
-        isPlaying = false;
+        IsPlaying = false;
         alreadyPlayed = true;
 
 
@@ -211,9 +254,9 @@ public class GameCanvas : MonoBehaviour
     {
         EventSystem.current.SetSelectedGameObject(null);
         //CodeOutputPanel codeOutput = codePanel.GetComponentInChildren<CodeOutputPanel>();
-        if (!alreadyPlayed && !isPlaying)
+        if (!alreadyPlayed && !IsPlaying)
         {
-            isPlaying = true;
+            IsPlaying = true;
             StartCoroutine(Play());
         }
         else
@@ -285,15 +328,21 @@ public class GameCanvas : MonoBehaviour
     
     public void OnClickConditional()
     {
+        CodeOutputPanel activeCodeOutputPanel = GetActiveCodePanel();
+       // GameManager.instance.NextCommandTutoredGameplay();
         if (GameManager.instance.ConditionalMode == 0)
         {
+            conditionalButtonText.fontSize =  25;
             conditionalPanel.gameObject.SetActive(!conditionalPanel.gameObject.activeSelf);
+            GameManager.instance.NextCommandTutoredGameplay();
         } else if (GameManager.instance.ConditionalMode == 1)
         {
-            codeOutputPanel.HandleCommands(Command.Else, null);
+            conditionalButtonText.fontSize = 17;
+            activeCodeOutputPanel.HandleCommands(Command.Else, null);
         } else if (GameManager.instance.ConditionalMode == 2)
         {
-            codeOutputPanel.HandleCommands(Command.EndIf, null);
+            conditionalButtonText.fontSize = 25;
+            activeCodeOutputPanel.HandleCommands(Command.EndIf, null);
         }
     }
     public void ToggleConditionalPanel()
@@ -319,7 +368,16 @@ public class GameCanvas : MonoBehaviour
     void Start()
     {
         activeCodePanel = codePanel.gameObject;
-        
+        GameObject conditionalButtonObj = GameObject.Find("Conditional Button");
+
+
+        if (conditionalButtonObj != null)
+        {
+                    conditionalButton = conditionalButtonObj.GetComponent<Button>();
+                    
+                    conditionalButtonText = conditionalButton.GetComponentInChildren<Text>();
+        }
+
     }
 
     // Update is called once per frame

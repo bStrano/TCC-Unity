@@ -9,8 +9,8 @@ public class Chest : MonoBehaviour {
 
     public Direction IsNear(Transform transform)
     {
-        float thisX = this.transform.position.x;
-        float x = transform.position.x;
+        double thisX = Math.Truncate(this.transform.position.x);
+        double x = Math.Truncate(transform.position.x);
         double thisY = Math.Truncate(this.transform.position.y);
         double y = Math.Truncate(transform.position.y);
 

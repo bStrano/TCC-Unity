@@ -44,7 +44,7 @@ public class CodeOutputPanel : MonoBehaviour
 
     private void CallDeactivateLoopPanelLoopPanel()
     {
-        gameCanvas.DeactivateLoopPanel();
+        GameCanvas.DeactivateLoopPanel();
     }
 
     
@@ -89,7 +89,7 @@ public class CodeOutputPanel : MonoBehaviour
             {
                 try
                 {
-                    if (gameCanvas.FunctionPanel1.CommandsPanel.Commands.Count == 0)
+                    if (GameCanvas.FunctionPanel1.CommandsPanel.Commands.Count == 0)
                     {
                         GameManager.instance.AlertDialog.SetupDialog(
                             "Mantenha pressionado o botão de função para abrir o painel de funções", "Entendi!");
@@ -112,7 +112,7 @@ public class CodeOutputPanel : MonoBehaviour
             }
             case "Function2":
             {
-                if (gameCanvas.FunctionPanel2.CommandsPanel.Commands.Count == 0)
+                if (GameCanvas.FunctionPanel2.CommandsPanel.Commands.Count == 0)
                 {
                     GameManager.instance.AlertDialog.OpenDialog();
                     return;
@@ -149,7 +149,7 @@ public class CodeOutputPanel : MonoBehaviour
         }
     }
 
-    private void RemoveButton(int i)
+    public void RemoveButton(int i)
     {
         Destroy(buttons[i].gameObject);
         buttons.RemoveAt(i);
@@ -166,7 +166,9 @@ public class CodeOutputPanel : MonoBehaviour
         if (command != Command.None)
         {
             GameObject newButton = GameObject.Instantiate(button, contentPanel, false);
-            if (command != Command.EndLoop && command != Command.Loop && command != Command.Variable)
+            
+            //command != Command.EndLoop && command != Command.Loop
+            if ( command != Command.Variable)
             {
                 UpdateEntries(true);
             }
@@ -181,12 +183,16 @@ public class CodeOutputPanel : MonoBehaviour
             }
             codeButton.DeleteButton.onClick.AddListener(() =>
             {
+                
                 for (int i = buttons.Count - 1; i >= 0; i--)
                 {
+                    if (gameCanvas.IsPlaying) GameManager.instance.ResetGame();
                     if (buttons[i].gameObject.GetComponent<CodeButton>().LineNumber.text == codeButton.LineNumber.text)
                     {
                         if (command == Command.Loop)
                         {
+                          
+                           
                             while (true)
                             {
                                 try
@@ -289,6 +295,8 @@ public class CodeOutputPanel : MonoBehaviour
     {
         switch (command)
         {
+            case Command.Shield:
+                return "escudoMagico()";
             case Command.Walk_Top:
                 return "andarCima()";
             case Command.Walk_Right:
@@ -328,7 +336,6 @@ public class CodeOutputPanel : MonoBehaviour
     
     public bool AddComand(Command command)
     {
-        Debug.Log("Command Avaiable" + GameManager.instance.CommandsAvailable);
         if (commandsCount < GameManager.instance.CommandsAvailable)
         {
             CommandsPanel.Commands.Add(command);
@@ -357,17 +364,26 @@ public class CodeOutputPanel : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        entries.text = commandsCount + "/" + GameManager.instance.CommandsAvailable;
+        SetupEntries();
         foreach (var variable in GameManager.instance.Variables)
         {
-            GameObject newButton = GameObject.Instantiate(variableButton, contentPanel, false);
-            newButton.GetComponent<VariableButton>().TitleText.text = variable.Title;
-        }
+            if (variableButton != null)
+            {
+                GameObject newButton = GameObject.Instantiate(variableButton, contentPanel, false);
+                newButton.GetComponent<VariableButton>().TitleText.text = variable.Title;
+
+            }
+            }
 
         //GameObject lineCode = Instantiate
     }
 
-
+    public void SetupEntries()
+    {
+        commandsCount = 0;
+        entries.text = commandsCount + "/" + GameManager.instance.CommandsAvailable;
+    }
+    
     public List<GameObject> Buttons
     {
         get { return buttons; }
@@ -401,5 +417,11 @@ public class CodeOutputPanel : MonoBehaviour
         get { return loops; }
 
         set { loops = value; }
+    }
+
+    public GameCanvas GameCanvas
+    {
+        get { return gameCanvas; }
+        set { gameCanvas = value; }
     }
 }

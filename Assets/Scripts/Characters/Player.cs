@@ -23,7 +23,9 @@ public class Player : Character
     [SerializeField] private GameObject victoryEffect;
     [SerializeField] private GameObject shieldEffect;
 
-   
+    public bool ShieldActivated { get; set; } 
+
+
     // Use this for initialization
     protected override void Start()
     {
@@ -47,7 +49,6 @@ public class Player : Character
 
     bool MoveIfPossible(Vector3 nextPosition)
     {
-        Debug.Log("Is Walkable: " +GameManager.instance.IsWalkable(nextPosition) );
         if (GameManager.instance.IsWalkable(nextPosition))
         {
             StartCoroutine(Move(nextPosition));
@@ -107,7 +108,6 @@ public class Player : Character
         }
         else
         {
-            Debug.Log("false");
             return false;
         }
     }
@@ -128,41 +128,47 @@ public class Player : Character
     }
 
 
+
+   
+    
     public bool setActiveCommand(Command playerCommand)
     {
-        //PlayerCommand playerCommand = (PlayerCommand)Enum.Parse(typeof(PlayerCommand), command);
-        if (playerCommand == Command.Walk_Top || playerCommand == Command.Walk_Right ||
-            playerCommand == Command.Walk_Bot || playerCommand == Command.Walk_Left)
+        switch (playerCommand)
         {
-            //Debug.Log("Iniciando a movimentação do personagem, ---- " + playerCommand.ToString());
-            return MoveToDirection(playerCommand);
-        }
-        else if (playerCommand == Command.Collect_Coin)
-        {
-            return CollectCoin();
-        }
-        else if (playerCommand == Command.Open_Chest)
-        {
-            return OpenChest();
-        }
-        else if (playerCommand == Command.Fireball)
-        {
-            return AttackTest("Fireball");
-        }
-        else if (playerCommand == Command.Ice)
-        {
-            return AttackTest("Ice");
-        }
-        else if (playerCommand == Command.Lightning)
-        {
-            return AttackTest("Lightning");
-        }
-        else
-        {
-            return false;
+            //PlayerCommand playerCommand = (PlayerCommand)Enum.Parse(typeof(PlayerCommand), command);
+            case Command.Walk_Top:
+            case Command.Walk_Right:
+            case Command.Walk_Bot:
+            case Command.Walk_Left:
+                //Debug.Log("Iniciando a movimentação do personagem, ---- " + playerCommand.ToString());
+                return MoveToDirection(playerCommand);
+            case Command.Collect_Coin:
+                return CollectCoin();
+            case Command.Open_Chest:
+                return OpenChest();
+            case Command.Fireball:
+                return AttackTest("Fireball");
+            case Command.Ice:
+                return AttackTest("Ice");
+            case Command.Lightning:
+                return AttackTest("Lightning");
+            case Command.Shield:
+                StartCoroutine(nameof(ActivateShield));
+                return true;
+            default:
+                return false;
         }
     }
 
+
+    public IEnumerator ActivateShield()
+    {
+        ShieldActivated = true;
+        shieldEffect.SetActive(true);
+        yield return new WaitForSeconds(3);
+        shieldEffect.SetActive(false);
+        ShieldActivated = false;
+    }
 
     public bool AttackTest(string spellName)
     {
@@ -207,6 +213,16 @@ public class Player : Character
     {
         isAttacking = false;
         animator.SetBool("isAttacking", isAttacking);
+    }
+    
+    public override void TakeDamage(int damage)
+    {
+        Debug.Log( "Shield: " + ShieldActivated);
+        if (!ShieldActivated)
+        {
+            base.TakeDamage(damage);
+        }
+        
     }
 
     public void CastSpell(string spellIndex)

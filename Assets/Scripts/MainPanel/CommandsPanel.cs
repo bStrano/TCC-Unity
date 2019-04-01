@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public enum Command
 {
     None,
+    Shield,
     Walk_Top,
     Walk_Right,
     Walk_Bot,
@@ -37,7 +38,7 @@ public class CommandsPanel : MonoBehaviour
     private int programmingCommands = 0;
 
 
-    public List<Command> Commands { get; private set; }
+    public List<Command> Commands { get; set; }
 
 
     public Button LoopButton

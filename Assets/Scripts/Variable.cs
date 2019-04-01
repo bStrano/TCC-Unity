@@ -1,63 +1,58 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-
-[System.Serializable]
-public class Variable
+namespace Assets.Scripts
 {
-    [SerializeField] private CEnemy enemy;
-    [SerializeField] private string title;
-    [SerializeField] private int intValue;
-    [SerializeField] private bool boolValue;
+    [System.Serializable]
+    public class Variable
+    {
+        [SerializeField] private Coin coin;
+        [SerializeField] private CEnemy enemy;
+        [SerializeField] private string title;
+        [SerializeField] private int intValue;
+        [SerializeField] private bool boolValue;
 
 
-    [SerializeField] private bool isInt;
-    [SerializeField] private bool isBool;
-    [SerializeField] private bool isEnemyHealth;
-
+        [SerializeField] private bool isCoin;
+        [SerializeField] private bool isInt;
+        [SerializeField] private bool isBool;
+        [SerializeField] private bool isEnemyHealth;
+        [SerializeField] private bool isEnemyImmunity;
  
     
-    public dynamic GetValue()
-    {
-        if (isInt)
+        public dynamic GetValue()
         {
+            if (isCoin) return coin;
+            if (isInt) return intValue;
+            if (isBool) return boolValue;
+            if (isEnemyHealth) return Enemy.MaxHealth;
+            if (isEnemyImmunity) return Enemy.Immunity;
             return intValue;
         }
-
-        if (isBool)
+    
+    
+    
+        public string Title
         {
-            return boolValue;
+            get => title;
+            set => title = value;
         }
 
-        if (isEnemyHealth)
+        public int Value
         {
-            return Enemy.MaxHealth;
+            get => intValue;
+            set => this.intValue = value;
         }
 
-        return null;
-//        if (intValue != -1) return intValue;
-//        return boolValue;
+        public CEnemy Enemy
+        {
+            get { return enemy; }
+            set { enemy = value; }
+        }
 
-    }
-    
-    
-    
-    public string Title
-    {
-        get => title;
-        set => title = value;
-    }
-
-    public int Value
-    {
-        get => intValue;
-        set => this.intValue = value;
-    }
-
-    public CEnemy Enemy
-    {
-        get { return enemy; }
-        set { enemy = value; }
+        public Coin Coin
+        {
+            get => coin;
+            set => coin = value;
+        }
     }
 }
