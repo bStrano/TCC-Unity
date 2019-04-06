@@ -32,7 +32,6 @@ public class ObjectsManager : MonoBehaviour {
             GameObject coinObject = coins[i];
             if(pos != new Vector2((float) Math.Truncate(coinObject.transform.position.x), (float) Math.Truncate(coinObject.transform.position.y))) continue;
             
-            Debug.Log(coinObject);
             Coin coin = coinObject.GetComponent<Coin>();
 
             if (coin.RemoveCoin(transform))

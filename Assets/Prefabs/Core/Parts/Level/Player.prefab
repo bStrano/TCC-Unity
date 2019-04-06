@@ -95,8 +95,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5667db36e9f850409b46fe512e0a3fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.6
+  speed: 1
+  damage: 0
+  maxHealth: 0
+  hasRandomHealth: 0
+  maxHealthMin: 0
+  maxHealthMax: 0
   map: {fileID: 0}
+  alternativeMaps: []
   spellPrefab:
   - {fileID: 3549906749206782651, guid: 6e90f6e51de891f4bb5985ebbbc906d5, type: 3}
   - {fileID: 2867140085745687250, guid: 1236f976794f6604ea477ceb4bb2674b, type: 3}
@@ -106,6 +112,9 @@ MonoBehaviour:
   - {fileID: 4078028701015052}
   - {fileID: 4608138548233786}
   - {fileID: 4229293022750176}
+  deathEffect: {fileID: 0}
+  victoryEffect: {fileID: 0}
+  shieldEffect: {fileID: 0}
 --- !u!95 &95848499061840696
 Animator:
   serializedVersion: 3

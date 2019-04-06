@@ -32,6 +32,11 @@ public class GameManager : MonoBehaviour
     private int conditionalMode;
 
 
+    public void SetupSpeed()
+    {
+        
+    }
+
     public void resetHintPanelPosition()
     {
         if (tutoredGameplayMode)

@@ -5,7 +5,7 @@ using UnityEngine;
 public class Loop
 {
     private int initialIndex;
-    private int finalIndex;
+    private int? finalIndex = null ;
     private int numberIterations;
     private dynamic iterationVariable;
     
@@ -45,17 +45,10 @@ public class Loop
         }
     }
 
-    public int FinalIndex
+    public int? FinalIndex
     {
-        get
-        {
-            return finalIndex;
-        }
-
-        set
-        {
-            finalIndex = value;
-        }
+        get => finalIndex;
+        set => finalIndex = value;
     }
 
     public int NumberIterations

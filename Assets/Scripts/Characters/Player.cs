@@ -65,7 +65,6 @@ public class Player : Character
 
     public bool CollectCoin()
     {
-        Debug.Log("Collect Coin");
         return ObjectsManager.instance.RequestCoinCollect(transform);
     }
 

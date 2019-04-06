@@ -72,11 +72,6 @@ public class CommandsPanel : MonoBehaviour
 
 
 
-    public void RemoveCommand(int commandIndex)
-    {
-        Commands.RemoveAt(commandIndex);
-    }
-
 
     
     

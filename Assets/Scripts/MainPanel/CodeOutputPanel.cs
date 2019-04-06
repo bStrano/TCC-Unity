@@ -32,9 +32,10 @@ public class CodeOutputPanel : MonoBehaviour
 
     public void HandleVariableCommand()
     {
+       
         dropdown.Hide();
         if (dropdown.value == 0) return;
-        
+         GameManager.instance.NextCommandTutoredGameplay();
         var numberOfRepetitions = GameManager.instance.Variables.ElementAt(dropdown.value - 1).GetValue();
         if (numberOfRepetitions != null) HandleLoopCommand((int) numberOfRepetitions);
         Invoke (nameof(CallDeactivateLoopPanelLoopPanel), 0.2f);
@@ -61,11 +62,27 @@ public class CodeOutputPanel : MonoBehaviour
     }
 
 
+
+    public void RemoveUnfinishedLoopPanel()
+    {
+        GameManager.instance.LoopMode = false;
+        Loops.RemoveAt(Loops.Count -1);
+        LoopButton loopButton = mainPanel.GetComponent<MainPanel>().CommandsPanel.LoopButton.GetComponent<LoopButton>();
+        loopButton.DisableLoopMode();
+    }
     public void EndLoopCommand()
     {
+        Loop loop = Loops[Loops.Count - 1];
+        loop.FinalIndex = buttons.Count - 1;
+               
+        if( loop.InitialIndex == loop.FinalIndex)
+        {
+            GameManager.instance.AlertDialog.SetupDialog(
+                "Não é possivel finalizar o loop sem comandos. Adicione comandos ao Loop e tente novamente.", "Ok");
+            GameManager.instance.AlertDialog.OpenDialog();
+            return;
+        } 
         Command command = ReciveComand(Command.EndLoop.ToString());
-
-
         GameManager.instance.LoopMode = false;
         TranslateCommandToCode(Command.EndLoop, null);
         Loops[Loops.Count - 1].FinalIndex = buttons.Count - 1;
@@ -153,10 +170,30 @@ public class CodeOutputPanel : MonoBehaviour
     {
         Destroy(buttons[i].gameObject);
         buttons.RemoveAt(i);
-        commands.RemoveCommand(i);
+        RemoveCommand(i);
         UpdateEntries(false);
     }
 
+    
+    
+    public void RemoveCommand(int commandIndex)
+    {
+        foreach (var loop in loops)
+        {
+            if (commandIndex < loop.FinalIndex)
+            {
+                loop.FinalIndex--;
+            }
+
+            if (commandIndex < loop.InitialIndex)
+            {
+                loop.InitialIndex--;
+            }
+        }
+
+        commands.Commands.RemoveAt(commandIndex);
+    }
+    
     public void TranslateCommandToCode(Command command, string additional)
     {
  
@@ -177,12 +214,14 @@ public class CodeOutputPanel : MonoBehaviour
             CodeButton codeButton = newButton.GetComponent<CodeButton>();
             codeButton.LineNumber.text = lineNumber.ToString();
 
-            if (GameManager.instance.TutoredGameplayMode)
+            if (GameManager.instance.TutoredGameplayMode || command == Command.EndLoop)
             {
                 codeButton.DeleteButton.gameObject.SetActive(false);
             }
             codeButton.DeleteButton.onClick.AddListener(() =>
             {
+                if (gameCanvas.IsPlaying) GameManager.instance.ResetGame();
+               
                 
                 for (int i = buttons.Count - 1; i >= 0; i--)
                 {
@@ -191,8 +230,7 @@ public class CodeOutputPanel : MonoBehaviour
                     {
                         if (command == Command.Loop)
                         {
-                          
-                           
+                                RemoveUnfinishedLoopPanel();  
                             while (true)
                             {
                                 try
@@ -235,7 +273,7 @@ public class CodeOutputPanel : MonoBehaviour
                         else
                         {
                             buttons.RemoveAt(i);
-                            commands.RemoveCommand(i);
+                            RemoveCommand(i);
                             Destroy(codeButton.gameObject);
                             UpdateEntries(false);
                             break;
@@ -250,7 +288,6 @@ public class CodeOutputPanel : MonoBehaviour
                     codeButtonTemp.LineNumber.text = (i + 1).ToString();
                 }
 
-                Debug.Log(buttons.Count);
             });
             codeButton.CommandName.text = TranslateCommandToString(command, additional);
 
@@ -350,6 +387,7 @@ public class CodeOutputPanel : MonoBehaviour
     
     public Command ReciveComand(string commandString)
     {
+        if (gameCanvas.IsPlaying) GameManager.instance.ResetGame();
         Command command = ((Command) Enum.Parse(typeof(Command), commandString));
         if (AddComand(command))
         {

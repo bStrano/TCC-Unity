@@ -60,7 +60,6 @@ public class GameCanvas : MonoBehaviour
     public void SwitchToFunctionPanel(int functionNumber)
     {
         codePanel.gameObject.SetActive(false);
-        Debug.Log("Teste: " + functionPanel1.CodeOutputPanel.Buttons.Count);
         switch (functionNumber)
         {
             case 1:
@@ -119,7 +118,6 @@ public class GameCanvas : MonoBehaviour
         CodeOutputPanel activeCodeOutputPanel = GetActiveCodePanel();
         while (position < activeCodeOutputPanel.CommandsPanel.Commands.Count)
         {
-            Debug.Log("Commands Count: " + activeCodeOutputPanel.CommandsPanel.Commands.Count);
             if (GameManager.instance.CheckPlayerDied())
             {
                 StopAllCoroutines();
@@ -137,7 +135,6 @@ public class GameCanvas : MonoBehaviour
             }
             else if (command == Command.EndLoop)
             {
-                Debug.Log("End Loop");
                 IsLooping = false;
                 loopIndex++;
                 iterationLoopNumber = 1;
@@ -226,6 +223,11 @@ public class GameCanvas : MonoBehaviour
 
             if (IsLooping)
             {
+//                Debug.Log("Loop");
+//                Debug.Log("Loop - Initial Loop Index -" + activeCodeOutputPanel.Loops[loopIndex].FinalIndex);
+//                Debug.Log("Loop - Final Index" + activeCodeOutputPanel.Loops[loopIndex].FinalIndex);
+//                Debug.Log("Position - " + position);
+//                Debug.Log("IterationLoopNumber -" + iterationLoopNumber);
                 if (activeCodeOutputPanel.Loops[loopIndex].FinalIndex == position)
                 {
                    
@@ -320,7 +322,6 @@ public class GameCanvas : MonoBehaviour
         else
         {
             codeOutputPanel.EndLoopCommand();
-            GameManager.instance.LoopMode = false;
         }
 
     }

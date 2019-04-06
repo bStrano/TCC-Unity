@@ -186,6 +186,12 @@ public class TutoredGameplay : MonoBehaviour
                 dropdown.interactable = false;
             }
 
+            if (dropdowns.Count > 0)
+            {
+                dropdowns[0].interactable = true;
+            }
+            
+
             ActivateButton(buttons[activeIndex]);
         }
 

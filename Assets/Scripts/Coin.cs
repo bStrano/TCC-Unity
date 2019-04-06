@@ -19,11 +19,10 @@ public class Coin : MonoBehaviour
     public bool HasCoin(Transform transform)
     {
         Vector3 transformAbs = new Vector3(transform.position.x, (float) Math.Floor(transform.position.y), 0);
-        Debug.Log("HAS COIN" + this.transform.position.x + " / " +  Math.Floor(this.transform.position.y) + " / " +  transform.position.x + " / " +  Math.Floor(transform.position.y));
+//        Debug.Log("HAS COIN" + this.transform.position.x + " / " +  Math.Floor(this.transform.position.y) + " / " +  transform.position.x + " / " +  Math.Floor(transform.position.y));
         Vector3 thisTransformAbs = new Vector3(this.transform.position.x, (float) Math.Floor(this.transform.position.y), 0);
         if ( transformAbs == thisTransformAbs)
         {
-            Debug.Log("Has coin - True");
             return true;
         } else
         {
