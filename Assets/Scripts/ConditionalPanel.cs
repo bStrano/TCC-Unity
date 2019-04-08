@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,17 +28,7 @@ public class ConditionalPanel : MonoBehaviour
     {
         "Armadilha",
         "Fogo",
-        "Gelo",
         "Raio",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
     };
 
     // Start is called before the first frame update
@@ -170,7 +161,8 @@ public class ConditionalPanel : MonoBehaviour
 
     public void OnSave()
     {
-        CodeOutputPanel activeCodeOutputPanel = codeOutputPanel.GameCanvas.GetComponent<GameCanvas>().GetActiveCodePanel();
+        CodeOutputPanel activeCodeOutputPanel =
+            codeOutputPanel.GameCanvas.GetComponent<GameCanvas>().GetActiveCodePanel();
         GameManager.instance.resetHintPanelPosition();
 //        GameManager.instance.NextCommandTutoredGameplay();
         if (CheckIsValid())
@@ -208,6 +200,7 @@ public class ConditionalPanel : MonoBehaviour
 
 
         Debug.Log(firstArgument);
+
         switch (firstArgument)
         {
             case "posicaoAtual":
@@ -217,11 +210,11 @@ public class ConditionalPanel : MonoBehaviour
                 firstArgumentValue = GameManager.instance.FindClosestEnemy().Immunity;
                 break;
             default:
-                firstArgumentValue = GameManager.instance.Variables.Find(item => item.Title == firstArgument).GetValue();
+                firstArgumentValue =
+                    GameManager.instance.Variables.Find(item => item.Title == firstArgument).GetValue();
                 break;
         }
 
-        
 
         Debug.Log("Second Argument Statement: " + secondArgument);
         switch (secondArgument)
@@ -231,13 +224,13 @@ public class ConditionalPanel : MonoBehaviour
                 secondArgumentValue = "Armadilha";
                 if (firstArgumentValue is Transform)
                 {
-                    firstArgumentValue = ObjectsManager.instance.GetCoin(firstArgumentValue);              
+                    firstArgumentValue = ObjectsManager.instance.GetCoin(firstArgumentValue);
                 }
 
                 if (firstArgumentValue is Coin)
                 {
                     firstArgumentValue = ((Coin) firstArgumentValue).IsTrap ? "Armadilha" : "Não";
-                } 
+                }
 
                 Debug.Log(firstArgumentValue);
                 break;
@@ -257,18 +250,26 @@ public class ConditionalPanel : MonoBehaviour
         Debug.Log("ARGUMENTVALUE: " + firstArgumentValue);
         Debug.Log("ARGUMENTVALUE: " + secondArgumentValue);
 
-        switch (condition)
+        try
         {
-            case "!=":
-                return firstArgumentValue != secondArgumentValue;
-            case "==":
-                return firstArgumentValue == secondArgumentValue;
-            case ">":
-                return firstArgumentValue > secondArgumentValue;
-            case "<":
-                return firstArgumentValue < secondArgumentValue;
-            default:
-                return false;
+            switch (condition)
+            {
+                case "!=":
+                    return firstArgumentValue != secondArgumentValue;
+                case "==":
+                    return firstArgumentValue == secondArgumentValue;
+                case ">":
+                    return firstArgumentValue > secondArgumentValue;
+                case "<":
+                    return firstArgumentValue < secondArgumentValue;
+                default:
+                    return false;
+            }
+        }
+
+        catch (Exception e)
+        {
+            throw e;
         }
     }
 

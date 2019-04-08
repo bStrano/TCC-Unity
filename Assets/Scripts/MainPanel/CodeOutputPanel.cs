@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System;
 using System.Linq;
+using Assets.Scripts;
 using TMPro;
 
 
@@ -36,8 +37,9 @@ public class CodeOutputPanel : MonoBehaviour
         dropdown.Hide();
         if (dropdown.value == 0) return;
          GameManager.instance.NextCommandTutoredGameplay();
-        var numberOfRepetitions = GameManager.instance.Variables.ElementAt(dropdown.value - 1).GetValue();
-        if (numberOfRepetitions != null) HandleLoopCommand((int) numberOfRepetitions);
+//        var numberOfRepetitions = GameManager.instance.Variables.ElementAt(dropdown.value - 1).GetValue();
+        Variable variable = GameManager.instance.Variables.ElementAt(dropdown.value - 1);
+        if (variable.GetValue() != null) HandleLoopCommand(variable);
         Invoke (nameof(CallDeactivateLoopPanelLoopPanel), 0.2f);
         
         dropdown.value = 0;
@@ -48,20 +50,27 @@ public class CodeOutputPanel : MonoBehaviour
         GameCanvas.DeactivateLoopPanel();
     }
 
-    
+    public void HandleLoopCommand(Variable variable)
+    {
+        Loop loop = new Loop(this.buttons.Count, variable);
+        HandleLoop(loop);
+    }
 
     public void HandleLoopCommand(int numberOfRepetitions)
     {
+        HandleLoop( new Loop(this.buttons.Count, numberOfRepetitions));
+    }
+
+    private void HandleLoop(Loop loop)
+    {
+        Loops.Add(loop);
         Command command = ReciveComand(Command.Loop.ToString());
-        Loops.Add(new Loop(this.buttons.Count, numberOfRepetitions));
-        TranslateCommandToCode(Command.Loop, numberOfRepetitions.ToString());
+        TranslateCommandToCode(Command.Loop, loop.NumberIterations.ToString());
         GameManager.instance.NextCommandTutoredGameplay();
         GameManager.instance.LoopMode = true;
         LoopButton loopButton = mainPanel.GetComponent<MainPanel>().CommandsPanel.LoopButton.GetComponent<LoopButton>();
         loopButton.ActivateLoopMode();
     }
-
-
 
     public void RemoveUnfinishedLoopPanel()
     {
@@ -93,6 +102,7 @@ public class CodeOutputPanel : MonoBehaviour
 
     public void HandleCommands(Command command, string additional)
     {
+     
         ReciveComand(command.ToString());
         TranslateCommandToCode(command, additional);
         GameManager.instance.NextCommandTutoredGameplay();
@@ -100,6 +110,7 @@ public class CodeOutputPanel : MonoBehaviour
     
     public void HandleCommands(string commandString)
     {
+        ScrollView.velocity = new Vector2(0f, 4500f);
         switch (commandString)
         {
             case "Function1":

@@ -51,6 +51,12 @@ public abstract class Character : MonoBehaviour
         set => maxHealth = value;
     }
 
+    public float Speed
+    {
+        get { return speed; }
+        set { speed = value; }
+    }
+
     protected IEnumerator Move(Vector3 nextPosition)
     {
         isWalking = true;
@@ -58,7 +64,7 @@ public abstract class Character : MonoBehaviour
 
         while (transform.position != nextPosition)
         {
-            transform.position = Vector3.MoveTowards(transform.position, nextPosition, speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, nextPosition, Speed * Time.deltaTime);
             yield return null;
         }
 

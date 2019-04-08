@@ -75,8 +75,9 @@ public class Coin : MonoBehaviour
     {
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
        
-        Random rng = new Random();
-        IsTrap = rng.Next(0, 2) > 0;
+        Random rng = new Random(DateTime.Now.Millisecond);
+        IsTrap = rng.Next(0, 2) == 1;
+        Debug.Log("Coin is Trap: " + IsTrap);
         if (explode)
         {
             IsTrap = true;

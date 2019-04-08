@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts;
 using UnityEngine;
 
 public class Loop
@@ -7,7 +8,7 @@ public class Loop
     private int initialIndex;
     private int? finalIndex = null ;
     private int numberIterations;
-    private dynamic iterationVariable;
+    private Variable iterationVariable;
     
     public Loop(int initialIndex, int finalIndex,int numberIterations)
     {
@@ -16,18 +17,20 @@ public class Loop
         this.NumberIterations = numberIterations;
     }
     
-    public Loop(int initialIndex, int finalIndex,CEnemy enemy)
-    {
-        this.initialIndex = initialIndex;
-        this.finalIndex = finalIndex;
-        this.iterationVariable = enemy.MaxHealth;
-    }
 
     public Loop(int initialIndex,int numberIterations)
     {
         this.initialIndex = initialIndex;
         this.finalIndex = initialIndex;
         this.numberIterations = numberIterations;
+    }
+    
+    public Loop(int initialIndex,Variable iterationVariable)
+    {
+        this.initialIndex = initialIndex;
+        this.finalIndex = initialIndex;
+        this.iterationVariable = iterationVariable;
+        this.numberIterations = iterationVariable.GetValue();
     }
 
     

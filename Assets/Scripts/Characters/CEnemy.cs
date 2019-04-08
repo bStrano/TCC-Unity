@@ -204,6 +204,7 @@ public class CEnemy : Character
         animator.SetBool("DieBack", false);
         animator.SetBool("DieFront", false);
         animator.SetBool("Idle", true);
+        isDead = false;
         gameObject.transform.position = initialPosition;
         gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
         gameObject.GetComponent<Rigidbody2D>().WakeUp();

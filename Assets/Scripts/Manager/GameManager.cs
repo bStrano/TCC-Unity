@@ -22,18 +22,34 @@ public class GameManager : MonoBehaviour
     private TutoredGameplay tutoredGameplay;
 
     private bool tutoredGameplayMode;
-
     private bool loopMode;
     private bool functionMode;
-
     private bool varMode;
-
     // 0 - False, 1 - If , 2 - Else
     private int conditionalMode;
 
 
-    public void SetupSpeed()
+    private static float conditionalWaitTime;
+    private static float endConditionalWaitTime;
+    private static float functionWaitTime;
+    private static float normalCommandsWaitTime;
+    
+
+    public void SetupSpeed(Int16 speed)
     {
+        switch (speed)
+        {
+            default:
+                player.Speed = 0.7f;
+                conditionalWaitTime = 0.2f;
+                endConditionalWaitTime = 0.4f;
+                functionWaitTime = 1f;
+                normalCommandsWaitTime = 1.6f;
+                break;
+     
+                
+        }
+
         
     }
 
@@ -215,6 +231,7 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
         spawnpoint.position = new Vector2(player.transform.position.x, player.transform.position.y);
+        SetupSpeed(-1);
     }
 
     public CEnemy FindClosestEnemy()
@@ -326,5 +343,25 @@ public class GameManager : MonoBehaviour
     {
         get { return player; }
         set { player = value; }
+    }
+
+    public static float ConditionalWaitTime
+    {
+        get { return conditionalWaitTime; }
+    }
+
+    public static float EndConditionalWaitTime
+    {
+        get { return endConditionalWaitTime; }
+    }
+
+    public static float FunctionWaitTime
+    {
+        get { return functionWaitTime; }
+    }
+
+    public static float NormalCommandsWaitTime
+    {
+        get { return normalCommandsWaitTime; }
     }
 }

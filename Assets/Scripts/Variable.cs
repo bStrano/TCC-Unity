@@ -18,6 +18,7 @@ namespace Assets.Scripts
         [SerializeField] private bool isEnemyHealth;
         [SerializeField] private bool isEnemyImmunity;
  
+ 
     
         public dynamic GetValue()
         {

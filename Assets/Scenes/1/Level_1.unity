@@ -415,7 +415,7 @@ PrefabInstance:
     - target: {fileID: 1148634978557403994, guid: 39dddcf892040e54b9535b36d47c624a,
         type: 3}
       propertyPath: labels.Array.data[0]
-      value: "Antes de abrir o b\xE1u, \xE9 necess\xE1rio coletar todas as moedas."
+      value: "Colete todas as moedas para abrir o b\xE1u."
       objectReference: {fileID: 0}
     - target: {fileID: 3343328145909628652, guid: 39dddcf892040e54b9535b36d47c624a,
         type: 3}
@@ -426,6 +426,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: ExitGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 3034223552419030968, guid: 39dddcf892040e54b9535b36d47c624a,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3034223552419030968, guid: 39dddcf892040e54b9535b36d47c624a,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3034223552419030968, guid: 39dddcf892040e54b9535b36d47c624a,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3756338828427297467, guid: 39dddcf892040e54b9535b36d47c624a,
         type: 3}
@@ -755,7 +770,7 @@ PrefabInstance:
     - target: {fileID: 3237006197491210772, guid: 39dddcf892040e54b9535b36d47c624a,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.00005340576
+      value: -0.000045776367
       objectReference: {fileID: 0}
     - target: {fileID: 3237074298916696058, guid: 39dddcf892040e54b9535b36d47c624a,
         type: 3}
